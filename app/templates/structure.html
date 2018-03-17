@@ -55,7 +55,48 @@
 		
 	</head>
 	<body>
-        {% block structure_body %}{% endblock %}
+		{% if messages %}
+		{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="container"><br>
+				<div class="alert alert-success alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡OK!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="container"><br>
+				<div class="alert alert-info alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Informacion!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="container"><br>
+				<div class="alert alert-warning alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Alerta!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="container"><br>
+				<div class="alert alert-danger alert-dismissable">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Error!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+		
+		{% endfor %}
+		{% endif %}
+		
+		{% block structure_body %}{% endblock %}
         <!-- Latest jQuery -->
 		<script src="{% static 'assets/js/jquery.min.js' %}"></script>
 		

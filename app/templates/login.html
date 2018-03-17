@@ -2,7 +2,10 @@
 {% block structure_title%} Inicio de session {% endblock %}
 {% block structure_body%}
 {% load static %}
+
 <br>
+<div class="container">
+
 <section id="about" class="about-area">
 <div class="container">
 <div class="row">
@@ -17,7 +20,7 @@
                     
                     <!-- Submition status -->
                     <div id="form-messages"></div>
-                
+                    
                     <form method="POST"> {% csrf_token %}
                         <h2>Inicia<span> session</span></h2>
                 
