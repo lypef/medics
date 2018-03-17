@@ -1,1 +1,100 @@
-<p>{{user.email}}</p>
+{% extends 'structure.html' %}
+{% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
+{% block structure_body%}
+{% load static %}
+<!-- Preloader starts-->
+<div id="preloader"></div>
+<!-- Preloader ends -->
+
+
+
+<!-- Navigation area starts -->
+<div class="menu-area navbar-fixed-top">
+<div class="container">
+	<div class="row">
+
+		<!-- Navigation starts -->
+		<div class="col-md-12">
+			<div class="mainmenu">
+				<div class="navbar navbar-nobg">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/manager"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse">
+						<nav>
+							<ul class="nav navbar-nav navbar-right">
+								<li class="active"><a class="smooth_scroll" href="#slider">Agenda</a></li>
+								<li><a class="smooth_scroll" href="#about">Pacientes</a></li>
+								<li><a class="smooth_scroll" href="#pricing">Procedimientos</a></li>
+                                <li><a class="smooth_scroll" href="#team">Recetas</a></li>
+                                <li><a class="smooth_scroll" href="#news">Consulta</a></li>
+								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Navigation ends -->
+
+	</div>
+</div>
+</div>
+<!-- Navigation area ends -->
+<div class="clearfix header-space"></div>
+{% if messages %}
+		{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="container"><br>
+				<div class="alert alert-success fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡OK!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="container"><br>
+				<div class="alert alert-info  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Informacion!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="container"><br>
+				<div class="alert alert-warning  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Alerta!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="container"><br>
+				<div class="alert alert-danger  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Error!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+		
+		{% endfor %}
+		{% endif %}
+		
+<div class="container">		
+    <div class="row">
+        Aqui van los modulos
+    </div>
+</div>
+
+
+{% endblock %}

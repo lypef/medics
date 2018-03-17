@@ -8,7 +8,7 @@ from models import medics
 def index(request): 
     return render(request,'index.html')
 
-def login_user (request):
+def user_login (request):
     if request.method == 'POST':
         user = authenticate(username=request.POST.get('username', ''), password=request.POST.get('password', ''))
         
@@ -20,6 +20,13 @@ def login_user (request):
     if request.user.is_authenticated:
         return render(request,'manager.html')
     return render(request,'login.html')
+
+def user_logout (request):
+    if request.user.is_authenticated:
+        messages.info(request, 'Hasta pronto: ' + request.user.first_name + ' '  + request.user.last_name)
+        logout(request)            
+        return redirect('/manager')
+    return redirect('/manager')
 
 def Medic_Add (request):
     if request.method == 'POST':

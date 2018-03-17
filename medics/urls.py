@@ -8,6 +8,7 @@ from app import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', views.index),
-    url(r'^login/', views.login_user),
+    url(r'^manager/', views.user_login),
+    url(r'^logout/', views.user_logout),
     url(r'^medic_add/', views.Medic_Add),
 ]
