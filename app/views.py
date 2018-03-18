@@ -18,7 +18,10 @@ def user_login (request):
             messages.error(request, 'Credenciales incorrectas')
 
     if request.user.is_authenticated:
-        return render(request,'manager.html')
+        if request.GET.get('next', '/') == '/':
+            return render(request,'manager.html')
+        else:
+            return redirect(request.GET.get('next', '/'))
     return render(request,'login.html')
 
 def user_logout (request):
@@ -28,7 +31,8 @@ def user_logout (request):
         return redirect('/manager')
     return redirect('/manager')
 
-def Medic_Add (request):
+@login_required
+def patient (request):
     if request.method == 'POST':
         insert = medics(
                 username = request.POST.get('username', '').upper(), 
@@ -40,4 +44,4 @@ def Medic_Add (request):
     			)
     	insert.save()
         return redirect('/medic_add/')
-    return render(request,'Medic_add.html')
+    return render(request,'patients.html')

@@ -31,8 +31,8 @@
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
 								
-								{% if user.is_staff %} <li class="active"><a href="#slider">Agenda</a></li> {% endif %}
-								{% if user.is_superuser %} <li class=""><a href="/patient">Pacientes</a></li> {% endif %}
+								{% if user.is_staff %} <li class=""><a href="#slider">Agenda</a></li> {% endif %}
+								{% if user.is_superuser %} <li class="active"><a href="/patient">Pacientes</a></li> {% endif %}
 								{% if user.is_superuser %}<li class=""><a  href="#pricing">Procedimientos</a></li>{% endif %}
                                 {% if user.is_superuser %}<li class=""><a href="#team">Recetas</a></li>{% endif %}
                                 {% if user.is_superuser %}<li class=""><a href="#news">Consulta</a></li>{% endif %}
@@ -93,7 +93,7 @@
 		
 <div class="container">		
     <div class="row">
-        Aqui van los modulos principales
+        Aqui va el modulo de pacientes
     </div>
 </div>
 
