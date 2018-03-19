@@ -35,12 +35,25 @@ def user_logout (request):
 @login_required
 def patient (request):
     if request.method == 'GET':
-        l = patients.model.objects.all()
+        ListPatients = patients.objects.all().order_by('nombre')
+        for a in ListPatients:
+            dt = datetime.datetime.now()
+            year_actual = int(dt.strftime("%Y"))
 
+            s = str(a.f_nacimiento)
+            ss = s.split('-')
+            
+            if ss[0] != 'None':
+                year_nacimiento = int(ss[0])
+                a.f_nacimiento =  year_actual - year_nacimiento
+
+            
+        return render(request,'patients.html', {'ListPatients':ListPatients})
+    		
     if request.method == 'POST':
         insert = patients(
                 expediente = request.POST.get('expediente', '').upper(), 
-    			nombre = request.POST.get('password', ''),
+    			nombre = request.POST.get('nombre', ''),
                 a_paterno = request.POST.get('a_paterno', ''),
                 a_materno = request.POST.get('a_materno', ''),
                 telefono = request.POST.get('patelefonossword', ''),
@@ -60,4 +73,5 @@ def patient (request):
     			)
     	insert.save()
         messages.success(request,'Paciente agregado')
-    return render(request,'patients.html')
+        return render(request,'patients.html')
+    

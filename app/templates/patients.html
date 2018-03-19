@@ -107,31 +107,27 @@
 			<table class="table">
 				<thead class="thead-dark">
 				  <tr>
-					<th scope="col">#</th>
-					<th scope="col">First</th>
-					<th scope="col">Last</th>
-					<th scope="col">Handle</th>
+					<th scope="col">Expediente</th>
+					<th scope="col">Nombre</th>
+					<th scope="col">Apellidos</th>
+					<th scope="col">Edad</th>
+					<th scope="col">Sexo</th>
+					<th scope="col">Estado civil</th>
+					<th scope="col">Opciones</th>
 				  </tr>
 				</thead>
 				<tbody>
-				  <tr>
-					<th scope="row">1</th>
-					<td>Mark</td>
-					<td>Otto</td>
-					<td>@mdo</td>
-				  </tr>
-				  <tr>
-					<th scope="row">2</th>
-					<td>Jacob</td>
-					<td>Thornton</td>
-					<td>@fat</td>
-				  </tr>
-				  <tr>
-					<th scope="row">3</th>
-					<td>Larry</td>
-					<td>the Bird</td>
-					<td>@twitter</td>
-				  </tr>
+					{% for item in ListPatients %}
+					<tr>
+							<th>{{ item.expediente }}</th>
+							<td>{{ item.nombre }}</td>
+							<td>{{ item.a_paterno }} {{ item.a_materno }}</td>
+							<td>{{ item.f_nacimiento }} Años</td>
+							<td>{{ item.sexo }}</td>
+							<td>{{ item.e_civil }}</td>
+							<td><button type="button" class="btn btn-success"><span class="fa fa-eye"></span> Visualizar</button> <button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button> <button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Eliminar</button></td>
+						</tr>
+					{% endfor %}
 				</tbody>
 			  </table>
 			<!-- Finaliza tabla clientes -->
