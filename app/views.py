@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from models import medics
+import datetime
+from models import patients
 
 def index(request): 
     return render(request,'index.html')
@@ -33,15 +34,30 @@ def user_logout (request):
 
 @login_required
 def patient (request):
+    if request.method == 'GET':
+        l = patients.model.objects.all()
+
     if request.method == 'POST':
-        insert = medics(
-                username = request.POST.get('username', '').upper(), 
-    			password = request.POST.get('password', ''),
-    			name = '10',
-    			telefono = '10',
-    			movil = '10',
-    			email = '10@h.com'
+        insert = patients(
+                expediente = request.POST.get('expediente', '').upper(), 
+    			nombre = request.POST.get('password', ''),
+                a_paterno = request.POST.get('a_paterno', ''),
+                a_materno = request.POST.get('a_materno', ''),
+                telefono = request.POST.get('patelefonossword', ''),
+                celular = request.POST.get('celular', ''),
+                f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date(),
+                sexo = request.POST.get('sexo', ''),
+                e_civil = request.POST.get('e_civil', ''),
+                ocupacion = request.POST.get('pocupacionassword', ''),
+                religion = request.POST.get('religion', ''),
+                tipo_sanguinio = request.POST.get('tipo_sanguinio', ''),
+                domicilio = request.POST.get('domicilio', ''),
+                colonia = request.POST.get('colonia', ''),
+                cp = request.POST.get('cp', ''),
+                mail = request.POST.get('mail', ''),
+                estado = request.POST.get('estado', ''),
+                municipio = request.POST.get('municipio', '')
     			)
     	insert.save()
-        return redirect('/medic_add/')
+        messages.success(request,'Paciente agregado')
     return render(request,'patients.html')

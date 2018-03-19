@@ -91,11 +91,192 @@
 		{% endfor %}
 		{% endif %}
 		
-<div class="container">		
-    <div class="row">
-        Aqui va el modulo de pacientes
-    </div>
-</div>
 
+<!-- List Patients -->
+<section id="about" class="about-area section-big">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<div class="section-title mb-60">
+					<h2>Listado <span>pacientes</span></h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<!-- Tabla clientes -->
+			<table class="table">
+				<thead class="thead-dark">
+				  <tr>
+					<th scope="col">#</th>
+					<th scope="col">First</th>
+					<th scope="col">Last</th>
+					<th scope="col">Handle</th>
+				  </tr>
+				</thead>
+				<tbody>
+				  <tr>
+					<th scope="row">1</th>
+					<td>Mark</td>
+					<td>Otto</td>
+					<td>@mdo</td>
+				  </tr>
+				  <tr>
+					<th scope="row">2</th>
+					<td>Jacob</td>
+					<td>Thornton</td>
+					<td>@fat</td>
+				  </tr>
+				  <tr>
+					<th scope="row">3</th>
+					<td>Larry</td>
+					<td>the Bird</td>
+					<td>@twitter</td>
+				  </tr>
+				</tbody>
+			  </table>
+			<!-- Finaliza tabla clientes -->
+		</div>
+	</div>
+</section>
+<!-- Finaliza List Patients -->
+
+
+<!-- Service area starts -->
+<section id="department" class="department-area  section-big">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<div class="section-title white mb-30">
+					<h2>AGREGAR <span>PACIENTE</span></h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<form method="POST"> {% csrf_token %}
+				<div class="row">
+					
+					<div class="col-md-4">
+						<div class="form-group in_name">
+							<input type="text" name="expediente" class="form-control" id="name" placeholder="No. expediente">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<input type="text" name="nombre" class="form-control" id="email" placeholder="Nombre" required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="a_paterno" class="form-control" id="email" placeholder="Apellido paterno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido paterno')" oninput="setCustomValidity('')">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="a_materno" class="form-control" id="email" placeholder="Apellido materno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido materno')" oninput="setCustomValidity('')">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group in_email">
+							<input type="email" name="mail" class="form-control" id="email" placeholder="Correo electronico">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="telefono" class="form-control" id="email" placeholder="Telefono">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="celular" class="form-control" id="email" placeholder="Celular">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<input class="form-control date-pick" id="datepicker" name="f_nacimiento" placeholder="Date" type="text" required oninvalid="this.setCustomValidity('Especifique fecha de nacimiento')" oninput="setCustomValidity('')">
+							<i class="icon fa fa-calendar"></i>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="catagory" name="sexo" class="form-control" required oninvalid="this.setCustomValidity('Seleccione un sexo')" oninput="setCustomValidity('')">
+								<option value="">Sexo</option>
+								<option value="Masculino">Masculino</option>
+								<option value="Femenino">Femenino</option>
+								<option value="No especificado">No especificar</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="catagory" name="e_civil" class="form-control" required oninvalid="this.setCustomValidity('Seleccione estado civil')" oninput="setCustomValidity('')">
+								<option value="">Estado civil</option>
+								<option value="Casado">Casado</option>
+								<option value="Soltero">Soltero</option>
+								<option value="Union libre">Union libre</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="ocupacion" class="form-control" id="email" placeholder="Ocupacion">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="religion" class="form-control" id="email" placeholder="Religion">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="catagory" name="tipo_sanguineo" class="form-control" required oninvalid="this.setCustomValidity('Seleccion tipo sanguineo')" oninput="setCustomValidity('')">
+								<option value="">Tipo sanguineo</option>
+								<option value="O-">O -</option>
+								<option value="O+">O +</option>
+								<option value="A-">A -</option>
+								<option value="A+">A +</option>
+								<option value="B-">B -</option>
+								<option value="B+">B + </option>
+								<option value="AB-">AB - </option>
+								<option value="AB+">AB + </option>
+							</select>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="domicilio" class="form-control" id="email" placeholder="Domicilio">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="colonia" class="form-control" id="email" placeholder="Colonia">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="municipio" class="form-control" id="Municipio" placeholder="Municipio">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="estado" class="form-control" id="email" placeholder="Estado">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="cp" class="form-control" id="email" placeholder="Codigo postal">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="actions">
+							<input type="submit" value="Agregar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
+						</div>
+					</div>
+					
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+<!-- Service area ends -->
 
 {% endblock %}
