@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^manager/', views.user_login),
     url(r'^logout/', views.user_logout),
     url(r'^patient/', views.patient),
+    url(r'^patient_edit/(?P<id>[^/]+)/$', views.patient_Edit),
 ]

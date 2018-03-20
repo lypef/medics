@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from models import patients
 
@@ -47,9 +48,21 @@ def patient (request):
                 year_nacimiento = int(ss[0])
                 a.f_nacimiento =  year_actual - year_nacimiento
 
-            
-        return render(request,'patients.html', {'ListPatients':ListPatients})
-    		
+        paginator = Paginator(ListPatients, 9) # Show 25 contacts per page
+
+        page = request.GET.get('page')
+        
+        try:
+            ListPatients = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            ListPatients = paginator.page(1)
+        except EmptyPage:
+            # If page is out osf range (e.g. 9999), deliver last page of results.
+            ListPatients = paginator.page(paginator.num_pages)
+
+        return render(request,'patients.html', {'ListPatients':ListPatients,'page_range':paginator.page_range,'count':paginator.num_pages})
+        
     if request.method == 'POST':
         insert = patients(
                 expediente = request.POST.get('expediente', '').upper(), 
@@ -73,5 +86,10 @@ def patient (request):
     			)
     	insert.save()
         messages.success(request,'Paciente agregado')
-        return render(request,'patients.html')
-    
+        return redirect('/patient')
+
+@login_required
+def patient_Edit (request, id):
+    print id
+    return render(request,'patients_edit.html')
+        

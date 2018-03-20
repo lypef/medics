@@ -90,7 +90,6 @@
 		
 		{% endfor %}
 		{% endif %}
-		
 
 <!-- List Patients -->
 <section id="about" class="about-area section-big">
@@ -103,13 +102,24 @@
 			</div>
 		</div>
 		<div class="row">
+				
+			<div class="col-lg-12">
+				<div class="input-group">
+				<input type="text" class="form-control" placeholder="Buscar paciente">
+				<span class="input-group-btn">
+					<button class="btn btn-info" type="button">Buscar!</button>
+				</span>
+				</div>
+			</div>
+			</div>
+
+		<div class="row">
 			<!-- Tabla clientes -->
 			<table class="table">
 				<thead class="thead-dark">
 				  <tr>
 					<th scope="col">Expediente</th>
 					<th scope="col">Nombre</th>
-					<th scope="col">Apellidos</th>
 					<th scope="col">Edad</th>
 					<th scope="col">Sexo</th>
 					<th scope="col">Estado civil</th>
@@ -120,24 +130,102 @@
 					{% for item in ListPatients %}
 					<tr>
 							<th>{{ item.expediente }}</th>
-							<td>{{ item.nombre }}</td>
-							<td>{{ item.a_paterno }} {{ item.a_materno }}</td>
+							<td>{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</td>
 							<td>{{ item.f_nacimiento }} Años</td>
 							<td>{{ item.sexo }}</td>
 							<td>{{ item.e_civil }}</td>
-							<td><button type="button" class="btn btn-success"><span class="fa fa-eye"></span> Visualizar</button> <button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button> <button type="button" class="btn btn-danger"><span class="fa fa-trash"></span> Eliminar</button></td>
+							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> {% if user.is_superuser %}<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
+
+							<!-- Modal Delete-->
+							<div class="modal fade" id="delete{{item.id}}" role="dialog">
+									<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</h4>
+										</div>
+										<div class="modal-body">
+										<p>Esta seguro de eliminar el paciente ?. Depsues de esta accion no podra consultar el historial de este paciente asi como sus recetas, citas. etc.</p>
+										<p>Mail: {{ item.mail }}</p>
+										</div>
+										<div class="modal-footer">
+											{% if user.is_superuser %}
+											<button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+											<button type="button" class="btn btn-danger" data-dismiss="modal">SI</button>
+											{% endif %}
+										</div>
+									</div>
+									</div>
+								</div>
+								</div>
+							<!-- Finaliza Modal Delete-->
+	
+							<!-- Modal view -->
+							<div class="modal fade" id="view{{item.id}}" role="dialog">
+								<div class="modal-dialog">
+								
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</h4>
+									</div>
+									<div class="modal-body">
+									<p>Expediente no: {{ item.expediente }}</p>
+									<p>Telefono:. {{ item.telefono }}</p>
+									<p>Movil: {{ item.celular }}</p>
+									<p>Edad: {{ item.f_nacimiento }} años</p>
+									<p>Sexo: {{ item.sexo }}</p>
+									<p>Estado civil: {{ item.e_civil }}</p>
+									<p>Ocupacion: {{ item.ocupacion }}</p>
+									<p>Religion: {{ item.religion }}</p>
+									<p>Tipo sanguineo: {{ item.tipo_sanguinio }}</p>
+									<p>Correo electronico: {{ item.mail }}</p>
+									<p>Domicilio: {{ item.domicilio }}, {{ item.colonia }} - {{ item.municipio }}, {{ item.estado }}. CP: {{ item.cp }}</p>
+									</div>
+									<div class="modal-footer">
+									{% if user.is_superuser %}<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>{% endif %}
+									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+									</div>
+								</div>
+								
+								</div>
+								<!-- Finaliza contenido modal -->
+							</div>
+							
+							</div>
+							<!-- Finaliza Modal view-->
+
 						</tr>
 					{% endfor %}
 				</tbody>
 			  </table>
+			<div align="center">
+				<ul class="pagination">
+					{%if ListPatients.number > 1%}
+						<li class="waves-effect"><a href="?page={{ ListPatients.previous_page_number }}">&laquo;</a></li>
+					{%endif%}
+					{% for log in page_range %}
+					{%if log == ListPatients.number%}
+							<li class="active"><a href="?page={{log}}">{{log}}</a></li>
+						{%else%}  
+							<li class="waves-effect"><a href="?page={{log}}">{{log}}</a></li>
+						{%endif%}
+						
+					{%endfor%} 
+					{%if ListPatients.number < count %}
+						<li class="waves-effect"><a href="?page={{ ListPatients.next_page_number }}">&raquo;</a></li>
+					{%endif%}
+				</ul>
+			</div>
 			<!-- Finaliza tabla clientes -->
 		</div>
 	</div>
 </section>
 <!-- Finaliza List Patients -->
 
-
-<!-- Service area starts -->
+{% if user.is_superuser %}
+<!-- Agregar paciente -->
 <section id="department" class="department-area  section-big">
 	<div class="container">
 		<div class="row">
@@ -274,5 +362,6 @@
 	</div>
 </section>
 <!-- Service area ends -->
+{% endif %}
 
 {% endblock %}
