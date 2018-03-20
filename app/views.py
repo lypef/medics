@@ -242,3 +242,7 @@ def procedure_Delete(request):
             messages.error(request,e)
 
     return redirect('/procedures')
+
+@login_required
+def consultation(request):
+    return render(request, 'consultation.html')

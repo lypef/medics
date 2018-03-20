@@ -18,4 +18,5 @@ urlpatterns = [
     url(r'^procedures/', views.procedures),
     url(r'^procedures_edit/(?P<id>[^/]+)/$', views.procedures_Edit),
     url(r'^procedures_delete/', views.procedure_Delete),
+    url(r'^consultation/', views.consultation),
 ]
