@@ -1,1 +1,234 @@
-Aqui se edita un paciente
+{% extends 'structure.html' %}
+{% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
+{% block structure_body%}
+{% load static %}
+<!-- Navigation area starts -->
+<div class="menu-area navbar-fixed-top">
+<div class="container">
+	<div class="row">
+
+		<!-- Navigation starts -->
+		<div class="col-md-12">
+			<div class="mainmenu">
+				<div class="navbar navbar-nobg">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/manager"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse">
+						<nav>
+							<ul class="nav navbar-nav navbar-right">
+								
+								{% if user.is_staff %} <li class=""><a href="#slider">Agenda</a></li> {% endif %}
+								<li class="active"><a href="/patient">Pacientes</a></li>
+								{% if user.is_superuser %}<li class=""><a  href="#pricing">Procedimientos</a></li>{% endif %}
+                                {% if user.is_superuser %}<li class=""><a href="#team">Recetas</a></li>{% endif %}
+                                {% if user.is_superuser %}<li class=""><a href="#news">Consulta</a></li>{% endif %}
+								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Navigation ends -->
+
+	</div>
+</div>
+</div>
+<!-- Navigation area ends -->
+<div class="clearfix header-space"></div>
+{% if messages %}
+		{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="container"><br>
+				<div class="alert alert-success fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡OK!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="container"><br>
+				<div class="alert alert-info  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Informacion!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="container"><br>
+				<div class="alert alert-warning  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Alerta!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="container"><br>
+				<div class="alert alert-danger  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Error!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+		
+		{% endfor %}
+		{% endif %}
+<!-- Editar paciente -->
+<section id="department" class="department-area  section-big">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<div class="section-title white mb-30">
+					<h2>EDITAR <span>PACIENTE</span></h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<form method="POST"> {% csrf_token %}
+				<div class="row">
+					
+					<div class="col-md-4">
+						<div class="form-group in_name">
+							<input type="text" name="expediente" class="form-control" id="name" placeholder="No. expediente" value="{{patient.expediente}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<input type="text" name="nombre" class="form-control" id="email" placeholder="Nombre" required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')" value="{{patient.nombre}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="a_paterno" class="form-control" id="email" placeholder="Apellido paterno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido paterno')" oninput="setCustomValidity('')" value="{{patient.a_paterno}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="a_materno" class="form-control" id="email" placeholder="Apellido materno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido materno')" oninput="setCustomValidity('')" value="{{patient.a_materno}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group in_email">
+							<input type="email" name="mail" class="form-control" id="email" placeholder="Correo electronico" value="{{patient.mail}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="telefono" class="form-control" id="email" placeholder="Telefono" value="{{patient.telefono}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="celular" class="form-control" id="email" placeholder="Celular" value="{{patient.celular}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<input class="form-control date-pick" id="datepicker" name="f_nacimiento" placeholder="Date" type="text" required oninvalid="this.setCustomValidity('Especifique fecha de nacimiento')" oninput="setCustomValidity('')" value="{{patient.f_nacimiento}}">
+							<i class="icon fa fa-calendar"></i>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="sexo" name="sexo" class="form-control" required oninvalid="this.setCustomValidity('Seleccione un sexo')" oninput="setCustomValidity('')">
+								<option value="">Sexo</option>
+								<option value="Masculino">Masculino</option>
+								<option value="Femenino">Femenino</option>
+								<option value="No especificado">No especificar</option>
+                            </select>
+                            <script>
+                                document.getElementById("sexo").value="{{patient.sexo}}";
+                            </script>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="e_civil" name="e_civil" class="form-control" required oninvalid="this.setCustomValidity('Seleccione estado civil')" oninput="setCustomValidity('')">
+								<option value="">Estado civil</option>
+								<option value="Casado">Casado</option>
+								<option value="Soltero">Soltero</option>
+								<option value="Union libre">Union libre</option>
+                            </select>
+                            <script>
+                                document.getElementById("e_civil").value="{{patient.e_civil}}";
+                            </script>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="ocupacion" class="form-control" id="email" placeholder="Ocupacion" value="{{patient.ocupacion}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="religion" class="form-control" id="email" placeholder="Religion" value="{{patient.religion}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group">
+							<select id="tipo_sanguinio" name="tipo_sanguinio" class="form-control" required oninvalid="this.setCustomValidity('Seleccion tipo sanguineo')" oninput="setCustomValidity('')">
+								<option value="">Tipo sanguineo</option>
+								<option value="O-">O -</option>
+								<option value="O+">O +</option>
+								<option value="A-">A -</option>
+								<option value="A+">A +</option>
+								<option value="B-">B -</option>
+								<option value="B+">B + </option>
+								<option value="AB-">AB - </option>
+								<option value="AB+">AB + </option>
+                            </select>
+                            <script>
+                                document.getElementById("tipo_sanguinio").value="{{patient.tipo_sanguinio}}";
+                            </script>
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="domicilio" class="form-control" id="email" placeholder="Domicilio" value="{{patient.domicilio}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="colonia" class="form-control" id="email" placeholder="Colonia" value="{{patient.colonia}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="municipio" class="form-control" id="Municipio" placeholder="Municipio" value="{{patient.municipio}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="estado" class="form-control" id="email" placeholder="Estado" value="{{patient.estado}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="cp" class="form-control" id="email" placeholder="Codigo postal" value="{{patient.cp}}">
+						</div>
+					</div>
+					<div class="col-md-4">
+						<div class="actions">
+                            <input type="submit" value="Actualizar" name="submit" id="submitButton" class="btn" title="Actualizar paciente">
+						</div>
+					</div>
+					
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+<!-- Finaliza editar pacientes -->
+
+{% endblock %}

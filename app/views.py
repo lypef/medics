@@ -36,7 +36,11 @@ def user_logout (request):
 @login_required
 def patient (request):
     if request.method == 'GET':
-        ListPatients = patients.objects.all().order_by('nombre')
+        if request.GET.get('search') is not None:
+            ListPatients = patients.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+        else:
+            ListPatients = patients.objects.all().order_by('nombre')
+        
         for a in ListPatients:
             dt = datetime.datetime.now()
             year_actual = int(dt.strftime("%Y"))
@@ -90,6 +94,51 @@ def patient (request):
 
 @login_required
 def patient_Edit (request, id):
-    print id
-    return render(request,'patients_edit.html')
+    if request.method == 'POST':
+        try:
+            update = patients.objects.get(id=id)
+            update.expediente = request.POST.get('expediente').upper()
+            update.nombre = request.POST.get('nombre', '')
+            update.a_paterno = request.POST.get('a_paterno', '')
+            update.a_materno = request.POST.get('a_materno', '')
+            update.telefono = request.POST.get('patelefonossword', '')
+            update.celular = request.POST.get('celular', '')
+            update.f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date()
+            update.sexo = request.POST.get('sexo', '')
+            update.e_civil = request.POST.get('e_civil', '')
+            update.ocupacion = request.POST.get('pocupacionassword', '')
+            update.religion = request.POST.get('religion', '')
+            update.tipo_sanguinio = request.POST.get('tipo_sanguinio', '')
+            update.domicilio = request.POST.get('domicilio', '')
+            update.colonia = request.POST.get('colonia', '')
+            update.cp = request.POST.get('cp', '')
+            update.mail = request.POST.get('mail', '')
+            update.estado = request.POST.get('estado', '')
+            update.municipio = request.POST.get('municipio', '')
+            update.save()   
+            messages.success(request, 'Paciente actualizado')
+            return redirect ('/patient') 
+        except Exception, e:
+            messages.error(request, e)
+            return redirect ('/patient_edit/'+id) 
         
+    try:
+        patient = patients.objects.get(id= id)
+        s = str(patient.f_nacimiento)
+        ss = s.split('-')
+        patient.f_nacimiento = ss[0]+'-'+ss[1]+'-'+ss[2]
+    except Exception, e:
+        messages.error(request,e)
+    return render(request,'patients_edit.html', {'patient':patient})
+        
+@login_required
+def patient_Delete(request):
+    if request.GET.get('id') is not None and request.user.is_superuser:
+        try:
+            p = patients.objects.get(id= request.GET.get('id'))
+            p.delete()
+            messages.success(request,'Paciente eliminado')
+        except Exception, e:
+            messages.error(request,e)
+
+    return redirect('/patient')
