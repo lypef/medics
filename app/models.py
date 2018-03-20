@@ -24,3 +24,18 @@ class patients (models.Model):
     mail = models.EmailField()
     estado = models.CharField(max_length=150)
     municipio = models.CharField(max_length=150)
+    heredados = models.TextField()
+    nopatologicos = models.TextField()
+    patologicos = models.TextField()
+    ginecologos = models.TextField()
+    andrologicos = models.TextField()
+    perinatales = models.TextField()
+    quirurgicos = models.TextField()
+    alergias = models.TextField()
+    observaciones = models.TextField()
+
+class Procedure (models.Model):
+    nombre = models.CharField(max_length=150)
+    descripcion = models.TextField()
+    costo = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+    agendar = models.BooleanField(default=False)

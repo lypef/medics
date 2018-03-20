@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
-from models import patients
+from models import patients, Procedure
 
 def index(request): 
     return render(request,'index.html')
@@ -73,12 +73,12 @@ def patient (request):
     			nombre = request.POST.get('nombre', '').upper(),
                 a_paterno = request.POST.get('a_paterno', '').upper(),
                 a_materno = request.POST.get('a_materno', '').upper(),
-                telefono = request.POST.get('patelefonossword', ''),
+                telefono = request.POST.get('telefono', ''),
                 celular = request.POST.get('celular', ''),
                 f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date(),
                 sexo = request.POST.get('sexo', ''),
                 e_civil = request.POST.get('e_civil', ''),
-                ocupacion = request.POST.get('pocupacionassword', ''),
+                ocupacion = request.POST.get('ocupacion', ''),
                 religion = request.POST.get('religion', ''),
                 tipo_sanguinio = request.POST.get('tipo_sanguinio', ''),
                 domicilio = request.POST.get('domicilio', ''),
@@ -86,7 +86,16 @@ def patient (request):
                 cp = request.POST.get('cp', ''),
                 mail = request.POST.get('mail', ''),
                 estado = request.POST.get('estado', ''),
-                municipio = request.POST.get('municipio', '')
+                municipio = request.POST.get('municipio', ''),
+                heredados = request.POST.get('heredados', '').upper(),
+                nopatologicos = request.POST.get('nopatologicos', '').upper(),
+                patologicos = request.POST.get('patologicos', '').upper(),
+                ginecologos = request.POST.get('ginecologos', '').upper(),
+                andrologicos = request.POST.get('andrologicos', '').upper(),
+                perinatales = request.POST.get('perinatales', '').upper(),
+                quirurgicos = request.POST.get('quirurgicos', '').upper(),
+                alergias = request.POST.get('alergias', '').upper(),
+                observaciones = request.POST.get('observaciones', '').upper()
     			)
     	insert.save()
         messages.success(request,'Paciente agregado')
@@ -101,12 +110,12 @@ def patient_Edit (request, id):
             update.nombre = request.POST.get('nombre', '').upper()
             update.a_paterno = request.POST.get('a_paterno', '').upper()
             update.a_materno = request.POST.get('a_materno', '').upper()
-            update.telefono = request.POST.get('patelefonossword', '')
+            update.telefono = request.POST.get('telefono', '')
             update.celular = request.POST.get('celular', '')
             update.f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date()
             update.sexo = request.POST.get('sexo', '')
             update.e_civil = request.POST.get('e_civil', '')
-            update.ocupacion = request.POST.get('pocupacionassword', '')
+            update.ocupacion = request.POST.get('ocupacion', '')
             update.religion = request.POST.get('religion', '')
             update.tipo_sanguinio = request.POST.get('tipo_sanguinio', '')
             update.domicilio = request.POST.get('domicilio', '')
@@ -115,6 +124,15 @@ def patient_Edit (request, id):
             update.mail = request.POST.get('mail', '')
             update.estado = request.POST.get('estado', '')
             update.municipio = request.POST.get('municipio', '')
+            update.heredados = request.POST.get('heredados', '').upper()
+            update.nopatologicos = request.POST.get('nopatologicos', '').upper()
+            update.patologicos = request.POST.get('patologicos', '').upper()
+            update.ginecologos = request.POST.get('ginecologos', '').upper()
+            update.andrologicos = request.POST.get('andrologicos', '').upper()
+            update.perinatales = request.POST.get('perinatales', '').upper()
+            update.quirurgicos = request.POST.get('quirurgicos', '').upper()
+            update.alergias = request.POST.get('alergias', '').upper()
+            update.observaciones = request.POST.get('observaciones', '').upper()
             update.save()   
             messages.success(request, 'Paciente actualizado')
             return redirect ('/patient') 
@@ -142,3 +160,85 @@ def patient_Delete(request):
             messages.error(request,e)
 
     return redirect('/patient')
+
+@login_required
+def procedures (request):
+    if request.method == 'GET':
+        if request.GET.get('search') is not None:
+            ListProcedures = Procedure.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+        else:
+            ListProcedures = Procedure.objects.all().order_by('nombre')
+        
+        paginator = Paginator(ListProcedures, 5) # Show 25 contacts per page
+
+        page = request.GET.get('page')
+        
+        try:
+            ListProcedures = paginator.page(page)
+        except PageNotAnInteger:
+            # If page is not an integer, deliver first page.
+            ListProcedures = paginator.page(1)
+        except EmptyPage:
+            # If page is out osf range (e.g. 9999), deliver last page of results.
+            ListProcedures = paginator.page(paginator.num_pages)
+
+        return render(request,'procedures.html', {'ListProcedures':ListProcedures,'page_range':paginator.page_range,'count':paginator.num_pages})
+        
+    if request.method == 'POST':
+        if request.POST.get('agendar') is not None:
+                _agendar = True
+        else:
+            _agendar = False
+            
+        try:
+            insert = Procedure(
+            nombre = request.POST.get('nombre').upper(), 
+            descripcion = request.POST.get('descripcion').upper(), 
+            costo = request.POST.get('costo'),
+            agendar = _agendar
+            )
+            insert.save()
+            messages.success(request,'Procedimiento agregado')
+        except Exception, e:
+            messages.error(request,e)
+        
+        return redirect('/procedures')
+
+@login_required
+def procedures_Edit (request, id):
+    if request.method == 'POST':
+        if request.POST.get('agendar') is not None:
+                _agendar = True
+        else:
+            _agendar = False
+
+        try:
+            update = Procedure.objects.get(id=id)
+            update.nombre = request.POST.get('nombre').upper()
+            update.descripcion = request.POST.get('descripcion').upper()
+            update.costo = request.POST.get('costo')
+            update.agendar = _agendar
+            update.save()   
+            messages.success(request, 'Procedimiento actualizado')
+            return redirect ('/procedures') 
+        except Exception, e:
+            messages.error(request, e)
+            return redirect ('/procedures_edit/'+id) 
+        
+    try:
+        item = Procedure.objects.get(id= id)
+    except Exception, e:
+        messages.error(request,e)
+    return render(request,'procedure_edit.html', {'item':item})
+
+@login_required
+def procedure_Delete(request):
+    if request.GET.get('id') is not None and request.user.is_superuser:
+        try:
+            p = Procedure.objects.get(id= request.GET.get('id'))
+            p.delete()
+            messages.success(request,'Procedimiento eliminado')
+        except Exception, e:
+            messages.error(request,e)
+
+    return redirect('/procedures')

@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^patient/', views.patient),
     url(r'^patient_edit/(?P<id>[^/]+)/$', views.patient_Edit),
     url(r'^patient_delete/', views.patient_Delete),
+    url(r'^procedures/', views.procedures),
+    url(r'^procedures_edit/(?P<id>[^/]+)/$', views.procedures_Edit),
+    url(r'^procedures_delete/', views.procedure_Delete),
 ]

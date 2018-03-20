@@ -24,9 +24,9 @@
 					<div class="navbar-collapse collapse">
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
-								{% if user.is_staff %} <li ><a href="#slider">Agenda</a></li> {% endif %}
+								{% if user.is_staff %} <li><a href="#slider">Agenda</a></li> {% endif %}
 								<li class=""><a href="/patient">Pacientes</a></li>
-								<li class=""><a  href="/procedures">Procedimientos</a></li>
+								<li class="active"><a  href="/procedures">Procedimientos</a></li>
                                 {% if user.is_superuser %}<li class=""><a href="#team">Recetas</a></li>{% endif %}
                                 {% if user.is_superuser %}<li class=""><a href="#news">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
@@ -83,12 +83,53 @@
 		
 		{% endfor %}
 		{% endif %}
-		
-<div class="container">		
-    <div class="row">
-        Aqui van los modulos principales
-    </div>
-</div>
-
+<!-- Agregar paciente -->
+<section id="department" class="department-area  section-big">
+	<div class="container">
+		<div class="row">
+			<div class="col-md-12 text-center">
+				<div class="section-title white mb-30">
+					<h2>Editar <span>Procedimiento</span></h2>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<form method="POST"> {% csrf_token %}
+				<div class="row">
+					
+					<div class="col-md-6">
+						<div class="form-group in_name">
+							<input type="text" name="nombre" class="form-control" id="name" placeholder="Nombre"required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')" value="{{item.nombre}}">
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="form-group ">
+							<input type="text" name="costo" class="form-control" id="costo" placeholder="Costo" required="required" oninvalid="this.setCustomValidity('Ingrese un costo. Puede ser cero')" oninput="setCustomValidity('')" value="{{item.costo}}">
+						</div>
+                    </div>
+                    <div class="col-md-12">
+						<div class="form-group">
+                            <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Message" required >{{item.descripcion}}</textarea>
+						</div>
+					</div>
+					
+					<div class="col-md-6">
+						<div class="form-group ">
+							<input type="checkbox" class="form-check-input" id="agendar" name="agendar" {% if item.agendar %} checked {% endif %}>
+                            <label class="form-check-label" for="exampleCheck1">Agendar cita</label>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="actions">
+							<input type="submit" value="Actualizar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
+						</div>
+					</div>
+					
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+<!-- Service area ends -->
 
 {% endblock %}
