@@ -2,12 +2,6 @@
 {% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
 {% block structure_body%}
 {% load static %}
-<!-- Preloader starts-->
-<div id="preloader"></div>
-<!-- Preloader ends -->
-
-
-
 <!-- Navigation area starts -->
 <div class="menu-area navbar-fixed-top">
 <div class="container">
@@ -134,7 +128,7 @@
 							<td>{{ item.f_nacimiento }} Años</td>
 							<td>{{ item.sexo }}</td>
 							<td>{{ item.e_civil }}</td>
-							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> {% if user.is_superuser %}<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
+							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> <a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> {% if user.is_superuser %}<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
 
 							<!-- Modal Delete-->
 							<div class="modal fade" id="delete{{item.id}}" role="dialog">
@@ -184,7 +178,7 @@
 									<p>Domicilio: {{ item.domicilio }}, {{ item.colonia }} - {{ item.municipio }}, {{ item.estado }}. CP: {{ item.cp }}</p>
 									</div>
 									<div class="modal-footer">
-									{% if user.is_superuser %}<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>{% endif %}
+									<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>
 								</div>
@@ -224,7 +218,6 @@
 </section>
 <!-- Finaliza List Patients -->
 
-{% if user.is_superuser %}
 <!-- Agregar paciente -->
 <section id="department" class="department-area  section-big">
 	<div class="container">
@@ -362,6 +355,5 @@
 	</div>
 </section>
 <!-- Service area ends -->
-{% endif %}
 
 {% endblock %}
