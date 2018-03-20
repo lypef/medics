@@ -130,7 +130,50 @@
 							<td>{{ item.f_nacimiento }} Años</td>
 							<td>{{ item.sexo }}</td>
 							<td>{{ item.e_civil }}</td>
-							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> <a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> {% if user.is_superuser %}<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
+							<td><div class="dropdown">
+									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+									  Opciones
+									  <span class="caret"></span>
+									</button>
+									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+									  <li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</a></li>
+									  <li><a href="/patient_edit/{{ item.id }}"><span class="fa fa-pencil"></span> Editar</a></li>
+									  {% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
+									  <li role="separator" class="divider"></li>
+									  <li><a href="#">Ver citas</a></li>
+									  <li><a href="#">Ver historia clinica</a></li>
+									</ul>
+								  </div>
+
+							
+							</td>
+
+							<!-- Modal Editar-->
+							<div class="modal fade" id="edit{{item.id}}" role="dialog">
+									<div class="modal-dialog modal-sm">
+									<div class="modal-content">
+										<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</h4>
+										</div>
+										<div class="modal-body">
+										<p>Esta seguro de eliminar el paciente ?. Depsues de esta accion no podra consultar el historial de este paciente asi como sus recetas, citas. etc.</p>
+										<p>Mail: {{ item.mail }}</p>
+										</div>
+										<div class="modal-footer">
+											{% if user.is_superuser %}
+											<form action="/patient_delete" method="GET"> {% csrf_token %}
+												<input type="hidden" name="id" value="{{ item.id }}">
+												<button type="button" class="btn btn-success" data-dismiss="modal">No</button>
+												<input type="submit" value="SI" name="submit" id="submitButton" class="btn btn-danger" title="Enviar delete">
+											</form>													
+											{% endif %}
+										</div>
+									</div>
+									</div>
+								</div>
+								</div>
+							<!-- Finaliza Modal Editar-->
 
 							<!-- Modal Delete-->
 							<div class="modal fade" id="delete{{item.id}}" role="dialog">
