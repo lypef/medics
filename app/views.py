@@ -70,9 +70,9 @@ def patient (request):
     if request.method == 'POST':
         insert = patients(
                 expediente = request.POST.get('expediente', '').upper(), 
-    			nombre = request.POST.get('nombre', ''),
-                a_paterno = request.POST.get('a_paterno', ''),
-                a_materno = request.POST.get('a_materno', ''),
+    			nombre = request.POST.get('nombre', '').upper(),
+                a_paterno = request.POST.get('a_paterno', '').upper(),
+                a_materno = request.POST.get('a_materno', '').upper(),
                 telefono = request.POST.get('patelefonossword', ''),
                 celular = request.POST.get('celular', ''),
                 f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date(),
@@ -98,9 +98,9 @@ def patient_Edit (request, id):
         try:
             update = patients.objects.get(id=id)
             update.expediente = request.POST.get('expediente').upper()
-            update.nombre = request.POST.get('nombre', '')
-            update.a_paterno = request.POST.get('a_paterno', '')
-            update.a_materno = request.POST.get('a_materno', '')
+            update.nombre = request.POST.get('nombre', '').upper()
+            update.a_paterno = request.POST.get('a_paterno', '').upper()
+            update.a_materno = request.POST.get('a_materno', '').upper()
             update.telefono = request.POST.get('patelefonossword', '')
             update.celular = request.POST.get('celular', '')
             update.f_nacimiento = datetime.datetime.strptime(request.POST.get('f_nacimiento', ''), "%Y-%m-%d").date()
