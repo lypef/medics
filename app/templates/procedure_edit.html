@@ -84,9 +84,10 @@
 		{% endfor %}
 		{% endif %}
 <!-- Agregar paciente -->
-<section id="department" class="department-area  section-big">
+<section id="department" class="department-area  section-sm">
 	<div class="container">
 		<div class="row">
+			<br>
 			<div class="col-md-12 text-center">
 				<div class="section-title white mb-30">
 					<h2>Editar <span>Procedimiento</span></h2>
@@ -95,7 +96,8 @@
 		</div>
 		<div class="row">
 			<form method="POST"> {% csrf_token %}
-				<div class="row">
+					<button type="submit" class="btn btn-success btn-circle-fixed" value="Actualizar" name="submit" id="submitButton" ><i class="fa fa-save" ></i></button>
+					<div class="row">
 					
 					<div class="col-md-6">
 						<div class="form-group in_name">
@@ -116,15 +118,10 @@
 					<div class="col-md-6">
 						<div class="form-group ">
 							<input type="checkbox" class="form-check-input" id="agendar" name="agendar" {% if item.agendar %} checked {% endif %}>
-                            <label class="form-check-label" for="exampleCheck1">Agendar cita</label>
+                            <label class="form-check-label" for="exampleCheck1">Activar en todas las recetas</label>
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="actions">
-							<input type="submit" value="Actualizar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
-						</div>
-					</div>
-					
+					<br>
 				</div>
 			</form>
 		</div>

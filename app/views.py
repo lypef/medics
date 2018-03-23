@@ -245,4 +245,17 @@ def procedure_Delete(request):
 
 @login_required
 def consultation(request):
-    return render(request, 'consultation.html')
+    Pacientes = patients.objects.all().order_by('nombre')
+    Procedures = Procedure.objects.all().order_by('nombre')
+
+    for a in Pacientes:
+        dt = datetime.datetime.now()
+        year_actual = int(dt.strftime("%Y"))
+
+        s = str(a.f_nacimiento)
+        ss = s.split('-')
+        
+        if ss[0] != 'None':
+            year_nacimiento = int(ss[0])
+            a.f_nacimiento =  year_actual - year_nacimiento
+    return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures})

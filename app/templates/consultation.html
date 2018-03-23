@@ -84,140 +84,280 @@
 		
 		{% endfor %}
 		{% endif %}
-
+		<form method="POST"> {% csrf_token %}
 <!-- Agregar paciente -->
-<section id="department" class="department-area  section-big">
+<section id="department" class="department-area  section-sm">
 	<div class="container">
-		<div class="row">
-			<div class="col-md-12 text-center">
-				<div class="section-title white mb-30">
-					<h2>AGREGAR <span>PACIENTE</span></h2>
+		<br>
+		<div class="col-md-12 text-center">
+			<div class="section-title white mb-30">
+				<h2>Nueva <span>Consulta</span></h2>
+			</div>
+		</div>		
+		<button type="button" class="btn btn-warning btn-circle-fixed" data-toggle="modal" data-target="#receta"><i class="fa fa-th-list"></i></button>
+		<br><br><br>
+		<button type="button" class="btn btn-info btn-circle-fixed" data-toggle="modal" data-target="#procedimientos"><i class="fa fa-check"></i></button>
+		<br><br><br>
+		<button type="submit" class="btn btn-success btn-circle-fixed" ><i class="fa fa-save" value="Agregar" name="submit" id="submitButton" ></i></button>
+		
+		<!-- Modal receta -->
+		<div class="modal fade" id="receta" role="dialog">
+				<div class="modal-dialog modal-lg">
+				
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">RECETA</h4>
+					</div>
+					<div class="modal-body">
+							<textarea name="receta" id="receta" class="form-control" rows="12" placeholder="Texto aqui"></textarea>
+					</div>
+					<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+					</div>
+				</div>
+				
+				</div>
+				<!-- Finaliza contenido modal -->
+		</div>
+		<!-- Finaliza Modal receta-->
+
+		<!-- Modal procedimientos -->
+		<div class="modal fade" id="procedimientos" role="dialog">
+			<div class="modal-dialog modal-lg">
+			
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<div class="col-md-12 text-center">
+					<div class="section-title white mb-30">
+						<h2>procedimientos<span><input type="text" id="total"></span></h2>
+					</div>
+				</div>
+				</div>
+				<div class="modal-body">
+					<!-- Tabla clientes -->
+			<table class="table">
+				<thead class="thead-dark">
+				  <tr>
+					<th scope="col">Procedimiento</th>
+                    <th scope="col">Costo</th>
+					<th scope="col">Agregar</th>
+				  </tr>
+				</thead>
+				<tbody>
+					{% for item in Procedures %}
+					<tr>
+							<td>{{ item.nombre }}</td>
+							<td>$ {{ item.costo }}</td>
+							<td><input type="checkbox" class="form-check-input" id="{{item.id}}" name="{{item.id}}" {% if item.agendar %} checked{% endif %} value="{{item.costo}}" onchange="a({{item.id}})"></td>
+						</tr>
+					{% endfor %}
+					<script>
+						function a(id)
+						{
+							if (document.getElementById("total").value == "")
+							{
+								document.getElementById("total").value = 0
+							}
+							var x = document.getElementById(id).checked 
+							
+							if (x)
+							{ 
+								var t = parseFloat(document.getElementById("total").value)
+								var r = t + parseFloat(document.getElementById(id).value)
+								document.getElementById("total").value = r
+							} else{
+								var t = parseFloat(document.getElementById("total").value)
+								var r = t + (parseFloat(document.getElementById(id).value) * -1 )
+								document.getElementById("total").value = r
+							}
+						}
+					</script>
+					<br>
+					<script>
+						function total (id)
+						{
+							var check = document.getElementById(id).value
+							console.log(check)
+							{% for a in Procedures %}
+								{% if a.agendar %}
+									console.log({{a.costo}})
+								{% endif %}
+							{% endfor %}
+						}
+					</script>
+				</tbody>
+			  </table>
+				</div>
+				<div class="modal-footer">
+				<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 				</div>
 			</div>
-		</div>
-		<div class="row">
-			<form method="POST"> {% csrf_token %}
-				<div class="row">
-					
-					<div class="col-md-4">
-						<div class="form-group in_name">
-							<input type="text" name="expediente" class="form-control" id="name" placeholder="No. expediente">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<input type="text" name="nombre" class="form-control" id="email" placeholder="Nombre" required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="a_paterno" class="form-control" id="email" placeholder="Apellido paterno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido paterno')" oninput="setCustomValidity('')">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="a_materno" class="form-control" id="email" placeholder="Apellido materno" required="required" oninvalid="this.setCustomValidity('Ingrese apellido materno')" oninput="setCustomValidity('')">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group in_email">
-							<input type="email" name="mail" class="form-control" id="email" placeholder="Correo electronico">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="telefono" class="form-control" id="telefono" placeholder="Telefono">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="celular" class="form-control" id="celular" placeholder="Celular">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<input class="form-control date-pick" id="datepicker" name="f_nacimiento" placeholder="Date" type="text" required oninvalid="this.setCustomValidity('Especifique fecha de nacimiento')" oninput="setCustomValidity('')">
-							<i class="icon fa fa-calendar"></i>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<select id="catagory" name="sexo" class="form-control" required oninvalid="this.setCustomValidity('Seleccione un sexo')" oninput="setCustomValidity('')">
-								<option value="">Sexo</option>
-								<option value="Masculino">Masculino</option>
-								<option value="Femenino">Femenino</option>
-								<option value="No especificado">No especificar</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<select id="catagory" name="e_civil" class="form-control" required oninvalid="this.setCustomValidity('Seleccione estado civil')" oninput="setCustomValidity('')">
-								<option value="">Estado civil</option>
-								<option value="Casado">Casado</option>
-								<option value="Soltero">Soltero</option>
-								<option value="Union libre">Union libre</option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="ocupacion" class="form-control" id="email" placeholder="Ocupacion">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="religion" class="form-control" id="email" placeholder="Religion">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group">
-							<select id="catagory" name="tipo_sanguinio" class="form-control" required oninvalid="this.setCustomValidity('Seleccion tipo sanguinio')" oninput="setCustomValidity('')">
-								<option value="">Tipo sanguinio</option>
-								<option value="O-">O -</option>
-								<option value="O+">O +</option>
-								<option value="A-">A -</option>
-								<option value="A+">A +</option>
-								<option value="B-">B -</option>
-								<option value="B+">B + </option>
-								<option value="AB-">AB - </option>
-								<option value="AB+">AB + </option>
-							</select>
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="domicilio" class="form-control" id="email" placeholder="Domicilio">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="colonia" class="form-control" id="email" placeholder="Colonia">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="municipio" class="form-control" id="Municipio" placeholder="Municipio">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="estado" class="form-control" id="email" placeholder="Estado">
-						</div>
-					</div>
-					<div class="col-md-4">
-						<div class="form-group ">
-							<input type="text" name="cp" class="form-control" id="email" placeholder="Codigo postal">
-						</div>
-					</div>
-					
+			
+			</div>
+			<!-- Finaliza contenido modal -->
+	</div>
+	<!-- Finaliza procedimientos-->
 
-					<div class="col-md-4">
-						<div class="actions">
-							<input type="submit" value="Agregar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
-						</div>
-					</div>
-					
+		<div class="row">
+				<div class="row">
+						<div class="row">
+								<div class="col-md-12">
+									<div class="col-md-8">
+										<div class="col-md-6">
+											<div class="form-group">
+												<select id="Paciente" name="Paciente" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un paciente')" oninput="setCustomValidity('')">
+													<option value=""" ">LISTA DE PACIENTES</option>
+													{% for item in Pacientes %}
+														<option value="{{ item.id }}" onclick="document.getElementById('edad').value = {{item.f_nacimiento}}">{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
+													{% endfor %}
+												</select>
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+												<input type="number" name="edad" class="form-control" id="edad" placeholder="Edad">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+													<input type="number" name="temperatura" class="form-control" id="temperatura" placeholder="Temperatura ℃" >
+											</div>
+										</div>
+										<script>
+											function Imc() {
+												var altura = document.getElementById('estatura').value
+												var peso = document.getElementById('peso').value
+												var imc = (peso * 10000)/(altura * altura)
+												document.getElementById('imc').value = imc.toFixed(2)
+												
+											}
+											
+										</script>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+													<input type="number" name="peso" class="form-control" id="peso" placeholder="Peso KG,s" onchange="Imc()" >
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+													<input type="number" name="estatura" class="form-control" id="estatura" placeholder="Estatura CM,s" onchange="Imc()">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+												<input type="text" name="presion_arterial" class="form-control" id="presion_arterial" placeholder="Presion arterial sistolica/distolica">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+													<input type="number" name="talla" class="form-control" id="talla" placeholder="Talla">
+											</div>
+										</div>
+										<div class="col-md-6">
+											<div class="form-group in_name">
+													<input type="text" name="imc" class="form-control" id="imc" placeholder="IMC = Peso [kg]/ estatura [m2]">
+											</div>
+										</div>
+										
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">CABEZA</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="cabeza" id="cabeza" class="form-control" rows="3" placeholder="Texto aqui" ></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">TORAX</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="torax" id="torax" class="form-control" rows="3" placeholder="Texto aqui" ></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">ABDOMEN</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="abdomen" id="abdomen" class="form-control" rows="3" placeholder="Texto aqui" ></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">GENITALES</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="genitales" id="genitales" class="form-control" rows="3" placeholder="Texto aqui"></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">PIEL</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="piel" id="piel" class="form-control" rows="3" placeholder="Texto aqui"></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+										
+										<div class="col-md-12">
+												<div class="panel panel-default ">
+													<div class="panel-heading">OBSERVACIONES</div>
+													<div class="panel-body">
+															<div class="form-group">
+																<textarea name="observaciones" id="observaciones" class="form-control" rows="3" placeholder="Texto aqui"></textarea>
+															</div>
+													</div>
+												</div>
+										</div>
+									</div>
+									<div class="col-md-4">
+											<div class="panel panel-default ">
+												<div class="panel-heading">DIAGNOSTICO</div>
+												<div class="panel-body">
+														<div class="form-group">
+															<textarea name="diagnostico" id="diagnostico" class="form-control" rows="16" placeholder="Texto aqui"></textarea>
+														</div>
+												</div>
+											</div>
+											<div class="panel panel-default ">
+												<div class="panel-heading">PRONOSTICO</div>
+												<div class="panel-body">
+														<div class="form-group">
+															<textarea name="pronostico" id="pronostico" class="form-control" rows="16" placeholder="Texto aqui"></textarea>
+														</div>
+												</div>
+											</div>
+											<div class="panel panel-default ">
+												<div class="panel-heading">INDICACIONES TERAPEUTICAS</div>
+												<div class="panel-body">
+														<div class="form-group">
+															<textarea name="terapeuticas" id="terapeuticas" class="form-control" rows="15" placeholder="Texto aqui"></textarea>
+														</div>
+												</div>
+											</div>
+
+									</div>
+								</div>
+							</div>
 				</div>
 			</form>
 		</div>
