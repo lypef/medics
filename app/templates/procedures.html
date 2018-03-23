@@ -189,19 +189,19 @@
 			  </table>
 			<div align="center">
 				<ul class="pagination">
-					{%if ListPatients.number > 1%}
-						<li class="waves-effect"><a href="?page={{ ListPatients.previous_page_number }}">&laquo;</a></li>
+					{%if ListProcedures.number > 1%}
+						<li class="waves-effect"><a href="?page={{ ListProcedures.previous_page_number }}">&laquo;</a></li>
 					{%endif%}
 					{% for log in page_range %}
-					{%if log == ListPatients.number%}
+					{%if log == ListProcedures.number%}
 							<li class="active"><a href="?page={{log}}">{{log}}</a></li>
 						{%else%}  
 							<li class="waves-effect"><a href="?page={{log}}">{{log}}</a></li>
 						{%endif%}
 						
 					{%endfor%} 
-					{%if ListPatients.number < count %}
-						<li class="waves-effect"><a href="?page={{ ListPatients.next_page_number }}">&raquo;</a></li>
+					{%if ListProcedures.number < count %}
+						<li class="waves-effect"><a href="?page={{ ListProcedures.next_page_number }}">&raquo;</a></li>
 					{%endif%}
 				</ul>
 			</div>

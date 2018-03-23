@@ -142,7 +142,7 @@
 									  {% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
 									  <li role="separator" class="divider"></li>
 									  <li><a href="#">Ver citas</a></li>
-									  <li><a href="#">Ver historia clinica</a></li>
+									  <li><a href="/recipe_history/{{ item.id }}">Ver historia clinica</a></li>
 									</ul>
 								  </div>
 

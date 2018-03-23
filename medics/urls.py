@@ -19,4 +19,6 @@ urlpatterns = [
     url(r'^procedures_edit/(?P<id>[^/]+)/$', views.procedures_Edit),
     url(r'^procedures_delete/', views.procedure_Delete),
     url(r'^consultation/', views.consultation),
+    url(r'^recipe/', views.recipe),
+    url(r'^recipe_history/(?P<id>[^/]+)/$', views.recipe_history)
 ]
