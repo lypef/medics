@@ -116,7 +116,6 @@
 				  <tr>
 					<th scope="col">Procedimiento</th>
                     <th scope="col">Costo</th>
-                    <th scope="col">Descripcion</th>
                     <th scope="col">Agregar siempre</th>
                     <th scope="col">Opciones</th>
 				  </tr>
@@ -126,7 +125,6 @@
 					<tr>
 							<td>{{ item.nombre }}</td>
 							<td>$ {{ item.costo }}</td>
-                            <td>{{ item.descripcion|slice:'0:30' }}...</td>
                             <td>{% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</td>
 							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> <a href="/procedures_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> {% if user.is_superuser %}<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
 
@@ -170,7 +168,7 @@
                                         <p>Procedimiento: {{ item.nombre }}</p>
                                         <p>Costo: $ {{ item.costo }}</p>
                                         <p>Descripcion: {{ item.descripcion }}</p>
-                                        <p>Agendar: {% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</p>
+                                        <p>Agregar siempre a consulta: {% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</p>
 									</div>
 									<div class="modal-footer">
 									<a href="/procedures_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>
@@ -239,7 +237,7 @@
                     </div>
                     <div class="col-md-12">
 						<div class="form-group">
-                            <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Message" required></textarea>
+                            <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Texto aqui" required></textarea>
 						</div>
 					</div>
 					
