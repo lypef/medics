@@ -5,7 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
-from models import patients, Procedure
+from django.contrib.auth.models import User
+from models import patients, Procedure, receta, receta_procedures
 
 def index(request): 
     return render(request,'index.html')
@@ -245,17 +246,53 @@ def procedure_Delete(request):
 
 @login_required
 def consultation(request):
-    Pacientes = patients.objects.all().order_by('nombre')
-    Procedures = Procedure.objects.all().order_by('nombre')
+    if request.method == 'POST':
+        print request.POST.get('paciente')
+        r = receta(
+                patient = patients.objects.get(id=request.POST.get('paciente')),
+                edad = request.POST.get('edad'),
+                temperatura = request.POST.get('temperatura'),
+                peso = request.POST.get('peso'),
+                estatura = request.POST.get('estatura'),
+                presion_arterial = request.POST.get('presion_arterial'),
+                talla = request.POST.get('talla'),
+                imc = request.POST.get('imc'),
+                cabeza = request.POST.get('cabeza'),
+                torax = request.POST.get('torax'),
+                abdomen = request.POST.get('abdomen'),
+                genitales = request.POST.get('genitales'),
+                piel = request.POST.get('piel'),
+                diagnostico = request.POST.get('diagnostico'),
+                pronostico = request.POST.get('pronostico'),
+                terapeuticas = request.POST.get('terapeuticas'),
+                f_consulta = str(datetime.datetime.now()),
+                user = User.objects.get(id=request.user.id)
+    			)
+    	r.save()
+        procedimientos = Procedure.objects.all().order_by('nombre')
+        for a in procedimientos:
+            if request.POST.get('p'+str(a.id)):
+                p = receta_procedures(
+                    receta = receta.objects.get(id=r.id),
+                    procedure = Procedure.objects.get(id=a.id),
+                    costo = a.costo
+    			)
+    	        p.save()
+        messages.success(request,'Consulta exitosa')
+        return redirect ('/consultation') 
 
-    for a in Pacientes:
-        dt = datetime.datetime.now()
-        year_actual = int(dt.strftime("%Y"))
+    if request.method == 'GET':
+        Pacientes = patients.objects.all().order_by('nombre')
+        Procedures = Procedure.objects.all().order_by('nombre')
 
-        s = str(a.f_nacimiento)
-        ss = s.split('-')
-        
-        if ss[0] != 'None':
-            year_nacimiento = int(ss[0])
-            a.f_nacimiento =  year_actual - year_nacimiento
-    return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures})
+        for a in Pacientes:
+            dt = datetime.datetime.now()
+            year_actual = int(dt.strftime("%Y"))
+
+            s = str(a.f_nacimiento)
+            ss = s.split('-')
+            
+            if ss[0] != 'None':
+                year_nacimiento = int(ss[0])
+                a.f_nacimiento =  year_actual - year_nacimiento
+        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures})

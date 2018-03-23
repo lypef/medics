@@ -153,7 +153,7 @@
 					<tr>
 							<td>{{ item.nombre }}</td>
 							<td>$ {{ item.costo }}</td>
-							<td><input type="checkbox" class="form-check-input" id="{{item.id}}" name="{{item.id}}" {% if item.agendar %} checked{% endif %} value="{{item.costo}}" onchange="calculate_total()"></td>
+							<td><input type="checkbox" class="form-check-input" id="p{{item.id}}" name="p{{item.id}}" {% if item.agendar %} checked{% endif %} value="{{item.costo}}" onchange="calculate_total()"></td>
 						</tr>
 					{% endfor %}
 					<script>
@@ -164,7 +164,7 @@
 						{
 							var t = 0
 							{% for item in Procedures %}
-								if ( document.getElementById({{item.id}}).checked )
+								if ( document.getElementById("p"+{{item.id}}).checked )
 								{ 
 									t += {{item.costo}}
 								}
@@ -175,7 +175,7 @@
 						function SelectAll (bol)
 						{
 							{% for item in Procedures %}
-								document.getElementById({{item.id}}).checked = bol
+								document.getElementById("p"+{{item.id}}).checked = bol
 							{% endfor %}
 							calculate_total()
 						}
@@ -202,12 +202,24 @@
 									<div class="col-md-8">
 										<div class="col-md-6">
 											<div class="form-group">
-												<select id="Paciente" name="Paciente" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un paciente')" oninput="setCustomValidity('')">
-													<option value=""" ">LISTA DE PACIENTES</option>
+												<select id="paciente" name="paciente" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un paciente')" oninput="setCustomValidity('')" onchange="LoadEdad()">
+													<option value="">LISTA DE PACIENTES</option>
 													{% for item in Pacientes %}
-														<option value="{{ item.id }}" onclick="document.getElementById('edad').value = {{item.f_nacimiento}}">{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
+														<option value="{{ item.id }}">{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
 													{% endfor %}
 												</select>
+												<script>
+													function LoadEdad()
+													{
+														var id = document.getElementById("paciente").value
+														{% for item in Pacientes %}
+															if ( id == {{item.id}} )
+															{
+																document.getElementById("edad").value = {{item.f_nacimiento}}
+															}
+														{% endfor %}
+													}
+												</script>
 											</div>
 										</div>
 										<div class="col-md-6">

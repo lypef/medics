@@ -1,9 +1,7 @@
-# -*- coding: utf-8 -*-
 from __future__ import unicode_literals
-
 from django.db import models
+from django.contrib.auth.models import User
 
-# Create your models here.
 
 class patients (models.Model):
     expediente = models.CharField(max_length=150)
@@ -39,3 +37,28 @@ class Procedure (models.Model):
     descripcion = models.TextField()
     costo = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     agendar = models.BooleanField(default=False)
+
+class receta (models.Model):
+    patient = models.ForeignKey(patients)
+    edad = models.CharField(max_length=150)
+    temperatura = models.CharField(max_length=150)
+    peso = models.CharField(max_length=150)
+    estatura = models.CharField(max_length=150)
+    presion_arterial = models.CharField(max_length=150)
+    talla = models.CharField(max_length=150)
+    imc = models.CharField(max_length=150)
+    cabeza = models.TextField()
+    torax = models.TextField()
+    abdomen = models.TextField()
+    genitales = models.TextField()
+    piel = models.TextField()
+    diagnostico = models.TextField()
+    pronostico = models.TextField()
+    terapeuticas = models.TextField()
+    f_consulta = models.DateTimeField()
+    user = models.ForeignKey(User)
+
+class receta_procedures (models.Model):
+    receta = models.ForeignKey(receta)
+    procedure = models.ForeignKey(Procedure)
+    costo = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
