@@ -317,8 +317,8 @@ def recipe(request):
         except EmptyPage:
             # If page is out osf range (e.g. 9999), deliver last page of results.
             recetas = paginator.page(paginator.num_pages)
-
-        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages})
+        procedures = receta_procedures.objects.all()
+        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures})
 
 @login_required
 def consultation(request):
@@ -342,7 +342,8 @@ def consultation(request):
                 pronostico = request.POST.get('pronostico'),
                 terapeuticas = request.POST.get('terapeuticas'),
                 f_consulta = str(datetime.datetime.now()),
-                user = User.objects.get(id=request.user.id)
+                user = User.objects.get(id=request.user.id),
+                total = request.POST.get('total_g')
     			)
     	r.save()
         procedimientos = Procedure.objects.all().order_by('nombre')
@@ -375,4 +376,7 @@ def consultation(request):
 
 @login_required
 def recipe_history(request, id):
-    return render(request,'recipe_history.html')
+    var = receta.objects.filter(patient__id__contains=id).order_by('-f_consulta')
+    procedures = receta_procedures.objects.all()
+    
+    return render(request,'recipe_history.html', {'var':var,'procedures':procedures})

@@ -133,7 +133,8 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                        <li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-file"></span> Receta</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#">Ver citas</a></li>
                                         <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>
@@ -163,8 +164,8 @@
                                                             <p>Presion arterial: {{ item.presion_arterial }}</p>
                                                             <p>Talla: {{ item.talla }}</p>
                                                             <p>Imc: {{ item.imc }}</p>
-                                                            <p>Cabeza: {{ item.cabeza|slice:'0:35' }}...</p>
-                                                            <p>Torax: {{ item.torax|slice:'0:35' }}...</p>
+                                                            <p>Cabeza: {{ item.cabeza|slice:'0:25' }}...</p>
+                                                            <p>Torax: {{ item.torax|slice:'0:25' }}...</p>
                                                             
                                                     </div>
                                                     <div class="col-md-6">
@@ -178,7 +179,22 @@
                                                             <p>Medico: {{ item.user.first_name }}</p>
                                                     </div>
                                                 </div>
-                                            </div>
+											</div>
+											<hr>
+											<h4 class="modal-title">PROCEDIMIENTOS REALIZADOS</h4>
+											<br><ul class="list-group">
+													{% for a in procedures %}
+														{% if item.id == a.receta.id %}
+															<li class="list-group-item">
+																<span class="badge">$ {{a.costo}}</span>
+																{{a.procedure.nombre}}
+															</li>
+														{% endif %}
+													{% endfor %}
+													<br>
+													<div class="text-right">
+															<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
+															</div>
 									</div>
 									<div class="modal-footer">
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
@@ -191,7 +207,6 @@
 							
 							</div>
 							<!-- Finaliza Modal view-->
-
 						</tr>
 					{% endfor %}
 				</tbody>

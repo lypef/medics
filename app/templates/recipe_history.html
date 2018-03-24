@@ -1,1 +1,195 @@
-Hola
+{% extends 'structure.html' %}
+{% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
+{% block structure_body%}
+{% load static %}
+<!-- Navigation area starts -->
+<div class="menu-area navbar-fixed-top">
+<div class="container">
+	<div class="row">
+
+		<!-- Navigation starts -->
+		<div class="col-md-12">
+			<div class="mainmenu">
+				<div class="navbar navbar-nobg">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/manager"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse">
+						<nav>
+							<ul class="nav navbar-nav navbar-right">
+								
+								{% if user.is_staff %} <li class=""><a href="#slider">Agenda</a></li> {% endif %}
+								<li ><a href="/patient">Pacientes</a></li>
+								<li class=""><a  href="/procedures">Procedimientos</a></li>
+                                {% if user.is_superuser %}<li class="active"><a href="/recipe">Recetas</a></li>{% endif %}
+                                {% if user.is_superuser %}<li ><a href="/consultation">Consulta</a></li>{% endif %}
+								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Navigation ends -->
+
+	</div>
+</div>
+</div>
+<!-- Navigation area ends -->
+<div class="clearfix header-space"></div>
+{% if messages %}
+		{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="container"><br>
+				<div class="alert alert-success fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡OK!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="container"><br>
+				<div class="alert alert-info  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Informacion!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="container"><br>
+				<div class="alert alert-warning  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Alerta!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+	
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="container"><br>
+				<div class="alert alert-danger  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Error!</strong> {{ message }}
+				</div>
+			</div>	
+			{% endif %}
+		
+		{% endfor %}
+		{% endif %}
+    <!--Contenido-->
+    <section id="department" class="department-area  section-small">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 text-center">
+                    <div class="section-title white">
+                        <h2> <p id="nombre"></p> <span id="apellidos"></span></h2>
+                        {% for item in var %}
+                        <script>
+                            document.getElementById("nombre").innerHTML = '{{item.patient.nombre}}'
+                            document.getElementById("apellidos").innerHTML = '{{item.patient.a_paterno}} {{item.patient.a_materno}}'
+                        </script>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for item in var %}
+                <div class="col-md-4 col-sm-6">
+                    <div class="single-service">
+                        <div class="ser-title">
+                            <i class="fa fa-user-md"></i>
+                            <a href="" data-toggle="modal" data-target="#view{{item.id}}"><h3>{{ item.f_consulta  }}</h3></a>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="col-md-6">
+                                    {{item.edad}} años
+                                    <br>{{item.temperatura}} Grados
+                                </div>
+                                <div class="col-md-6">
+                                    Talla: {{item.talla}}
+                                    <br>IMC: {{item.imc}}
+                                </div>
+                            </div>
+                        </div>
+                        Presion arterial: {{item.presion_arterial}}
+                        <br>Medico: {{item.user.first_name}}
+                    </div>
+				</div>
+				
+				<!-- Modal view -->
+				<div class="modal fade" id="view{{item.id}}" role="dialog">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<div class="modal-dialog modal-lg">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">PACIENTE: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+						</div>
+						<div class="modal-body">
+								<div class="row">
+									<div class="col-md-9">
+										<div class="col-md-6">
+												<p>Edad: {{ item.edad }} años</p>
+												<p>Temperatura: {{ item.temperatura }} grados</p>
+												<p>Peso: {{ item.peso }} KG,s</p>
+												<p>Estatura: {{ item.estatura }} CM,s</p>
+												<p>Presion arterial: {{ item.presion_arterial }}</p>
+												<p>Talla: {{ item.talla }}</p>
+												<p>Imc: {{ item.imc }}</p>
+												<p>Cabeza: {{ item.cabeza|slice:'0:25' }}...</p>
+												<p>Torax: {{ item.torax|slice:'0:25' }}...</p>
+												
+										</div>
+										<div class="col-md-6">
+												<p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
+												<p>Genitales: {{ item.genitales|slice:'0:45' }}...</p>
+												<p>Piel: {{ item.piel|slice:'0:45' }}...</p>
+												<p>Diagnostico: {{ item.diagnostico|slice:'0:45' }}...</p>
+												<p>Pronostico: {{ item.pronostico|slice:'0:45' }}...</p>
+												<p>Terapeuticas: {{ item.terapeuticas|slice:'0:45' }}...</p>
+												<p>Fecha de consulta: {{ item.f_consulta }}</p>
+												<p>Medico: {{ item.user.first_name }}</p>
+										</div>
+									</div>
+								</div>
+								<hr>
+								<h4 class="modal-title">PROCEDIMIENTOS REALIZADOS</h4>
+								<br><ul class="list-group">
+										{% for a in procedures %}
+											{% if item.id == a.receta.id %}
+												<li class="list-group-item">
+													<span class="badge">$ {{a.costo}}</span>
+													{{a.procedure.nombre}}
+												</li>
+											{% endif %}
+										{% endfor %}
+										<br>
+										<div class="text-right">
+												<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
+												</div>
+						</div>
+						<div class="modal-footer">
+						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+						</div>
+					</div>
+				</div>
+					<!-- Finaliza contenido modal -->
+				</div>
+				<!-- Finaliza Modal view-->
+            {% endfor %}	
+            </div>
+        </div>
+    </section>
+<!--Finaliza Contenido-->
+{% endblock %}

@@ -57,6 +57,7 @@ class receta (models.Model):
     terapeuticas = models.TextField()
     f_consulta = models.DateTimeField()
     user = models.ForeignKey(User)
+    total = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
 
 class receta_procedures (models.Model):
     receta = models.ForeignKey(receta)

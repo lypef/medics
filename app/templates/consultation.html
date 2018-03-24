@@ -103,13 +103,16 @@
 		<!-- Modal receta -->
 		<div class="modal fade" id="receta" role="dialog">
 				<div class="modal-dialog modal-lg">
-				
-				<!-- Modal content-->
-				<div class="modal-content">
-					<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title">RECETA</h4>
-					</div>
+					<!-- Modal content-->
+					<div class="modal-content">
+						<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<div class="col-md-12 text-center">
+							<div class="section-title white">
+								<h2>RECETA<span></p></span></h2>
+							</div>
+						</div>
+						</div>
 					<div class="modal-body">
 							<textarea name="receta" id="receta" class="form-control" rows="12" placeholder="Texto aqui"></textarea>
 					</div>
@@ -134,6 +137,7 @@
 				<div class="col-md-12 text-center">
 					<div class="section-title white mb-30">
 						<h2>procedimientos<span><p id="total"></p>
+						<input type="hidden" name="total_g" id="total_g">
 						</span></h2>
 					</div>
 				</div>
@@ -171,6 +175,7 @@
 							{% endfor %}
 							total_gbl = t
 							document.getElementById("total").innerHTML = "Total $: " + total_gbl
+							document.getElementById("total_g").value = total_gbl
 						}
 						function SelectAll (bol)
 						{
