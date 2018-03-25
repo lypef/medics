@@ -24,11 +24,11 @@
 					<div class="navbar-collapse collapse">
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
-								{% if user.is_staff %} <li ><a href="#slider">Agenda</a></li> {% endif %}
+								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li class=""><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
@@ -51,40 +51,40 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 			<div class="container"><br>
 				<div class="alert alert-info  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 			<div class="container"><br>
 				<div class="alert alert-warning  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
 			<div class="container"><br>
 				<div class="alert alert-danger  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-		
+
 		{% endfor %}
 		{% endif %}
-		
-<div class="container">		
+
+<div class="container">
     <div class="row">
         Aqui van los modulos principales
     </div>

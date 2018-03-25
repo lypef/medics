@@ -20,5 +20,7 @@ urlpatterns = [
     url(r'^procedures_delete/', views.procedure_Delete),
     url(r'^consultation/', views.consultation),
     url(r'^recipe/', views.recipe),
-    url(r'^recipe_history/(?P<id>[^/]+)/$', views.recipe_history)
+    url(r'^recipe_history/(?P<id>[^/]+)/$', views.recipe_history),
+    url(r'^diary/', views.diary_f),
+    url(r'^consultation_diary/(?P<id_agenda>[^/]+)/(?P<id_paciente>[^/]+)/$', views.consultation_agenda),
 ]

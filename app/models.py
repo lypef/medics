@@ -63,3 +63,8 @@ class receta_procedures (models.Model):
     receta = models.ForeignKey(receta)
     procedure = models.ForeignKey(Procedure)
     costo = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
+
+class diary (models.Model):
+    patient = models.ForeignKey(patients)
+    f_start = models.CharField(max_length=150)
+    f_end = models.CharField(max_length=150)
