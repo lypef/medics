@@ -42,6 +42,8 @@ def patient (request):
         else:
             ListPatients = patients.objects.all().order_by('nombre')
 
+            agenda = diary.objects.all().order_by('-id')
+
         for a in ListPatients:
             dt = datetime.datetime.now()
             year_actual = int(dt.strftime("%Y"))
@@ -66,7 +68,7 @@ def patient (request):
             # If page is out osf range (e.g. 9999), deliver last page of results.
             ListPatients = paginator.page(paginator.num_pages)
 
-        return render(request,'patients.html', {'ListPatients':ListPatients,'page_range':paginator.page_range,'count':paginator.num_pages})
+        return render(request,'patients.html', {'ListPatients':ListPatients,'page_range':paginator.page_range,'count':paginator.num_pages, 'agenda':agenda})
 
     if request.method == 'POST':
         insert = patients(
@@ -306,6 +308,8 @@ def recipe(request):
         else:
             recetas = receta.objects.all().order_by('-f_consulta')
 
+        agenda = diary.objects.all().order_by('-id')
+
         paginator = Paginator(recetas, 10)
         page = request.GET.get('page')
 
@@ -318,7 +322,7 @@ def recipe(request):
             # If page is out osf range (e.g. 9999), deliver last page of results.
             recetas = paginator.page(paginator.num_pages)
         procedures = receta_procedures.objects.all()
-        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures})
+        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures, 'agenda':agenda})
 
 @login_required
 def consultation(request):

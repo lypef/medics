@@ -24,7 +24,7 @@
 					<div class="navbar-collapse collapse">
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
-								
+
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li ><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
@@ -52,36 +52,36 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 			<div class="container"><br>
 				<div class="alert alert-info  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 			<div class="container"><br>
 				<div class="alert alert-warning  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
 			<div class="container"><br>
 				<div class="alert alert-danger  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-		
+
 		{% endfor %}
 		{% endif %}
     <!--Contenido-->
@@ -136,17 +136,51 @@
 										<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
 										<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-file"></span> Receta</a></li>
                                         <li role="separator" class="divider"></li>
-                                        <li><a href="#">Ver citas</a></li>
+                                        <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>
                                     </ul>
                                     </div>
                                     </td>
+																		<!-- Modal Cita -->
+																		<div class="modal fade" id="cita{{item.id}}" role="dialog">
+																			<div class="modal-dialog modal-sm">
+
+																			<!-- Modal content-->
+																			<div class="modal-content">
+																				<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal">&times;</button>
+																				<h4 class="modal-title">{{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+																				</div>
+																				<div class="modal-body">
+																					<div class="row">
+																						<ul class="list-group">
+																								{% for a in agenda %}
+																									{% if a.patient.id == item.patient.id %}
+																										<li class="list-group-item">
+																											<span class="badge">Receta: {{a.receta}}</span>
+																											Hora: {{a.f_start}}
+																										</li>
+																									{% endif %}
+																								{% endfor %}
+																							</ul>
+																					</div>
+																				</div>
+																				<div class="modal-footer">
+																				<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+																				</div>
+																			</div>
+
+																			</div>
+																			<!-- Finaliza contenido modal -->
+																	</div>
+																	</div>
+																	<!-- Finaliza Modal cita-->
 							<!-- Modal view -->
 							<div class="modal fade" id="view{{item.id}}" role="dialog">
 									<button type="button" class="close" data-dismiss="modal">&times;</button>
                                     <div class="modal-dialog modal-lg">
 									<button type="button" class="close" data-dismiss="modal">&times;</button>
-								
+
 								<!-- Modal content-->
 								<div class="modal-content">
 									<div class="modal-header">
@@ -166,7 +200,7 @@
                                                             <p>Imc: {{ item.imc }}</p>
                                                             <p>Cabeza: {{ item.cabeza|slice:'0:25' }}...</p>
                                                             <p>Torax: {{ item.torax|slice:'0:25' }}...</p>
-                                                            
+
                                                     </div>
                                                     <div class="col-md-6">
                                                             <p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
@@ -200,11 +234,11 @@
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>
 								</div>
-								
+
 								</div>
 								<!-- Finaliza contenido modal -->
 							</div>
-							
+
 							</div>
 							<!-- Finaliza Modal view-->
 						</tr>
@@ -219,11 +253,11 @@
 					{% for log in page_range %}
 					{%if log == recetas.number%}
 							<li class="active"><a href="?page={{log}}">{{log}}</a></li>
-						{%else%}  
+						{%else%}
 							<li class="waves-effect"><a href="?page={{log}}">{{log}}</a></li>
 						{%endif%}
-						
-					{%endfor%} 
+
+					{%endfor%}
 					{%if recetas.number < count %}
 						<li class="waves-effect"><a href="?page={{ recetas.next_page_number }}">&raquo;</a></li>
 					{%endif%}

@@ -66,5 +66,6 @@ class receta_procedures (models.Model):
 
 class diary (models.Model):
     patient = models.ForeignKey(patients)
+    receta = models.CharField(max_length=150)
     f_start = models.CharField(max_length=150)
     f_end = models.CharField(max_length=150)

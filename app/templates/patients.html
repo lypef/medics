@@ -24,12 +24,12 @@
 					<div class="navbar-collapse collapse">
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
-								
+
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li class="active"><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
@@ -52,36 +52,36 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 			<div class="container"><br>
 				<div class="alert alert-info  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 			<div class="container"><br>
 				<div class="alert alert-warning  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
 			<div class="container"><br>
 				<div class="alert alert-danger  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-		
+
 		{% endfor %}
 		{% endif %}
 
@@ -97,7 +97,7 @@
 			</div>
 		</div>
 		<div class="row">
-			
+
 			<form action="/patient">
 			<div class="col-lg-12">
 				<div class="input-group">
@@ -141,12 +141,12 @@
 									  <li><a href="/patient_edit/{{ item.id }}"><span class="fa fa-pencil"></span> Editar</a></li>
 									  {% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
 									  <li role="separator" class="divider"></li>
-									  <li><a href="#">Ver citas</a></li>
+									  <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
 									  <li><a href="/recipe_history/{{ item.id }}">Ver historia clinica</a></li>
 									</ul>
 								  </div>
 
-							
+
 							</td>
 
 							<!-- Modal Editar-->
@@ -167,7 +167,7 @@
 												<input type="hidden" name="id" value="{{ item.id }}">
 												<button type="button" class="btn btn-success" data-dismiss="modal">No</button>
 												<input type="submit" value="SI" name="submit" id="submitButton" class="btn btn-danger" title="Enviar delete">
-											</form>													
+											</form>
 											{% endif %}
 										</div>
 									</div>
@@ -194,7 +194,7 @@
 												<input type="hidden" name="id" value="{{ item.id }}">
 												<button type="button" class="btn btn-success" data-dismiss="modal">No</button>
 												<input type="submit" value="SI" name="submit" id="submitButton" class="btn btn-danger" title="Enviar delete">
-											</form>													
+											</form>
 											{% endif %}
 										</div>
 									</div>
@@ -202,11 +202,11 @@
 								</div>
 								</div>
 							<!-- Finaliza Modal Delete-->
-	
+
 							<!-- Modal view -->
 							<div class="modal fade" id="view{{item.id}}" role="dialog">
 								<div class="modal-dialog modal-lg">
-								
+
 								<!-- Modal content-->
 								<div class="modal-content">
 									<div class="modal-header">
@@ -248,12 +248,47 @@
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>
 								</div>
-								
+
 								</div>
 								<!-- Finaliza contenido modal -->
 						</div>
 						</div>
 						<!-- Finaliza Modal view-->
+
+						<!-- Modal Cita -->
+						<div class="modal fade" id="cita{{item.id}}" role="dialog">
+							<div class="modal-dialog modal-sm">
+
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<ul class="list-group">
+												{% for a in agenda %}
+													{% if a.patient.id == item.id %}
+														<li class="list-group-item">
+															<span class="badge">Receta: {{a.receta}}</span>
+															Hora: {{a.f_start}}
+														</li>
+													{% endif %}
+												{% endfor %}
+											</ul>
+									</div>
+								</div>
+								<div class="modal-footer">
+								<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+								</div>
+							</div>
+
+							</div>
+							<!-- Finaliza contenido modal -->
+					</div>
+					</div>
+					<!-- Finaliza Modal cita-->
 				</tr>
 			{% endfor %}
 			</tbody>
@@ -266,11 +301,11 @@
 					{% for log in page_range %}
 					{%if log == ListPatients.number%}
 							<li class="active"><a href="?page={{log}}">{{log}}</a></li>
-						{%else%}  
+						{%else%}
 							<li class="waves-effect"><a href="?page={{log}}">{{log}}</a></li>
 						{%endif%}
-						
-					{%endfor%} 
+
+					{%endfor%}
 					{%if ListPatients.number < count %}
 						<li class="waves-effect"><a href="?page={{ ListPatients.next_page_number }}">&raquo;</a></li>
 					{%endif%}
@@ -295,7 +330,7 @@
 		<div class="row">
 			<form method="POST"> {% csrf_token %}
 				<div class="row">
-					
+
 					<div class="col-md-4">
 						<div class="form-group in_name">
 							<input type="text" name="expediente" class="form-control" id="name" placeholder="No. expediente">
@@ -412,7 +447,7 @@
 							<h2>datos <span>patologicos</span></h2>
 						</div>
 					</div>
-					
+
 					<div class="col-md-12">
 						<div class="actions">
 							<div class="panel panel-info">
@@ -517,7 +552,7 @@
 							<input type="submit" value="Agregar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
 						</div>
 					</div>
-					
+
 				</div>
 			</form>
 		</div>
