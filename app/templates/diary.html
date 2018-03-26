@@ -59,8 +59,6 @@
 		<div id="preloader"></div>
 		<!-- Preloader ends -->
 
-
-
 <!-- Navigation area starts -->
     <div class="menu-area navbar-fixed-top">
         <div class="container">
@@ -138,7 +136,6 @@
                 {
                   title: '{{a.patient.nombre}} {{a.patient.a_paterno}} {{a.patient.a_materno}}',
                   start: '{{ a.f_start}}',
-                  end: '{{ a.f_end}}',
                   url: '/consultation_diary/{{ a.id}}/{{a.patient.id}}',
                 },
               {% endfor %}
@@ -163,20 +160,137 @@
         }
 
       </style>
+			{% if messages %}
+					{% for message in messages %}
+						{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+						<div class="container"><br>
+							<div class="alert alert-success fade in">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<strong>¡OK!</strong> {{ message }}
+							</div>
+						</div>
+						{% endif %}
+
+						{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+						<div class="container"><br>
+							<div class="alert alert-info  fade in">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<strong>¡Informacion!</strong> {{ message }}
+							</div>
+						</div>
+						{% endif %}
+
+						{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+						<div class="container"><br>
+							<div class="alert alert-warning  fade in">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<strong>¡Alerta!</strong> {{ message }}
+							</div>
+						</div>
+						{% endif %}
+
+						{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+						<div class="container"><br>
+							<div class="alert alert-danger  fade in">
+								<button type="button" class="close" data-dismiss="alert">&times;</button>
+								<strong>¡Error!</strong> {{ message }}
+							</div>
+						</div>
+						{% endif %}
+
+					{% endfor %}
+					{% endif %}
       <br>
       <div id='calendar'></div>
-      <div class="container">
-    		<div class="row">
-    			<br>
-    			<div class="col-md-12 text-center">
-    				<div class="section-title mb-60">
-    					<h2>Nueva cita<span></span></h2>
-    				</div>
-    			</div>
-    		</div>
-    </div>
-	</div>
+			<br>
 
+			<section id="department" class="department-area  section-big">
+				<div class="container">
+					<div class="row">
+						<div class="col-md-12 text-center">
+	    				<div class="section-title ">
+	    					<h2>Nueva cita<span></span></h2>
+	    				</div>
+	    			</div>
+
+						<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.1.221/styles/kendo.common.min.css" />
+						<link rel="stylesheet" href="http://kendo.cdn.telerik.com/2018.1.221/styles/kendo.bootstrap.min.css" />
+						<!--<script src="http://kendo.cdn.telerik.com/2018.1.221/js/kendo.all.min.js"></script>-->
+						<script src="{% static 'datetimepicker/kendo.all.min.js' %}"></script>
+
+						<form method="POST"> {% csrf_token %}
+						<div class="form-group col-md-4">
+							<select id="paciente" name="paciente" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un paciente')" oninput="setCustomValidity('')" onchange="LoadEdad()">
+								<option value="">LISTA DE PACIENTES</option>
+								{% for item in Pacientes %}
+									<option value="{{ item.id }}">{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
+								{% endfor %}
+							</select>
+						</div>
+						<div class="form-group col-md-4">
+							<input id="datetimepicker" name="datetimepicker" title="datetimepicker"  style="width: 100%;  height:44px;"/>
+						</div>
+						<div class="form-group col-md-4">
+							<select id="receta" name="receta" class="form-control" >
+								<option value="">LISTA DE RECETAS</option>
+							</select>
+							<script>
+								function LoadEdad()
+								{
+									var id = document.getElementById("paciente").value
+									var x = document.getElementById("receta")
+
+									for(i = x.options.length - 1 ; i >= 0 ; i--)
+							    {
+							        x.remove(i);
+							    }
+
+									var cont = 0;
+									{% for r in recetas %}
+										if ( id == {{r.patient.id}} )
+										{
+											cont ++
+										}
+									{% endfor %}
+
+									var option = document.createElement("option");
+									option.value = ""
+									if (cont > 0)
+									{
+											option.text = "LISTA DE RECETAS ( " + cont + " )"
+									}else {
+											option.text = "LISTA DE RECETAS"
+									}
+									x.add(option);
+
+									{% for r in recetas %}
+										if ( id == {{r.patient.id}} )
+										{
+											var option = document.createElement("option");
+											option.value = {{r.id}}
+											option.text = "No. Receta: "+{{r.id}}
+									    x.add(option);
+										}
+									{% endfor %}
+								}
+							</script>
+						</div>
+						<script>
+								$(document).ready(function () {
+										// create DateTimePicker from input HTML element
+										$("#datetimepicker").kendoDateTimePicker({
+												value: new Date(),
+												dateInput: true
+										});
+								});
+						</script>
+						<div class="form-group col-md-12 text-center">
+							<button type="submit" class="btn btn-success btn-circle-fixed" value="Actualizar" name="submit" id="submitButton" ><i class="fa fa-save" > Guardar</i></button>
+						</div>
+						</form>
+					</div>
+				</div>
+			</section>
 
 		<!-- Contact area ends -->
 

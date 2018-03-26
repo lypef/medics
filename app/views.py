@@ -9,7 +9,8 @@ from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary
 
 def index(request):
-    return render(request,'index.html')
+    #return render(request,'index.html')
+    return redirect("/manager")
 
 def user_login (request):
     if request.method == 'POST':
@@ -387,8 +388,24 @@ def recipe_history(request, id):
 
 @login_required
 def diary_f(request):
-    agenda = diary.objects.all()
-    return render(request,'diary.html', {'agenda':agenda})
+    if request.method == 'POST':
+        d = diary(
+            patient = patients.objects.get(id=request.POST.get('paciente')),
+            receta = request.POST.get('receta'),
+            f_start = request.POST.get('datetimepicker')
+            )
+        d.save()
+
+
+
+        messages.success(request,'Agregado')
+        return redirect ('/diary')
+
+    if request.method == 'GET':
+        agenda = diary.objects.all()
+        Pacientes = patients.objects.all().order_by('nombre')
+        recetas =receta.objects.all().order_by('-f_consulta')
+        return render(request,'diary.html', {'agenda':agenda, 'Pacientes':Pacientes, 'recetas':recetas})
 
 @login_required
 def consultation_agenda (request, id_agenda, id_paciente):
