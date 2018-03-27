@@ -68,3 +68,12 @@ class diary (models.Model):
     patient = models.ForeignKey(patients)
     receta = models.CharField(max_length=150)
     f_start = models.CharField(max_length=150)
+
+class properties (models.Model):
+    direccion = models.CharField(max_length=600)
+    correo = models.CharField(max_length=600)
+    telefono = models.CharField(max_length=600)
+    facebook = models.CharField(max_length=600)
+    twitter = models.CharField(max_length=600)
+    youtube = models.CharField(max_length=600)
+    lema = models.CharField(max_length=600)

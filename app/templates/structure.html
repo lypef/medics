@@ -76,7 +76,42 @@
 			<div class="row">
 				<div class="col-md-4 col-sm-6">
 					<div class="logo padding">
-						<a href=""><img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
+						{% if user.is_superuser %}
+							<a href="" data-toggle="modal" data-target="#ajustes"><i class="fa fa-cog" style="font-size:4em;"></i> <img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
+						{% else %}
+							<a href="/" ><img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
+						{% endif %}
+						<!-- Modal view -->
+						<div class="modal fade" id="ajustes" role="dialog">
+							<div class="modal-dialog modal-lg">
+
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">{{ propiedades.direccion }}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-9">
+											<div class="col-md-6">
+												<p>Expediente no: {{ item.expediente }}</p>
+											</div>
+											<div class="col-md-6">
+												<p>Heredados: <br>{{ item.heredados|slice:'0:52' }}...</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+									<a href="/save_ajustes"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Guardar</button></a>
+								</div>
+							</div>
+
+							</div>
+							<!-- Finaliza contenido modal -->
+					</div>
+					<!-- Finaliza Modal view-->
 						<p>El mejor servicio para lo mas importante. Su salud</p>
 					</div>
 				</div>

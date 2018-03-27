@@ -6,7 +6,8 @@ from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.contrib.auth.models import User
-from models import patients, Procedure, receta, receta_procedures, diary
+from models import patients, Procedure, receta, receta_procedures, diary, properties
+
 
 def index(request):
     #return render(request,'index.html')
@@ -23,7 +24,9 @@ def user_login (request):
 
     if request.user.is_authenticated:
         if request.GET.get('next', '/') == '/':
-            return render(request,'manager.html')
+            for tmp in properties.objects.all():
+                propiedades = tmp
+            return render(request,'manager.html', {'propiedades':propiedades})
         else:
             return redirect(request.GET.get('next', '/'))
     return render(request,'login.html')
@@ -68,8 +71,9 @@ def patient (request):
         except EmptyPage:
             # If page is out osf range (e.g. 9999), deliver last page of results.
             ListPatients = paginator.page(paginator.num_pages)
-
-        return render(request,'patients.html', {'ListPatients':ListPatients,'page_range':paginator.page_range,'count':paginator.num_pages, 'agenda':agenda})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request,'patients.html', {'ListPatients':ListPatients,'page_range':paginator.page_range,'count':paginator.num_pages, 'agenda':agenda, 'propiedades':propiedades})
 
     if request.method == 'POST':
         insert = patients(
@@ -151,7 +155,9 @@ def patient_Edit (request, id):
         patient.f_nacimiento = ss[0]+'-'+ss[1]+'-'+ss[2]
     except Exception, e:
         messages.error(request,e)
-    return render(request,'patients_edit.html', {'patient':patient})
+    for tmp in properties.objects.all():
+        propiedades = tmp
+    return render(request,'patients_edit.html', {'patient':patient, 'propiedades':propiedades})
 
 @login_required
 def patient_Delete(request):
@@ -185,8 +191,9 @@ def procedures (request):
         except EmptyPage:
             # If page is out osf range (e.g. 9999), deliver last page of results.
             ListProcedures = paginator.page(paginator.num_pages)
-
-        return render(request,'procedures.html', {'ListProcedures':ListProcedures,'page_range':paginator.page_range,'count':paginator.num_pages})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request,'procedures.html', {'ListProcedures':ListProcedures,'page_range':paginator.page_range,'count':paginator.num_pages, 'propiedades':propiedades})
 
     if request.method == 'POST':
         if request.POST.get('agendar') is not None:
@@ -233,7 +240,9 @@ def procedures_Edit (request, id):
         item = Procedure.objects.get(id= id)
     except Exception, e:
         messages.error(request,e)
-    return render(request,'procedure_edit.html', {'item':item})
+    for tmp in properties.objects.all():
+        propiedades = tmp
+    return render(request,'procedure_edit.html', {'item':item, 'propiedades':propiedades})
 
 @login_required
 def procedure_Delete(request):
@@ -323,7 +332,9 @@ def recipe(request):
             # If page is out osf range (e.g. 9999), deliver last page of results.
             recetas = paginator.page(paginator.num_pages)
         procedures = receta_procedures.objects.all()
-        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures, 'agenda':agenda})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures, 'agenda':agenda, 'propiedades':propiedades})
 
 @login_required
 def consultation(request):
@@ -384,7 +395,9 @@ def recipe_history(request, id):
     var = receta.objects.filter(patient__id__contains=id).order_by('-f_consulta')
     procedures = receta_procedures.objects.all()
 
-    return render(request,'recipe_history.html', {'var':var,'procedures':procedures})
+    for tmp in properties.objects.all():
+        propiedades = tmp
+    return render(request,'recipe_history.html', {'var':var,'procedures':procedures, 'propiedades':propiedades})
 
 @login_required
 def diary_f(request):
@@ -405,7 +418,9 @@ def diary_f(request):
         agenda = diary.objects.all()
         Pacientes = patients.objects.all().order_by('nombre')
         recetas =receta.objects.all().order_by('-f_consulta')
-        return render(request,'diary.html', {'agenda':agenda, 'Pacientes':Pacientes, 'recetas':recetas})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request,'diary.html', {'agenda':agenda, 'Pacientes':Pacientes, 'recetas':recetas, 'propiedades':propiedades})
 
 @login_required
 def consultation_agenda (request, id_agenda, id_paciente):
@@ -461,4 +476,6 @@ def consultation_agenda (request, id_agenda, id_paciente):
             if ss[0] != 'None':
                 year_nacimiento = int(ss[0])
                 a.f_nacimiento =  year_actual - year_nacimiento
-        return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades})
