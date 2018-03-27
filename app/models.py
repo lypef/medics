@@ -70,6 +70,7 @@ class diary (models.Model):
     f_start = models.CharField(max_length=150)
 
 class properties (models.Model):
+    r_social = models.CharField(max_length=600)
     direccion = models.CharField(max_length=600)
     correo = models.CharField(max_length=600)
     telefono = models.CharField(max_length=600)

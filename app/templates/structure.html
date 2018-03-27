@@ -78,9 +78,6 @@
 					<div class="logo padding">
 						{% if user.is_superuser %}
 							<a href="" data-toggle="modal" data-target="#ajustes"><i class="fa fa-cog" style="font-size:4em;"></i> <img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
-						{% else %}
-							<a href="/" ><img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
-						{% endif %}
 						<!-- Modal view -->
 						<div class="modal fade" id="ajustes" role="dialog">
 							<div class="modal-dialog modal-lg">
@@ -89,44 +86,95 @@
 							<div class="modal-content">
 								<div class="modal-header">
 								<button type="button" class="close" data-dismiss="modal">&times;</button>
-								<h4 class="modal-title">{{ propiedades.direccion }}</h4>
+								<h4 class="modal-title">{{ propiedades.r_social }}</h4>
 								</div>
 								<div class="modal-body">
 									<div class="row">
-										<div class="col-md-9">
-											<div class="col-md-6">
-												<p>Expediente no: {{ item.expediente }}</p>
-											</div>
-											<div class="col-md-6">
-												<p>Heredados: <br>{{ item.heredados|slice:'0:52' }}...</p>
+										<form method="GET" action="/properties_update"> {% csrf_token %}
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.r_social }}" name="propiedades_razon_social" id="propiedades_razon_social" class="form-control" placeholder="Razon social">
 											</div>
 										</div>
+
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.direccion }}" name="propiedades_direccion" id="propiedades_direccion" class="form-control" placeholder="Direccion">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.correo }}" name="propiedades_correo" id="propiedades_correo" class="form-control" placeholder="Correo electronico">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.telefono }}" name="propiedades_telefono" id="propiedades_telefono" class="form-control" placeholder="Telefono">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="modal-body">
+													<textarea name="propiedades_lema" id="propiedades_lema" class="form-control" rows="3" placeholder="Lema">{{ propiedades.lema }}</textarea>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.facebook }}" name="propiedades_facebook" id="propiedades_facebook" class="form-control" placeholder="Url Facebook">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.twitter }}" name="propiedades_twitter" id="propiedades_twitter" class="form-control" placeholder="Url twitter">
+											</div>
+										</div>
+
+										<div class="col-md-12">
+											<div class="form-group ">
+												<input type="text" value="{{ propiedades.youtube }}" name="propiedades_youtube" id="propiedades_youtube" class="form-control" placeholder="Url youtube">
+											</div>
+										</div>
+
+										<input type="hidden" name="propiedades_id" id="propiedades_id" value="{{ propiedades.id }}">
+
+										<input type="hidden" name="propiedades_url" id="propiedades_url" value="{{ propiedades.id }}">
+
+										<script>
+											document.getElementById("propiedades_url").value = window.location.pathname
+										</script>
+
 									</div>
 								</div>
 								<div class="modal-footer">
-									<a href="/save_ajustes"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Guardar</button></a>
+									<button type="submit" class="btn btn-warning" ><i class="fa fa-save" value="Agregar" name="submit" id="submitButton" ></i> Guardar</button>
 								</div>
+							</form>
 							</div>
 
 							</div>
 							<!-- Finaliza contenido modal -->
 					</div>
 					<!-- Finaliza Modal view-->
-						<p>El mejor servicio para lo mas importante. Su salud</p>
+					{% else %}
+						<a href="/" ><img src="{% static 'assets/img/footer-logo.png' %}" alt="" /></a>
+					{% endif %}
+						<p>{{ propiedades.lema }}</p>
 					</div>
 				</div>
 				<div class="col-md-4 col-sm-6">
 					<div class="footer-info padding">
 						<h3>CONTACTO</h3>
-						<p><i class="fa fa-map-marker" aria-hidden="true"></i> 324 CENTRO, LAS CHOAPAS VERACRUZ, MEXICO</p>
-						<p><i class="fa fa-paper-plane" aria-hidden="true"></i> HOLA@MEDICOS.COM </p>
-						<p><i class="fa fa-phone" aria-hidden="true"></i> +52 923 120 05 05</p>
+						<p><i class="fa fa-map-marker" aria-hidden="true"></i>{{ propiedades.direccion }}</p>
+						<p><i class="fa fa-paper-plane" aria-hidden="true"></i>{{ propiedades.correo }}</p>
+						<p><i class="fa fa-phone" aria-hidden="true"></i> {{ propiedades.telefono }}</p>
 					</div>
 				</div>
 				<div class="col-md-4 col-sm-6">
 					<div class="subcriber-info">
-						<h3>SUBSCRIBE</h3>
-						<p>Get healthy news, tip and solutions to your problems from our experts.</p>
+						<h3>{{ propiedades.r_social }}</h3>
 						<div class="subcriber-box">
 							<form id="mc-form" class="mc-form">
 								<div class="newsletter-form">
@@ -165,12 +213,9 @@
 				<div class="col-md-4 col-sm-6">
 					<div class="social">
 						<ul class="social-links">
-							<li><a href=""><i class="fa fa-rss"></i></a></li>
-							<li><a href=""><i class="fa fa-facebook"></i></a></li>
-							<li><a href=""><i class="fa fa-twitter"></i></a></li>
-							<li><a href=""><i class="fa fa-google-plus"></i></a></li>
-							<li><a href=""><i class="fa fa-youtube"></i></a></li>
-							<li><a href=""><i class="fa fa-pinterest"></i></a></li>
+							<li><a href="{{ propiedades.facebook }}"><i class="fa fa-facebook"></i></a></li>
+							<li><a href="{{ propiedades.twitter }}"><i class="fa fa-twitter"></i></a></li>
+							<li><a href="{{ propiedades.youtube }}"><i class="fa fa-youtube"></i></a></li>
 						</ul>
 					</div>
 				</div>
@@ -204,10 +249,6 @@
 		<!-- Ajax Mailchimp js -->
 		<script src="{% static 'assets/js/jquery.ajaxchimp.min.js' %}"></script>
 
-		<!-- GOOGLE MAP JS
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB0YyDTa0qqOjIerob2VTIwo_XVMhrruxo"></script>
-		-->
-		<!-- Main js-->
 		<script src="{% static 'assets/js/main_script.js' %}"></script>
 	</body>
 </html>

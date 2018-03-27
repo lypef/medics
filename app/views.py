@@ -256,58 +256,6 @@ def procedure_Delete(request):
 
     return redirect('/procedures')
 
-@login_required
-def consultation(request):
-    if request.method == 'POST':
-        print request.POST.get('paciente')
-        r = receta(
-                patient = patients.objects.get(id=request.POST.get('paciente')),
-                edad = request.POST.get('edad'),
-                temperatura = request.POST.get('temperatura'),
-                peso = request.POST.get('peso'),
-                estatura = request.POST.get('estatura'),
-                presion_arterial = request.POST.get('presion_arterial'),
-                talla = request.POST.get('talla'),
-                imc = request.POST.get('imc'),
-                cabeza = request.POST.get('cabeza'),
-                torax = request.POST.get('torax'),
-                abdomen = request.POST.get('abdomen'),
-                genitales = request.POST.get('genitales'),
-                piel = request.POST.get('piel'),
-                diagnostico = request.POST.get('diagnostico'),
-                pronostico = request.POST.get('pronostico'),
-                terapeuticas = request.POST.get('terapeuticas'),
-                f_consulta = str(datetime.datetime.now()),
-                user = User.objects.get(id=request.user.id)
-    			)
-    	r.save()
-        procedimientos = Procedure.objects.all().order_by('nombre')
-        for a in procedimientos:
-            if request.POST.get('p'+str(a.id)):
-                p = receta_procedures(
-                    receta = receta.objects.get(id=r.id),
-                    procedure = Procedure.objects.get(id=a.id),
-                    costo = a.costo
-    			)
-    	        p.save()
-        messages.success(request,'Consulta exitosa')
-        return redirect ('/consultation')
-
-    if request.method == 'GET':
-        Pacientes = patients.objects.all().order_by('nombre')
-        Procedures = Procedure.objects.all().order_by('nombre')
-
-        for a in Pacientes:
-            dt = datetime.datetime.now()
-            year_actual = int(dt.strftime("%Y"))
-
-            s = str(a.f_nacimiento)
-            ss = s.split('-')
-
-            if ss[0] != 'None':
-                year_nacimiento = int(ss[0])
-                a.f_nacimiento =  year_actual - year_nacimiento
-        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures})
 
 @login_required
 def recipe(request):
@@ -388,7 +336,9 @@ def consultation(request):
             if ss[0] != 'None':
                 year_nacimiento = int(ss[0])
                 a.f_nacimiento =  year_actual - year_nacimiento
-        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures})
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades})
 
 @login_required
 def recipe_history(request, id):
@@ -425,7 +375,6 @@ def diary_f(request):
 @login_required
 def consultation_agenda (request, id_agenda, id_paciente):
     if request.method == 'POST':
-        print request.POST.get('paciente')
         r = receta(
                 patient = patients.objects.get(id=request.POST.get('paciente')),
                 edad = request.POST.get('edad'),
@@ -479,3 +428,19 @@ def consultation_agenda (request, id_agenda, id_paciente):
         for tmp in properties.objects.all():
             propiedades = tmp
         return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades})
+
+@login_required
+def properties_update_ (request):
+    if request.GET.get('propiedades_id') is not None:
+        update = properties.objects.get(id=request.GET.get('propiedades_id'))
+        update.r_social = request.GET.get('propiedades_razon_social')
+        update.direccion = request.GET.get('propiedades_direccion')
+        update.correo = request.GET.get('propiedades_correo')
+        update.telefono = request.GET.get('propiedades_telefono')
+        update.facebook = request.GET.get('propiedades_facebook')
+        update.twitter = request.GET.get('propiedades_twitter')
+        update.youtube = request.GET.get('propiedades_youtube')
+        update.lema = request.GET.get('propiedades_lema')
+        update.save()
+
+    return redirect (request.GET.get('propiedades_url'))

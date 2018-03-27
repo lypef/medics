@@ -23,4 +23,6 @@ urlpatterns = [
     url(r'^recipe_history/(?P<id>[^/]+)/$', views.recipe_history),
     url(r'^diary/', views.diary_f),
     url(r'^consultation_diary/(?P<id_agenda>[^/]+)/(?P<id_paciente>[^/]+)/$', views.consultation_agenda),
+    url(r'^properties_update/', views.properties_update_),
+
 ]
