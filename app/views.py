@@ -7,7 +7,8 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
 from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary, properties
-
+from reportlab.pdfgen import canvas
+from django.http import HttpResponse
 
 def index(request):
     #return render(request,'index.html')
@@ -442,5 +443,24 @@ def properties_update_ (request):
         update.youtube = request.GET.get('propiedades_youtube')
         update.lema = request.GET.get('propiedades_lema')
         update.save()
-
     return redirect (request.GET.get('propiedades_url'))
+
+def recipe_receta (request, id):
+    for tmp in properties.objects.all():
+        propiedades = tmp
+
+    # Create the HttpResponse object with the appropriate PDF headers.
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+
+    # Create the PDF object, using the response object as its "file."
+    p = canvas.Canvas(response)
+
+    # Draw things on the PDF. Here's where the PDF generation happens.
+    # See the ReportLab documentation for the full list of functionality.
+    p.drawString(100, 800, propiedades.r_social)
+
+    # Close the PDF object cleanly, and we're done.
+    p.showPage()
+    p.save()
+    return response
