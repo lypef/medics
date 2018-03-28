@@ -1,7 +1,6 @@
 {% extends 'structure.html' %}
 {% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
 {% block structure_body%}
-{% load static %}
 <!-- Navigation area starts -->
 <div class="menu-area navbar-fixed-top">
 <div class="container">
@@ -12,7 +11,7 @@
 			<div class="mainmenu">
 				<div class="navbar navbar-nobg">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="/manager"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
+						<a class="navbar-brand" href="/manager"><img src="/static/assets/img/logo.png" alt=""></a>
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 							<span class="sr-only">Toggle navigation</span>
 							<span class="icon-bar"></span>
@@ -24,7 +23,7 @@
 					<div class="navbar-collapse collapse">
 						<nav>
 							<ul class="nav navbar-nav navbar-right">
-								
+
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li ><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
@@ -52,36 +51,36 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 			<div class="container"><br>
 				<div class="alert alert-info  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 			<div class="container"><br>
 				<div class="alert alert-warning  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
 			<div class="container"><br>
 				<div class="alert alert-danger  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-		
+
 		{% endfor %}
 		{% endif %}
 		<form method="POST"> {% csrf_token %}
@@ -93,13 +92,13 @@
 			<div class="section-title white mb-30">
 				<h2>Nueva <span>Consulta</span></h2>
 			</div>
-		</div>		
+		</div>
 		<button type="button" class="btn btn-warning btn-circle-fixed" data-toggle="modal" data-target="#receta"><i class="fa fa-th-list"></i></button>
 		<br><br><br>
 		<button type="button" class="btn btn-info btn-circle-fixed" data-toggle="modal" data-target="#procedimientos"><i class="fa fa-check"></i></button>
 		<br><br><br>
 		<button type="submit" class="btn btn-success btn-circle-fixed" ><i class="fa fa-save" value="Agregar" name="submit" id="submitButton" ></i></button>
-		
+
 		<!-- Modal receta -->
 		<div class="modal fade" id="receta" role="dialog">
 				<div class="modal-dialog modal-lg">
@@ -120,7 +119,7 @@
 					<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 					</div>
 				</div>
-				
+
 				</div>
 				<!-- Finaliza contenido modal -->
 		</div>
@@ -129,7 +128,7 @@
 		<!-- Modal procedimientos -->
 		<div class="modal fade" id="procedimientos" role="dialog">
 			<div class="modal-dialog modal-lg">
-			
+
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
@@ -169,7 +168,7 @@
 							var t = 0
 							{% for item in Procedures %}
 								if ( document.getElementById("p"+{{item.id}}).checked )
-								{ 
+								{
 									t += {{item.costo}}
 								}
 							{% endfor %}
@@ -243,9 +242,9 @@
 												var peso = document.getElementById('peso').value
 												var imc = (peso * 10000)/(altura * altura)
 												document.getElementById('imc').value = imc.toFixed(2)
-												
+
 											}
-											
+
 										</script>
 										<div class="col-md-6">
 											<div class="form-group in_name">
@@ -272,7 +271,7 @@
 													<input type="text" name="imc" class="form-control" id="imc" placeholder="IMC = Peso [kg]/ estatura [m2]">
 											</div>
 										</div>
-										
+
 										<div class="col-md-12">
 												<div class="panel panel-default ">
 													<div class="panel-heading">CABEZA</div>
@@ -327,7 +326,7 @@
 													</div>
 												</div>
 										</div>
-										
+
 										<div class="col-md-12">
 												<div class="panel panel-default ">
 													<div class="panel-heading">OBSERVACIONES</div>

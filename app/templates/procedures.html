@@ -1,7 +1,6 @@
 {% extends 'structure.html' %}
 {% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
 {% block structure_body%}
-{% load static %}
 <!-- Navigation area starts -->
 <div class="menu-area navbar-fixed-top">
 <div class="container">
@@ -12,7 +11,7 @@
 			<div class="mainmenu">
 				<div class="navbar navbar-nobg">
 					<div class="navbar-header">
-						<a class="navbar-brand" href="/manager"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
+						<a class="navbar-brand" href="/manager"><img src="/static/assets/img/logo.png" alt=""></a>
 						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 							<span class="sr-only">Toggle navigation</span>
 							<span class="icon-bar"></span>
@@ -51,36 +50,36 @@
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
 			<div class="container"><br>
 				<div class="alert alert-info  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
 			<div class="container"><br>
 				<div class="alert alert-warning  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-	
+
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
 			<div class="container"><br>
 				<div class="alert alert-danger  fade in">
 					<button type="button" class="close" data-dismiss="alert">&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
-			</div>	
+			</div>
 			{% endif %}
-		
+
 		{% endfor %}
 		{% endif %}
 
@@ -96,7 +95,7 @@
 			</div>
 		</div>
 		<div class="row">
-			
+
 			<form action="/procedures">
 			<div class="col-lg-12">
 				<div class="input-group">
@@ -145,7 +144,7 @@
 												<input type="hidden" name="id" value="{{ item.id }}">
 												<button type="button" class="btn btn-success" data-dismiss="modal">No</button>
 												<input type="submit" value="SI" name="submit" id="submitButton" class="btn btn-danger" title="Enviar delete">
-											</form>													
+											</form>
 											{% endif %}
 										</div>
 									</div>
@@ -153,11 +152,11 @@
 								</div>
 								</div>
 							<!-- Finaliza Modal Delete-->
-	
+
 							<!-- Modal view -->
 							<div class="modal fade" id="view{{item.id}}" role="dialog">
 								<div class="modal-dialog">
-								
+
 								<!-- Modal content-->
 								<div class="modal-content">
 									<div class="modal-header">
@@ -175,11 +174,11 @@
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>
 								</div>
-								
+
 								</div>
 								<!-- Finaliza contenido modal -->
 							</div>
-							
+
 							</div>
 							<!-- Finaliza Modal view-->
 
@@ -195,11 +194,11 @@
 					{% for log in page_range %}
 					{%if log == ListProcedures.number%}
 							<li class="active"><a href="?page={{log}}">{{log}}</a></li>
-						{%else%}  
+						{%else%}
 							<li class="waves-effect"><a href="?page={{log}}">{{log}}</a></li>
 						{%endif%}
-						
-					{%endfor%} 
+
+					{%endfor%}
 					{%if ListProcedures.number < count %}
 						<li class="waves-effect"><a href="?page={{ ListProcedures.next_page_number }}">&raquo;</a></li>
 					{%endif%}
@@ -224,7 +223,7 @@
 		<div class="row">
 			<form method="POST"> {% csrf_token %}
 				<div class="row">
-					
+
 					<div class="col-md-6">
 						<div class="form-group in_name">
 							<input type="text" name="nombre" class="form-control" id="name" placeholder="Nombre"required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')">
@@ -240,7 +239,7 @@
                             <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Texto aqui" required></textarea>
 						</div>
 					</div>
-					
+
 					<div class="col-md-6">
 						<div class="form-group ">
 							<input type="checkbox" class="form-check-input" id="agendar" name="agendar">
@@ -252,7 +251,7 @@
 							<input type="submit" value="Agregar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
 						</div>
 					</div>
-					
+
 				</div>
 			</form>
 		</div>

@@ -44,10 +44,14 @@ def patient (request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
             ListPatients = patients.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+            if len(ListPatients) < 1:
+                ListPatients = patients.objects.filter(a_paterno__contains=request.GET.get('search').upper()).order_by('nombre')
+            if len(ListPatients) < 1:
+                ListPatients = patients.objects.filter(a_materno__contains=request.GET.get('search').upper()).order_by('nombre')
         else:
             ListPatients = patients.objects.all().order_by('nombre')
 
-            agenda = diary.objects.all().order_by('-id')
+        agenda = diary.objects.all().order_by('-id')
 
         for a in ListPatients:
             dt = datetime.datetime.now()
@@ -261,9 +265,12 @@ def procedure_Delete(request):
 @login_required
 def recipe(request):
     if request.method == 'GET':
-
         if request.GET.get('search') is not None:
             recetas = receta.objects.filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            if len(recetas) < 1:
+                recetas = receta.objects.filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            if len(recetas) < 1:
+                recetas = receta.objects.filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
         else:
             recetas = receta.objects.all().order_by('-f_consulta')
 
