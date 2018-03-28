@@ -452,6 +452,49 @@ def properties_update_ (request):
         update.save()
     return redirect (request.GET.get('propiedades_url'))
 
+@login_required
+def profile_update (request):
+    update = User.objects.get(id=request.user.id)
+    update.first_name = request.GET.get('user_first_name')
+    update.last_name = request.GET.get('user_last_name')
+    update.email = request.GET.get('user_email')
+    if request.GET.get('check_change_password') == 'on':
+        if request.GET.get('password') == request.GET.get('password_confirm'):
+            if len(request.GET.get('password')) > 0:
+                update.set_password(request.GET.get('password'))
+            else:
+                messages.error(request, 'Ingrese un password')
+        else:
+            messages.error(request, 'El password no coincide')
+    update.save()
+    return redirect (request.GET.get('propiedades_url_perfil'))
+
+@login_required
+def _users (request):
+    usuarios = User.objects.all()
+    for tmp in properties.objects.all():
+        propiedades = tmp
+    return render(request, 'users.html', {'propiedades':propiedades, 'usuarios':usuarios})
+
+@login_required
+def _users_Delete(request):
+    if request.GET.get('id') is not None and request.user.is_superuser:
+        try:
+            p = User.objects.get(id= request.GET.get('id'))
+            p.delete()
+            messages.success(request,'usuario eliminado')
+        except Exception, e:
+            messages.error(request,e)
+
+    return redirect('/users')
+
+@login_required
+def _users_Update(request):
+    update = User.objects.get(id=2)
+    update.first_name = 'ssss'
+    update.save()
+    return redirect('/users')
+
 def recipe_receta (request, id):
     for tmp in properties.objects.all():
         propiedades = tmp

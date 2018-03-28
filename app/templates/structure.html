@@ -175,23 +175,94 @@
 					<div class="subcriber-info">
 						<h3>{{ propiedades.r_social }}</h3>
 						<div class="subcriber-box">
-							<form id="mc-form" class="mc-form">
-								<div class="newsletter-form">
-									<input type="email" autocomplete="off" id="mc-email" placeholder="Email address" class="form-control">
-									<button class="mc-submit" type="submit"><i class="fa fa-paper-plane"></i></button>
-									<div class="clearfix"></div>
-									<!-- mailchimp-alerts Start -->
-									<div class="mailchimp-alerts">
-										<div class="mailchimp-submitting"></div>
-										<!-- mailchimp-submitting end -->
-										<div class="mailchimp-success"></div>
-										<!-- mailchimp-success end -->
-										<div class="mailchimp-error"></div>
-										<!-- mailchimp-error end -->
+							{% if user.is_superuser %}
+								<a href="" data-toggle="modal" data-target="#perfil"><i class="fa fa-user-circle-o" style="font-size:1.2em;"> PERFIL</i></a><br>
+								<!-- Modal perfil -->
+								<div class="modal fade" id="perfil" role="dialog">
+									<div class="modal-dialog modal-sm">
+
+									<!-- Modal conpertent-->
+									<div class="modal-content">
+										<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">{{ user.first_name }}</h4>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<form method="GET" action="/update_profile"> {% csrf_token %}
+
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="text" value="{{ user.first_name }}" name="user_first_name" id="user_first_name" class="form-control" placeholder="Nombre">
+														</div>
+													</div>
+
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="text" value="{{ user.last_name }}" name="user_last_name" id="user_last_name" class="form-control" placeholder="Apellidos">
+														</div>
+													</div>
+
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="text" value="{{ user.email }}" name="user_email" id="user_email" class="form-control" placeholder="Correo electronico">
+														</div>
+													</div>
+
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="checkbox" class="form-check-input" id="check_change_password" name="check_change_password" onchange="changepassword()">
+								                  <label class="form-check-label" for="exampleCheck1" style="color: black;">Cambiar contraseña</label>
+														</div>
+													</div>
+													<script>
+														function changepassword(value)
+														{
+															 	var x = document.getElementById("check_change_password").checked
+																if (x)
+																{
+																	document.getElementById("password").disabled = false
+																	document.getElementById("password_confirm").disabled = false
+																}else {
+																	document.getElementById("password").disabled = true
+																	document.getElementById("password_confirm").disabled = true
+																}
+														}
+													</script>
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="password"  name="password" id="password" class="form-control" placeholder="Nueva contraseña" disabled >
+														</div>
+													</div>
+
+													<div class="col-md-12">
+														<div class="form-group ">
+															<input type="password"  name="password_confirm" id="password_confirm" class="form-control" placeholder="Confirmar contraseña" disabled >
+														</div>
+													</div>
+
+													<input type="hidden" name="propiedades_url_perfil" id="propiedades_url_perfil">
+
+													<script>
+														document.getElementById("propiedades_url_perfil").value = window.location.pathname
+													</script>
+
+												<div class="modal-footer">
+													<button type="submit" class="btn btn-warning" ><i class="fa fa-save" value="Agregar" name="submit" id="submitButton" ></i> ACTUALIZAR</button>
+												</form>
+										</div>
+
 									</div>
-									<!-- mailchimp-alerts end -->
-								</div>
-							</form>
+
+									</div>
+									<!-- Finaliza contenido modal -->
+							</div>
+							<!-- Finaliza Modal perfil-->
+							</div>
+							</div>
+
+								<a href="/users" ><i class="fa fa-users" style="font-size:1.2em;"> USUARIOS</i></a>
+							{% endif %}
 						</div>
 					</div>
 				</div>
