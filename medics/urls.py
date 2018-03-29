@@ -29,4 +29,6 @@ urlpatterns = [
     url(r'^users/', views._users),
     url(r'^user_delete/', views._users_Delete),
     url(r'^user_update/', views._users_Update),
+    url(r'^user_add/', views._users_Add),
+
 ]

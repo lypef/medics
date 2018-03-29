@@ -100,7 +100,6 @@ def patient (request):
                 mail = request.POST.get('mail', ''),
                 estado = request.POST.get('estado', ''),
                 municipio = request.POST.get('municipio', ''),
-                heredados = request.POST.get('heredados', '').upper(),
                 nopatologicos = request.POST.get('nopatologicos', '').upper(),
                 patologicos = request.POST.get('patologicos', '').upper(),
                 ginecologos = request.POST.get('ginecologos', '').upper(),
@@ -137,7 +136,6 @@ def patient_Edit (request, id):
             update.mail = request.POST.get('mail', '')
             update.estado = request.POST.get('estado', '')
             update.municipio = request.POST.get('municipio', '')
-            update.heredados = request.POST.get('heredados', '').upper()
             update.nopatologicos = request.POST.get('nopatologicos', '').upper()
             update.patologicos = request.POST.get('patologicos', '').upper()
             update.ginecologos = request.POST.get('ginecologos', '').upper()
@@ -295,7 +293,6 @@ def recipe(request):
 @login_required
 def consultation(request):
     if request.method == 'POST':
-        print request.POST.get('paciente')
         r = receta(
                 patient = patients.objects.get(id=request.POST.get('paciente')),
                 edad = request.POST.get('edad'),
@@ -305,7 +302,9 @@ def consultation(request):
                 presion_arterial = request.POST.get('presion_arterial'),
                 talla = request.POST.get('talla'),
                 imc = request.POST.get('imc'),
-                cabeza = request.POST.get('cabeza'),
+                exp_fisica = request.POST.get('exp_fisica'),
+                extremidades = request.POST.get('extremidades'),
+                p_actual = request.POST.get('p_actual'),
                 torax = request.POST.get('torax'),
                 abdomen = request.POST.get('abdomen'),
                 genitales = request.POST.get('genitales'),
@@ -392,7 +391,9 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 presion_arterial = request.POST.get('presion_arterial'),
                 talla = request.POST.get('talla'),
                 imc = request.POST.get('imc'),
-                cabeza = request.POST.get('cabeza'),
+                exp_fisica = request.POST.get('exp_fisica'),
+                extremidades = request.POST.get('extremidades'),
+                p_actual = request.POST.get('p_actual'),
                 torax = request.POST.get('torax'),
                 abdomen = request.POST.get('abdomen'),
                 genitales = request.POST.get('genitales'),
@@ -471,7 +472,13 @@ def profile_update (request):
 
 @login_required
 def _users (request):
-    usuarios = User.objects.all()
+    if request.GET.get('search') is not None:
+        usuarios = User.objects.filter(first_name__contains=request.GET.get('search').upper()).order_by('-first_name')
+        if len(usuarios) < 1:
+            usuarios = User.objects.filter(last_name__contains=request.GET.get('search').upper()).order_by('-first_name')
+    else:
+        usuarios = User.objects.all()
+
     for tmp in properties.objects.all():
         propiedades = tmp
     return render(request, 'users.html', {'propiedades':propiedades, 'usuarios':usuarios})
@@ -490,9 +497,74 @@ def _users_Delete(request):
 
 @login_required
 def _users_Update(request):
-    update = User.objects.get(id=2)
-    update.first_name = 'ssss'
+    _id = request.GET.get('id')
+    if request.GET.get('check_change_medico'+_id) == 'on':
+        medico = True
+    else:
+        medico = False
+
+    if request.GET.get('check_change_asistente'+_id) == 'on':
+        asistente = True
+    else:
+        asistente = False
+
+    if request.GET.get('check_change_active'+_id) == 'on':
+        active = True
+    else:
+        active = False
+
+    update = User.objects.get(id=_id)
+    update.first_name = request.GET.get('user_first_name')
+    update.last_name = request.GET.get('user_last_name')
+    update.email = request.GET.get('user_email')
+    if request.GET.get('check_change_password'+str(_id)) == 'on':
+        if request.GET.get('password'+str(_id)) == request.GET.get('password_confirm'+str(_id)):
+            if len(request.GET.get('password'+str(_id))) > 0:
+                update.set_password(request.GET.get('password'+str(_id)))
+            else:
+                messages.error(request, 'Ingrese un password')
+        else:
+            messages.error(request, 'El password no coincide')
+
+    if medico:
+        update.is_superuser = True
+        update.is_staff = True
+
+    if asistente:
+        update.is_superuser = False
+        update.is_staff = True
+
+    if active:
+        update.is_active = True
+    else:
+        update.is_active = False
+
     update.save()
+    return redirect('/users')
+
+@login_required
+def _users_Add(request):
+    try:
+        if request.GET.get('add_medico') == 'on':
+            medico = True
+        else:
+            medico = False
+
+        r = User(
+                password = request.GET.get('password'),
+                is_superuser = medico,
+                first_name = request.GET.get('nombre'),
+                last_name = request.GET.get('apellidos'),
+                email = request.GET.get('email'),
+                is_staff = True,
+                is_active = True,
+                username = request.GET.get('username')
+                )
+        r.save()
+        messages.success(request, 'Usuario agregado')
+    except Exception, e:
+        messages.error(request, e)
+
     return redirect('/users')
 
 def recipe_receta (request, id):

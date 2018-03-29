@@ -229,7 +229,6 @@
 													<p>Domicilio: {{ item.domicilio }}, {{ item.colonia }} - {{ item.municipio }}, {{ item.estado }}. CP: {{ item.cp }}</p>
 												</div>
 												<div class="col-md-6">
-													<p>Heredados: <br>{{ item.heredados|slice:'0:52' }}...</p>
 													<p>No patologicos: <br>{{ item.nopatologicos|slice:'0:52' }}...</p>
 													<p>Patologicos: <br>{{ item.patologicos|slice:'0:52' }}...</p>
 													<p>Ginecologos: <br>{{ item.ginecologos|slice:'0:52' }}...</p>
@@ -237,7 +236,7 @@
 													<p>Perinatales: <br>{{ item.perinatales|slice:'0:52' }}...</p>
 													<p>Quirurgicos: <br>{{ item.quirurgicos|slice:'0:52' }}...</p>
 													<p>Alergias: <br>{{ item.alergias|slice:'0:52' }}...</p>
-													<p>Observaciones: <br>{{ item.observaciones|slice:'0:52' }}...</p>
+													<p>Padecimiento actual: <br>{{ item.observaciones|slice:'0:52' }}...</p>
 												</div>
 											</div>
 										</div>
@@ -443,18 +442,7 @@
 					</div>
 					<div class="col-md-12 text-center">
 						<div class="section-title white mb-30">
-							<h2>datos <span>patologicos</span></h2>
-						</div>
-					</div>
-
-					<div class="col-md-12">
-						<div class="actions">
-							<div class="panel panel-info">
-								<div class="panel-heading">HEREDADOS</div>
-								<div class="panel-body">
-									<textarea name="heredados" id="heredados" class="form-control" rows="6" placeholder="Texto aqui"></textarea>
-								</div>
-							  </div>
+							<h2>antecedentes <span>heredofamiliares</span></h2>
 						</div>
 					</div>
 

@@ -96,11 +96,11 @@
     		</div>
     		<div class="row">
 
-    			<form action="/procedures">
+    			<form >{% csrf_token %}
     			<div class="col-lg-12">
     				<div class="input-group">
-    					<input type="text" class="form-control" placeholder="Buscar paciente" name="search" id="search">
-    				<span class="input-group-btn">
+    					<input type="text" class="form-control" placeholder="Buscar usuario" name="search" id="search">
+    					<span class="input-group-btn">
     					<input type="submit" value="Buscar !" name="submit" id="submitButton" class="btn btn-info" title="Realizar busqueda">
     				</span>
     				</div>
@@ -150,7 +150,7 @@
     										<h4 class="modal-title">{{ item.first_name }} {{ item.last_name }}</h4>
     										</div>
     										<div class="modal-body">
-    										<p>Esta seguro de eliminar el usuario ?.</p>
+    										<p>Esta seguro de eliminar el usuario ?. Todas las consultas y recetas de este usuario se perderan y no sera posible recuperarlo</p>
     										</div>
     										<div class="modal-footer">
 
@@ -167,7 +167,7 @@
     								</div>
     							<!-- Finaliza Modal Delete-->
 
-                  <!-- Modal Delete-->
+                  <!-- Modal edit-->
     							<div class="modal fade" id="edit{{item.id}}" role="dialog">
     									<div class="modal-dialog modal-lg">
     									<div class="modal-content">
@@ -180,32 +180,64 @@
 
                             <div class="col-md-12">
   														<div class="form-group ">
-  															<input type="text" value="{{ item.first_name }}" name="user_first_name{{ item.id }}" id="user_first_name{{ item.id }}" class="form-control" placeholder="Nombre">
+  															<input type="text" value="{{ item.first_name }}" name="user_first_name" id="user_first_name" class="form-control" placeholder="Nombre">
   														</div>
   													</div>
 
   													<div class="col-md-12">
   														<div class="form-group ">
-  															<input type="text" value="{{ item.last_name }}" name="user_last_name{{ item.id }}" id="user_last_name{{ item.id }}" class="form-control" placeholder="Apellidos">
+  															<input type="text" value="{{ item.last_name }}" name="user_last_name" id="user_last_name" class="form-control" placeholder="Apellidos">
   														</div>
   													</div>
 
   													<div class="col-md-12">
   														<div class="form-group ">
-  															<input type="text" value="{{ item.email }}" name="user_email{{ item.id }}" id="user_email{{ item.id }}" class="form-control" placeholder="Correo electronico">
+  															<input type="text" value="{{ item.email }}" name="user_email" id="user_email" class="form-control" placeholder="Correo electronico">
   														</div>
   													</div>
 
   													<div class="col-md-12">
   														<div class="form-group ">
-  															<input type="checkbox" class="form-check-input" id="check_change_password{{ item.id }}" name="check_change_password{{ item.id }}" onchange="changepassword{{ item.id }}()">
+  																	<input type="checkbox" class="form-check-input" id="check_change_password{{item.id}}" name="check_change_password{{item.id}}" onchange="changepassword{{item.id}}()">
   								                  <label class="form-check-label" for="exampleCheck1" style="color: black;">Cambiar contraseña</label>
+
+																		<input type="checkbox" class="form-check-input" id="check_change_medico{{item.id}}" name="check_change_medico{{item.id}}" onchange="changemedico{{item.id}}()" {% if item.is_superuser %} checked {% endif %}>
+		  								              <label class="form-check-label" for="exampleCheck1" style="color: black;">Medico</label>
+
+																		<input type="checkbox" class="form-check-input" id="check_change_asistente{{item.id}}" name="check_change_asistente{{item.id}}" onchange="changeasiste{{item.id}}() "{% if item.is_superuser == False %} checked {% endif %}>
+		  								              <label class="form-check-label" for="exampleCheck1" style="color: black;">Asistente</label>
+
+																		<input type="checkbox" class="form-check-input" id="check_change_active{{item.id}}" name="check_change_active{{item.id}}" {% if item.is_active %} checked {% endif %}>
+		  								              <label class="form-check-label" for="exampleCheck1" style="color: black;">Activo</label>
   														</div>
   													</div>
   													<script>
-  														function changepassword{{ item.id }}(value)
+															function changemedico{{item.id}} ()
+															{
+																	var x = document.getElementById("check_change_medico"+String({{item.id}})).checked
+																	if (x)
+  																{
+  																	document.getElementById("check_change_asistente"+{{ item.id }}).checked = false
+  																}else {
+  																	document.getElementById("check_change_asistente"+{{ item.id }}).checked = true
+  																}
+															}
+
+															function changeasiste{{item.id}} ()
+															{
+																	var x = document.getElementById("check_change_asistente"+String({{item.id}})).checked
+																	if (x)
+  																{
+  																	document.getElementById("check_change_medico"+{{ item.id }}).checked = false
+  																}else {
+  																	document.getElementById("check_change_medico"+{{ item.id }}).checked = true
+  																}
+															}
+
+															function changepassword{{item.id}}()
   														{
-  															 	var x = document.getElementById("check_change_password"+{{ item.id }}).checked
+																	var x = document.getElementById("check_change_password"+String({{item.id}})).checked
+
   																if (x)
   																{
   																	document.getElementById("password"+{{ item.id }}).disabled = false
@@ -297,4 +329,71 @@
     </section>
     <!-- Finaliza List Patients -->
 
+		<!-- Agregar paciente -->
+		<section id="department" class="department-area  section-big">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<div class="section-title white mb-30">
+							<h2>AGREGAR <span>usuario</span></h2>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<form action="/user_add" method="GET"> {% csrf_token %}
+						<div class="row">
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="text" name="nombre" class="form-control" id="nombre" placeholder="Nombre">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="text" name="apellidos" class="form-control" id="apellidos" placeholder="Apellidos">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="email" name="email" class="form-control" id="email" placeholder="Correo electronico">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="text" name="username" class="form-control" id="username" placeholder="Nombre de usuario">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="password" name="password" class="form-control" id="password" placeholder="Contraseña">
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="form-group in_name">
+									<input type="checkbox" class="form-check-input" id="add_medico" name="add_medico" checked>
+									<label class="form-check-label" for="exampleCheck1" style="color: black;">Medico</label>
+
+									<input type="checkbox" class="form-check-input" id="add_asistente" name="add_asistente" checked>
+									<label class="form-check-label" for="exampleCheck1" style="color: black;">Asistente</label>
+
+								</div>
+							</div>
+
+							<div class="col-md-4">
+								<div class="actions">
+									<input type="submit" value="Agregar" name="submit" id="submitButton" class="btn" title="Submit Your Message!">
+								</div>
+							</div>
+
+						</div>
+					</form>
+				</div>
+			</div>
+		</section>
+		<!-- Service area ends -->
 {% endblock %}
