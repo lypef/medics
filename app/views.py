@@ -580,7 +580,17 @@ def recipe_receta (request, id):
 
     # Draw things on the PDF. Here's where the PDF generation happens.
     # See the ReportLab documentation for the full list of functionality.
-    p.drawString(100, 800, propiedades.r_social)
+    y = 800
+    p.drawString(40, y, propiedades.r_social)
+    p.drawString(40, y-15, 'DIRECCION:')
+    p.drawString(40, y-30, propiedades.direccion)
+    p.drawString(40, y-50, 'CORREO ELECTRONICO:')
+    p.drawString(40, y-65, propiedades.correo)
+    p.drawString(40, y-85, 'TELEFONO:')
+    p.drawString(40, y-100, propiedades.telefono)
+
+
+    p.drawImage('static/assets/img/footer-logo.png', 400, 740)
 
     # Close the PDF object cleanly, and we're done.
     p.showPage()
