@@ -2,6 +2,22 @@
 {% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
 {% block structure_body%}
 <!-- Navigation area starts -->
+<script>
+	var p = getUrlVars()["recipe"];
+
+	if (p)
+	{
+			window.open("/recipe_pdf/"+p,"_target")
+	}
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+		});
+		return vars;
+	}
+</script>
 <div class="menu-area navbar-fixed-top">
 <div class="container">
 	<div class="row">

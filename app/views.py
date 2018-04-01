@@ -9,6 +9,16 @@ from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary, properties
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
+from reportlab.lib.pagesizes import letter
+from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT, TA_JUSTIFY
+from reportlab.lib.units import inch, mm
+from reportlab.pdfgen import canvas
+from reportlab.platypus import Paragraph, Table, SimpleDocTemplate, Spacer
+from io import BytesIO
+from reportlab.platypus import Paragraph, Table, TableStyle
+from reportlab.lib import colors
+
 
 def index(request):
     #return render(request,'index.html')
@@ -314,7 +324,8 @@ def consultation(request):
                 terapeuticas = request.POST.get('terapeuticas'),
                 f_consulta = str(datetime.datetime.now()),
                 user = User.objects.get(id=request.user.id),
-                total = request.POST.get('total_g')
+                total = request.POST.get('total_g'),
+                indicaciones = request.POST.get('receta')
     			)
     	r.save()
         procedimientos = Procedure.objects.all().order_by('nombre')
@@ -327,7 +338,7 @@ def consultation(request):
     			)
     	        p.save()
         messages.success(request,'Consulta exitosa')
-        return redirect ('/consultation')
+        return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':
         Pacientes = patients.objects.all().order_by('nombre')
@@ -346,6 +357,7 @@ def consultation(request):
         for tmp in properties.objects.all():
             propiedades = tmp
         return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades})
+
 
 @login_required
 def recipe_history(request, id):
@@ -403,7 +415,8 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 terapeuticas = request.POST.get('terapeuticas'),
                 f_consulta = str(datetime.datetime.now()),
                 user = User.objects.get(id=request.user.id),
-                total = request.POST.get('total_g')
+                total = request.POST.get('total_g'),
+                indicaciones = request.POST.get('receta')
     			)
     	r.save()
         procedimientos = Procedure.objects.all().order_by('nombre')
@@ -418,7 +431,7 @@ def consultation_agenda (request, id_agenda, id_paciente):
         agenda = diary.objects.get(id= id_agenda)
         agenda.delete()
         messages.success(request,'Consulta exitosa')
-        return redirect ('/consultation')
+        return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':
         Pacientes = patients.objects.all().order_by('nombre')
@@ -571,28 +584,74 @@ def recipe_receta (request, id):
     for tmp in properties.objects.all():
         propiedades = tmp
 
-    # Create the HttpResponse object with the appropriate PDF headers.
+    _receta = receta.objects.get(id=id)
+
     response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = 'attachment; filename="somefilename.pdf"'
+    pdf_name = "clientes.pdf"  # llamado clientes
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    # response['Content-Disposition'] = 'attachment; filename=%s' % pdf_name
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=10,
+                            topMargin=10,
+                            bottomMargin=10,
+                            )
+    data = []
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
 
-    # Create the PDF object, using the response object as its "file."
-    p = canvas.Canvas(response)
 
-    # Draw things on the PDF. Here's where the PDF generation happens.
-    # See the ReportLab documentation for the full list of functionality.
-    y = 800
-    p.drawString(40, y, propiedades.r_social)
-    p.drawString(40, y-15, 'DIRECCION:')
-    p.drawString(40, y-30, propiedades.direccion)
-    p.drawString(40, y-50, 'CORREO ELECTRONICO:')
-    p.drawString(40, y-65, propiedades.correo)
-    p.drawString(40, y-85, 'TELEFONO:')
-    p.drawString(40, y-100, propiedades.telefono)
+    header = Paragraph(propiedades.r_social, styles['Title'])
+    data.append(header)
+    data.append(Paragraph("| DIRECCION: " + propiedades.direccion, styles['Normal']))
+    data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
+    data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
+    data.append(Paragraph("| F. CONSULTA: " + str(_receta.f_consulta), styles['Normal']))
+    data.append(Paragraph("| ATENDIO: " + _receta.user.first_name + _receta.user.last_name, styles['Normal']))
+    data.append(Paragraph("| FOLIO RECETA: " + str(_receta.id), styles['Normal']))
 
 
-    p.drawImage('static/assets/img/footer-logo.png', 400, 740)
+    data.append(Paragraph("<br />| PACIENTE: " + _receta.patient.nombre + " " + _receta.patient.a_paterno + " " + _receta.patient.a_materno, styles['right_bold']))
+    data.append(Paragraph("| EXPEDIENTE: " + _receta.patient.expediente + " | SEXO: " + _receta.patient.sexo + " | E. CIVIL: " + _receta.patient.e_civil, styles['right']))
+    data.append(Paragraph("| TELEFONO: " + _receta.patient.telefono + " | CELULAR: " + _receta.patient.celular, styles['right']))
+    data.append(Paragraph("| FECHA DE NACIMIENTO: " + str(_receta.patient.f_nacimiento) + "| EDAD: " + str(_receta.edad), styles['right']))
+    data.append(Paragraph("| OCUPACION: " + _receta.patient.ocupacion, styles['right']))
+    data.append(Paragraph("| RELIGION: " + _receta.patient.religion + " | TIPO SANGUINIO: " + _receta.patient.tipo_sanguinio + "<br />", styles['right']))
 
-    # Close the PDF object cleanly, and we're done.
-    p.showPage()
-    p.save()
+    data.append(Paragraph("<br />INFORMACION", styles['pro']))
+
+    headings = ('TEMPERATURA', 'PESO', 'ESTATURA', 'PRESION ARTERIAL', 'TALLA', 'IMC')
+    allclientes = [(_receta.temperatura + " GRADOS",_receta.peso + " KGs",_receta.estatura + "CMs",_receta.presion_arterial,_receta.talla,_receta.imc)]
+
+    t = Table([headings] + allclientes)
+    data.append(t)
+
+    data.append(Paragraph("<br />RECETA E INDICACIONES", styles['pro']))
+
+    data.append(Paragraph(_receta.indicaciones, styles['Normal']))
+
+    data.append(Paragraph("<br />PROCEDIMIENTOS<br />", styles['pro']))
+
+    headings = ('Procedimiento', 'Costo receta', 'Costo actual')
+    allclientes = [(p.procedure.nombre, p.costo, p.procedure.costo) for p in receta_procedures.objects.filter(receta__id__contains=id)]
+
+    t = Table([headings] + allclientes)
+    t.setStyle(TableStyle(
+        [
+            ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue)
+        ]
+    ))
+    data.append(t)
+
+    data.append(Paragraph("<br />| TOTAL $ " + str(_receta.total), styles['right_bold']))
+    data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
+    doc.build(data)
+    response.write(buff.getvalue())
+    buff.close()
     return response
