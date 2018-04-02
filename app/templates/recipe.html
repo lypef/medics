@@ -113,15 +113,17 @@
 			<table class="table">
 				<thead class="thead-dark">
 				  <tr>
+					<th scope="col">FOLIO	</th>
 					<th scope="col">Paciente</th>
-                    <th scope="col">Fecha</th>
-                    <th scope="col">Medico</th>
-                    <th scope="col">Opciones</th>
+          <th scope="col">Fecha</th>
+          <th scope="col">Medico</th>
+          <th scope="col">Opciones</th>
 				  </tr>
 				</thead>
 				<tbody>
 					{% for item in recetas %}
 					<tr>
+							<td>{{item.id}}</td>
 							<td>{{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</td>
 							<td>{{ item.f_consulta }}</td>
                             <td>{{ item.user.first_name }}</td>
@@ -133,7 +135,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 																				<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
-																				<li><a href="/recipe_pdf/{{ item.id }}"><span class="fa fa-file"></span> Receta</a></li>
+																				<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-file"></span> Receta</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>

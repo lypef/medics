@@ -30,5 +30,8 @@ urlpatterns = [
     url(r'^user_delete/', views._users_Delete),
     url(r'^user_update/', views._users_Update),
     url(r'^user_add/', views._users_Add),
+    url(r'^report_procedures/', views._report_procedures),
+    url(r'^report_patients/', views._report_patients),
+    url(r'^report_recipes/', views._report_recipes),
 
 ]

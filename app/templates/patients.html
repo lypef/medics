@@ -114,6 +114,7 @@
 			<table class="table">
 				<thead class="thead-dark">
 				  <tr>
+					<th scope="col">ID</th>
 					<th scope="col">Expediente</th>
 					<th scope="col">Nombre</th>
 					<th scope="col">Edad</th>
@@ -125,6 +126,7 @@
 				<tbody>
 					{% for item in ListPatients %}
 					<tr>
+							<th>{{ item.id }}</th>
 							<th>{{ item.expediente }}</th>
 							<td>{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</td>
 							<td>{{ item.f_nacimiento }} Años</td>

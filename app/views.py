@@ -5,8 +5,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import datetime
-from django.contrib.auth.models import User
-from models import patients, Procedure, receta, receta_procedures, diary, properties
 from reportlab.pdfgen import canvas
 from django.http import HttpResponse
 from reportlab.lib.pagesizes import letter
@@ -18,6 +16,8 @@ from reportlab.platypus import Paragraph, Table, SimpleDocTemplate, Spacer
 from io import BytesIO
 from reportlab.platypus import Paragraph, Table, TableStyle
 from reportlab.lib import colors
+from django.contrib.auth.models import User
+from models import patients, Procedure, receta, receta_procedures, diary, properties
 
 
 def index(request):
@@ -53,7 +53,11 @@ def user_logout (request):
 def patient (request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
-            ListPatients = patients.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+
+            ListPatients = patients.objects.filter(id__contains=request.GET.get('search').upper()).order_by('nombre')
+
+            if len(ListPatients) < 1:
+                ListPatients = patients.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
                 ListPatients = patients.objects.filter(a_paterno__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
@@ -188,7 +192,9 @@ def patient_Delete(request):
 def procedures (request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
-            ListProcedures = Procedure.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+            ListProcedures = Procedure.objects.filter(id__contains=request.GET.get('search').upper()).order_by('nombre')
+            if len(ListProcedures) < 1:
+                ListProcedures = Procedure.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
         else:
             ListProcedures = Procedure.objects.all().order_by('nombre')
 
@@ -274,7 +280,9 @@ def procedure_Delete(request):
 def recipe(request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
-            recetas = receta.objects.filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            recetas = receta.objects.filter(id__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            if len(recetas) < 1:
+                recetas = receta.objects.filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
                 recetas = receta.objects.filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
@@ -580,6 +588,7 @@ def _users_Add(request):
 
     return redirect('/users')
 
+@login_required
 def recipe_receta (request, id):
     for tmp in properties.objects.all():
         propiedades = tmp
@@ -603,6 +612,7 @@ def recipe_receta (request, id):
     styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
     styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
     styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
+    styles.add(ParagraphStyle(name='pro_LEFT', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_LEFT))
 
 
     header = Paragraph(propiedades.r_social, styles['Title'])
@@ -630,11 +640,11 @@ def recipe_receta (request, id):
     t = Table([headings] + allclientes)
     data.append(t)
 
-    data.append(Paragraph("<br />RECETA E INDICACIONES", styles['pro']))
+    if len(_receta.indicaciones) > 0:
+        data.append(Paragraph("<br />RECETA E INDICACIONES", styles['pro']))
+        data.append(Paragraph(_receta.indicaciones, styles['Normal']))
 
-    data.append(Paragraph(_receta.indicaciones, styles['Normal']))
-
-    data.append(Paragraph("<br />PROCEDIMIENTOS<br />", styles['pro']))
+    data.append(Paragraph("<br />PROCEDIMIENTOS REALIZADOS<br />", styles['pro']))
 
     headings = ('Procedimiento', 'Costo receta', 'Costo actual')
     allclientes = [(p.procedure.nombre, p.costo, p.procedure.costo) for p in receta_procedures.objects.filter(receta__id__contains=id)]
@@ -648,8 +658,209 @@ def recipe_receta (request, id):
         ]
     ))
     data.append(t)
-
     data.append(Paragraph("<br />| TOTAL $ " + str(_receta.total), styles['right_bold']))
+
+    if len(_receta.exp_fisica) > 0:
+        data.append(Paragraph("<br />| EXPLORACION FISICA", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.exp_fisica, styles['Normal']))
+
+    if len(_receta.torax) > 0:
+        data.append(Paragraph("<br />| TORAX", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.torax, styles['Normal']))
+
+    if len(_receta.abdomen) > 0:
+        data.append(Paragraph("<br />| ABDOMEN", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.abdomen, styles['Normal']))
+
+    if len(_receta.genitales) > 0:
+        data.append(Paragraph("<br />| GENITALES", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.genitales, styles['Normal']))
+
+    if len(_receta.piel) > 0:
+        data.append(Paragraph("<br />| PIEL", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.piel, styles['Normal']))
+
+    if len(_receta.terapeuticas) > 0:
+        data.append(Paragraph("<br />| RECOMENDACIONES TERAPEUTICAS", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.terapeuticas, styles['Normal']))
+
+    if len(_receta.extremidades) > 0:
+        data.append(Paragraph("<br />| EXTREMIDADES", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.extremidades, styles['Normal']))
+
+
+    if len(_receta.diagnostico) > 0:
+        data.append(Paragraph("<br />| DIAGNOSTICO", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.diagnostico, styles['Normal']))
+
+    if len(_receta.p_actual) > 0:
+        data.append(Paragraph("<br />| PADECIMIENTO ACTUAL", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.p_actual, styles['Normal']))
+
+    if len(_receta.pronostico) > 0:
+        data.append(Paragraph("<br />| PRONOSTICO", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.pronostico, styles['Normal']))
+
+
+
+    data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
+    doc.build(data)
+    response.write(buff.getvalue())
+    buff.close()
+    return response
+
+@login_required
+def _report_procedures (request):
+    for tmp in properties.objects.all():
+        propiedades = tmp
+
+
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = "procedimientos.pdf"  # llamado clientes
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    # response['Content-Disposition'] = 'attachment; filename=%s' % pdf_name
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=10,
+                            topMargin=10,
+                            bottomMargin=10,
+                            )
+    data = []
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
+
+
+    header = Paragraph(propiedades.r_social, styles['Title'])
+    data.append(header)
+    data.append(Paragraph("| DIRECCION: " + propiedades.direccion, styles['Normal']))
+    data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
+    data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
+
+    data.append(Paragraph("<br />LISTA DE PROCEDIMIENTOS DISPONIBLES", styles['pro']))
+
+    headings = ('FOLIO','Procedimiento', 'Costo')
+    allclientes = [(p.id, p.nombre, p.costo) for p in Procedure.objects.all().order_by("nombre")]
+
+    t = Table([headings] + allclientes)
+    t.setStyle(TableStyle(
+        [
+            ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue)
+        ]
+    ))
+    data.append(t)
+
+    data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
+    doc.build(data)
+    response.write(buff.getvalue())
+    buff.close()
+    return response
+
+
+@login_required
+def _report_patients (request):
+    for tmp in properties.objects.all():
+        propiedades = tmp
+
+
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = "pacientes.pdf"  # llamado clientes
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    # response['Content-Disposition'] = 'attachment; filename=%s' % pdf_name
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=10,
+                            topMargin=10,
+                            bottomMargin=10,
+                            )
+    data = []
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
+
+
+    header = Paragraph(propiedades.r_social, styles['Title'])
+    data.append(header)
+    data.append(Paragraph("| DIRECCION: " + propiedades.direccion, styles['Normal']))
+    data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
+    data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
+
+    data.append(Paragraph("<br />LISTA DE PACIENTES EXISTENTES", styles['pro']))
+
+    headings = ('EXPEDIENTE','NOMBRE', 'CELULAR', 'F. NACIMIENTO')
+    allclientes = [(p.expediente, "(" + str(p.id) + ") " + p.nombre + " " + p.a_paterno + " " + p.a_materno, p.celular, p.f_nacimiento) for p in patients.objects.all().order_by("nombre")]
+
+    t = Table([headings] + allclientes)
+    t.setStyle(TableStyle(
+        [
+            ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue)
+        ]
+    ))
+    data.append(t)
+
+    data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
+    doc.build(data)
+    response.write(buff.getvalue())
+    buff.close()
+    return response
+
+
+@login_required
+def _report_recipes (request):
+    for tmp in properties.objects.all():
+        propiedades = tmp
+
+
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = "pacientes.pdf"  # llamado clientes
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    # response['Content-Disposition'] = 'attachment; filename=%s' % pdf_name
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=10,
+                            topMargin=10,
+                            bottomMargin=10,
+                            )
+    data = []
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
+
+
+    header = Paragraph(propiedades.r_social, styles['Title'])
+    data.append(header)
+    data.append(Paragraph("| DIRECCION: " + propiedades.direccion, styles['Normal']))
+    data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
+    data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
+
+    data.append(Paragraph("<br />LISTA DE RECETAS EXPEDIDAD", styles['pro']))
+
+    headings = ('FOLIO','PACIENTE', 'TOTAL', 'F. CONSULTA')
+    allclientes = [(p.id, "(" + str(p.patient.id) + ") " + p.patient.nombre + " " + p.patient.a_paterno + " " + p.patient.a_materno, str(p.total) + " MXN", p.f_consulta) for p in receta.objects.all().order_by("-f_consulta")]
+
+    t = Table([headings] + allclientes)
+    t.setStyle(TableStyle(
+        [
+            ('GRID', (0, 0), (3, -1), 1, colors.dodgerblue),
+            ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+            ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue)
+        ]
+    ))
+    data.append(t)
+
     data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
     doc.build(data)
     response.write(buff.getvalue())
