@@ -44,7 +44,6 @@ class receta (models.Model):
     peso = models.CharField(max_length=150)
     estatura = models.CharField(max_length=150)
     presion_arterial = models.CharField(max_length=150)
-    talla = models.CharField(max_length=150)
     imc = models.CharField(max_length=150)
     exp_fisica = models.TextField()
     extremidades = models.TextField()

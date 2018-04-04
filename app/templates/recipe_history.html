@@ -105,7 +105,7 @@
                     <div class="single-service">
                         <div class="ser-title">
                             <i class="fa fa-user-md"></i>
-                            <a href="" data-toggle="modal" data-target="#view{{item.id}}"><h3>{{ item.f_consulta  }}</h3></a>
+                            <a href="" data-toggle="modal" data-target="#view{{item.id}}"><h3>{{ item.f_consulta }}</h3></a>
                         </div>
                         <div class="row">
                             <div class="col-md-9">
@@ -114,13 +114,12 @@
                                     <br>{{item.temperatura}} Grados
                                 </div>
                                 <div class="col-md-6">
-                                    Talla: {{item.talla}}
+                                    PA: {{item.presion_arterial}}
                                     <br>IMC: {{item.imc}}
                                 </div>
                             </div>
                         </div>
-                        Presion arterial: {{item.presion_arterial}}
-                        <br>Medico: {{item.user.first_name}}
+                        Medico: {{item.user.first_name}}
                     </div>
 				</div>
 
@@ -144,9 +143,8 @@
 												<p>Peso: {{ item.peso }} KG,s</p>
 												<p>Estatura: {{ item.estatura }} CM,s</p>
 												<p>Presion arterial: {{ item.presion_arterial }}</p>
-												<p>Talla: {{ item.talla }}</p>
 												<p>Imc: {{ item.imc }}</p>
-												<p>Cabeza: {{ item.cabeza|slice:'0:25' }}...</p>
+												<p>Exploracion fisica: {{ item.exp_fisica|slice:'0:25' }}...</p>
 												<p>Torax: {{ item.torax|slice:'0:25' }}...</p>
 
 										</div>
@@ -162,6 +160,13 @@
 										</div>
 									</div>
 								</div>
+								{% if item.indicaciones %}
+								<hr>
+								<h4 class="modal-title">RECETA E INDICACIONES</h4>
+								<div class='modal-body'>
+										<textarea name='receta' id='receta' class='form-control' rows='8' placeholder='Texto aqui' disabled>{{item.indicaciones}}</textarea>
+								</div>
+								{% endif %}
 								<hr>
 								<h4 class="modal-title">PROCEDIMIENTOS REALIZADOS</h4>
 								<br><ul class="list-group">
@@ -175,8 +180,8 @@
 										{% endfor %}
 										<br>
 										<div class="text-right">
-												<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
-												</div>
+											<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
+										</div>
 						</div>
 						<div class="modal-footer">
 						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>

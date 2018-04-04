@@ -3,11 +3,11 @@
 {% block structure_body%}
 <!-- Navigation area starts -->
 <script>
-	var p = getUrlVars()["recipe"];
+	var p = getUrlVars()['recipe'];
 
 	if (p)
 	{
-			window.open("/recipe_pdf/"+p,"_target")
+			window.open('/recipe_pdf/'+p,'_target')
 	}
 
 	function getUrlVars() {
@@ -18,34 +18,34 @@
 		return vars;
 	}
 </script>
-<div class="menu-area navbar-fixed-top">
-<div class="container">
-	<div class="row">
+<div class='menu-area navbar-fixed-top'>
+<div class='container'>
+	<div class='row'>
 
 		<!-- Navigation starts -->
-		<div class="col-md-12">
-			<div class="mainmenu">
-				<div class="navbar navbar-nobg">
-					<div class="navbar-header">
-						<a class="navbar-brand" href="/manager"><img src="/static/assets/img/logo.png" alt=""></a>
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-							<span class="sr-only">Toggle navigation</span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
-							<span class="icon-bar"></span>
+		<div class='col-md-12'>
+			<div class='mainmenu'>
+				<div class='navbar navbar-nobg'>
+					<div class='navbar-header'>
+						<a class='navbar-brand' href='/manager'><img src='/static/assets/img/logo.png' alt=''></a>
+						<button type='button' class='navbar-toggle' data-toggle='collapse' data-target='.navbar-collapse'>
+							<span class='sr-only'>Toggle navigation</span>
+							<span class='icon-bar'></span>
+							<span class='icon-bar'></span>
+							<span class='icon-bar'></span>
 						</button>
 					</div>
 
-					<div class="navbar-collapse collapse">
+					<div class='navbar-collapse collapse'>
 						<nav>
-							<ul class="nav navbar-nav navbar-right">
+							<ul class='nav navbar-nav navbar-right'>
 
-								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
-								<li ><a href="/patient">Pacientes</a></li>
-								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class="active"><a href="/consultation">Consulta</a></li>{% endif %}
-								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
+								{% if user.is_staff %} <li class=''><a href='/diary'>Agenda</a></li> {% endif %}
+								<li ><a href='/patient'>Pacientes</a></li>
+								<li class=''><a  href='/procedures'>Procedimientos</a></li>
+                                {% if user.is_superuser %}<li class=''><a href='/recipe'>Recetas</a></li>{% endif %}
+                                {% if user.is_superuser %}<li class='active'><a href='/consultation'>Consulta</a></li>{% endif %}
+								<a class='a_button' href='/logout'>SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
 					</div>
@@ -58,40 +58,40 @@
 </div>
 </div>
 <!-- Navigation area ends -->
-<div class="clearfix header-space"></div>
+<div class='clearfix header-space'></div>
 {% if messages %}
 		{% for message in messages %}
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
-			<div class="container"><br>
-				<div class="alert alert-success fade in">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class='container'><br>
+				<div class='alert alert-success fade in'>
+					<button type='button' class='close' data-dismiss='alert'>&times;</button>
 					<strong>¡OK!</strong> {{ message }}
 				</div>
 			</div>
 			{% endif %}
 
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
-			<div class="container"><br>
-				<div class="alert alert-info  fade in">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class='container'><br>
+				<div class='alert alert-info  fade in'>
+					<button type='button' class='close' data-dismiss='alert'>&times;</button>
 					<strong>¡Informacion!</strong> {{ message }}
 				</div>
 			</div>
 			{% endif %}
 
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
-			<div class="container"><br>
-				<div class="alert alert-warning  fade in">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class='container'><br>
+				<div class='alert alert-warning  fade in'>
+					<button type='button' class='close' data-dismiss='alert'>&times;</button>
 					<strong>¡Alerta!</strong> {{ message }}
 				</div>
 			</div>
 			{% endif %}
 
 			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
-			<div class="container"><br>
-				<div class="alert alert-danger  fade in">
-					<button type="button" class="close" data-dismiss="alert">&times;</button>
+			<div class='container'><br>
+				<div class='alert alert-danger  fade in'>
+					<button type='button' class='close' data-dismiss='alert'>&times;</button>
 					<strong>¡Error!</strong> {{ message }}
 				</div>
 			</div>
@@ -99,40 +99,42 @@
 
 		{% endfor %}
 		{% endif %}
-		<form method="POST"> {% csrf_token %}
+
+		<form method='POST'> {% csrf_token %}
 <!-- Agregar paciente -->
-<section id="department" class="department-area  section-sm">
-	<div class="container">
+<section id='department' class='department-area  section-sm'>
+	<div class='container'>
 		<br>
-		<div class="col-md-12 text-center">
-			<div class="section-title white mb-30">
-				<h2>Nueva <span>Consulta</span></h2>
+		<div id='histori'></div>
+		<div class='col-md-12 text-center'>
+			<div class='section-title white mb-30'>
+				<br><h2 class="col-md-12">Nueva <span>Consulta</span></h2>
 			</div>
 		</div>
-		<button type="button" class="btn btn-warning btn-circle-fixed" data-toggle="modal" data-target="#receta"><i class="fa fa-th-list"></i></button>
+		<button type='button' class='btn btn-warning btn-circle-fixed' data-toggle='modal' data-target='#receta'><i class='fa fa-th-list'></i></button>
 		<br><br><br>
-		<button type="button" class="btn btn-info btn-circle-fixed" data-toggle="modal" data-target="#procedimientos"><i class="fa fa-check"></i></button>
+		<button type='button' class='btn btn-info btn-circle-fixed' data-toggle='modal' data-target='#procedimientos'><i class='fa fa-check'></i></button>
 		<br><br><br>
-		<button type="submit" class="btn btn-success btn-circle-fixed" ><i class="fa fa-save" value="Agregar" name="submit" id="submitButton" ></i></button>
+		<button type='submit' class='btn btn-success btn-circle-fixed' ><i class='fa fa-save' value='Agregar' name='submit' id='submitButton' ></i></button>
 
 		<!-- Modal receta -->
-		<div class="modal fade" id="receta" role="dialog">
-				<div class="modal-dialog modal-lg">
+		<div class='modal fade' id='receta' role='dialog'>
+				<div class='modal-dialog modal-lg'>
 					<!-- Modal content-->
-					<div class="modal-content">
-						<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<div class="col-md-12 text-center">
-							<div class="section-title white">
+					<div class='modal-content'>
+						<div class='modal-header'>
+						<button type='button' class='close' data-dismiss='modal'>&times;</button>
+						<div class='col-md-12 text-center'>
+							<div class='section-title white'>
 								<h2>RECETA<span></p></span></h2>
 							</div>
 						</div>
 						</div>
-					<div class="modal-body">
-							<textarea name="receta" id="receta" class="form-control" rows="12" placeholder="Texto aqui"></textarea>
+					<div class='modal-body'>
+							<textarea name='receta' id='receta' class='form-control' rows='12' placeholder='Texto aqui'></textarea>
 					</div>
-					<div class="modal-footer">
-					<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+					<div class='modal-footer'>
+					<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>
 					</div>
 				</div>
 
@@ -142,29 +144,29 @@
 		<!-- Finaliza Modal receta-->
 
 		<!-- Modal procedimientos -->
-		<div class="modal fade" id="procedimientos" role="dialog">
-			<div class="modal-dialog modal-lg">
+		<div class='modal fade' id='procedimientos' role='dialog'>
+			<div class='modal-dialog modal-lg'>
 
 			<!-- Modal content-->
-			<div class="modal-content">
-				<div class="modal-header">
-				<button type="button" class="close" data-dismiss="modal">&times;</button>
-				<div class="col-md-12 text-center">
-					<div class="section-title white mb-30">
-						<h2>procedimientos<span><p id="total"></p>
-						<input type="hidden" name="total_g" id="total_g">
+			<div class='modal-content'>
+				<div class='modal-header'>
+				<button type='button' class='close' data-dismiss='modal'>&times;</button>
+				<div class='col-md-12 text-center'>
+					<div class='section-title white mb-30'>
+						<h2>procedimientos<span><p id='total'></p>
+						<input type='hidden' name='total_g' id='total_g'>
 						</span></h2>
 					</div>
 				</div>
 				</div>
-				<div class="modal-body">
+				<div class='modal-body'>
 					<!-- Tabla clientes -->
-			<table class="table">
-				<thead class="thead-dark">
+			<table class='table'>
+				<thead class='thead-dark'>
 				  <tr>
-					<th scope="col">Procedimiento</th>
-                    <th scope="col">Costo</th>
-					<th scope="col">Agregar</th>
+					<th scope='col'>Procedimiento</th>
+                    <th scope='col'>Costo</th>
+					<th scope='col'>Agregar</th>
 				  </tr>
 				</thead>
 				<tbody>
@@ -172,7 +174,7 @@
 					<tr>
 							<td>{{ item.nombre }}</td>
 							<td>$ {{ item.costo }}</td>
-							<td><input type="checkbox" class="form-check-input" id="p{{item.id}}" name="p{{item.id}}" {% if item.agendar %} checked{% endif %} value="{{item.costo}}" onchange="calculate_total()"></td>
+							<td><input type='checkbox' class='form-check-input' id='p{{item.id}}' name='p{{item.id}}' {% if item.agendar %} checked{% endif %} value='{{item.costo}}' onchange='calculate_total()'></td>
 						</tr>
 					{% endfor %}
 					<script>
@@ -183,19 +185,19 @@
 						{
 							var t = 0
 							{% for item in Procedures %}
-								if ( document.getElementById("p"+{{item.id}}).checked )
+								if ( document.getElementById('p'+{{item.id}}).checked )
 								{
 									t += {{item.costo}}
 								}
 							{% endfor %}
 							total_gbl = t
-							document.getElementById("total").innerHTML = "Total $: " + total_gbl
-							document.getElementById("total_g").value = total_gbl
+							document.getElementById('total').innerHTML = 'Total $: ' + total_gbl
+							document.getElementById('total_g').value = total_gbl
 						}
 						function SelectAll (bol)
 						{
 							{% for item in Procedures %}
-								document.getElementById("p"+{{item.id}}).checked = bol
+								document.getElementById('p'+{{item.id}}).checked = bol
 							{% endfor %}
 							calculate_total()
 						}
@@ -204,10 +206,10 @@
 				</tbody>
 			  </table>
 				</div>
-				<div class="modal-footer">
-						<button type="button" class="btn btn-warning" onclick="SelectAll(true)">Todos</button>
-						<button type="button" class="btn btn-danger" onclick="SelectAll(false)">Ninguno</button>
-						<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+				<div class='modal-footer'>
+						<button type='button' class='btn btn-warning' onclick='SelectAll(true)'>Todos</button>
+						<button type='button' class='btn btn-danger' onclick='SelectAll(false)'>Ninguno</button>
+						<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>
 				</div>
 			</div>
 			</div>
@@ -215,41 +217,138 @@
 	</div>
 	<!-- Finaliza procedimientos-->
 
-		<div class="row">
-				<div class="row">
-						<div class="row">
-								<div class="col-md-12">
-									<div class="col-md-8">
-										<div class="col-md-6">
-											<div class="form-group">
-												<select id="paciente" name="paciente" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un paciente')" oninput="setCustomValidity('')" onchange="LoadEdad()">
-													<option value="">LISTA DE PACIENTES</option>
+		<div class='row'>
+				<div class='row'>
+						<div class='row'>
+								<div class='col-md-12'>
+									<div class='col-md-8'>
+										<div class='col-md-6'>
+											<div class='form-group'>
+												<select id='paciente' name='paciente' class='form-control' required oninvalid='this.setCustomValidity('Seleccion un paciente')' oninput='setCustomValidity('')' onchange='LoadEdad()'>
+													<option value=''>LISTA DE PACIENTES</option>
 													{% for item in Pacientes %}
-														<option value="{{ item.id }}">{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
+														<option value='{{ item.id }}'>{{item.nombre}} {{item.a_paterno}} {{item.a_materno}}</option>
 													{% endfor %}
 												</select>
 												<script>
 													function LoadEdad()
 													{
-														var id = document.getElementById("paciente").value
+														var id = document.getElementById('paciente').value
+
+														var BodyTmp = ""
+														{% for r in recetas %}
+															if (id == {{r.patient.id}})
+															{
+																BodyTmp +="<div class='col-md-4 col-sm-6'>"
+																		+"<div class='single-service'>"
+																		+"		<div class='ser-title'>"
+																						+"<i class='fa fa-user-md'></i>"
+																						+"<a href='' data-toggle='modal' data-target='#view{{r.id}}'><h3>{{ r.f_consulta  }}</h3></a>"
+																				+"</div>"
+																				+"<div class='row'>"
+																						+"<div class='col-md-9'>"
+																								+"<div class='col-md-6'>"
+																										+"{{r.edad}} años"
+																										+"<br>{{r.temperatura}} Grados"
+																								+"</div>"
+																								+"<div class='col-md-6'>"
+																										+"PA: {{r.presion_arterial}}"
+																										+"<br>IMC: {{r.imc}}"
+																								+"</div>"
+																						+"</div>"
+																				+"</div>"
+																				+"Medico: {{r.user.first_name}}"
+																		+"</div>"
+																		+"</div>"
+																		+"<!-- Modal view -->"
+																		+"<div class='modal fade' id='view{{r.id}}' role='dialog'>"
+																				+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																				+"<div class='modal-dialog modal-lg'>"
+																				+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																			+"<!-- Modal content-->"
+																			+"<div class='modal-content'>"
+																				+"<div class='modal-header'>"
+																				+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																				+"<h4 class='modal-title'>PACIENTE: {{ r.patient.nombre }} {{ r.patient.a_paterno }} {{ r.patient.a_materno }}</h4>"
+																				+"</div>"
+																				+"<div class='modal-body'>"
+																						+"<div class='row'>"
+																							+"<div class='col-md-9'>"
+																								+"<div class='col-md-6'>"
+																										+"<p>Edad: {{ r.edad }} años</p>"
+																										+"<p>Temperatura: {{ r.temperatura }} grados</p>"
+																										+"<p>Peso: {{ r.peso }} KG,s</p>"
+																										+"<p>Estatura: {{ r.estatura }} CM,s</p>"
+																										+"<p>Presion arterial: {{ r.presion_arterial }}</p>"
+																										+"<p>Imc: {{ r.imc }}</p>"
+																										+"<p>EXPLORACION FISICA: {{ r.exp_fisica|slice:'0:25' }}...</p>"
+																										+"<p>Torax: {{ r.torax|slice:'0:25' }}...</p>"
+
+																								+"</div>"
+																								+"<div class='col-md-6'>"
+																										+"<p>Abdomen: {{ r.abdomen|slice:'0:45' }}...</p>"
+																										+"<p>Genitales: {{ r.genitales|slice:'0:45' }}...</p>"
+																										+"<p>Diagnostico: {{ r.diagnostico|slice:'0:45' }}...</p>"
+																										+"<p>Pronostico: {{ r.pronostico|slice:'0:45' }}...</p>"
+																										+"<p>Terapeuticas: {{ r.terapeuticas|slice:'0:45' }}...</p>"
+																										+"<p>Fecha de consulta: {{ r.f_consulta }}</p>"
+																										+"<p>Medico: {{ r.user.first_name }}</p>"
+																								+"</div>"
+																							+"</div>"
+																						+"</div>"
+																						+"{% if r.indicaciones %}"
+																						+"<hr>"
+																						+"<h4 class='modal-title'>RECETA E INDICACIONES</h4>"
+																						+"<div class='modal-body'>"
+																								+"<textarea class='form-control' rows='8' placeholder='Texto aqui' disabled>{{r.indicaciones}}</textarea>"
+																						+"</div>"
+																						+"{% endif %}"
+																						+"<hr>"
+																						+"<h4 class='modal-title'>PROCEDIMIENTOS REALIZADOS</h4>"
+																						+"<br><ul class='list-group'>"
+																								+"{% for a in Procedures_recipe %}"
+																									+"{% if r.id == a.receta.id %}"
+																										+"<li class='list-group-item'>"
+																											+"<span class='badge'>$ {{a.costo}}</span>"
+																											+"{{a.procedure.nombre}}"
+																										+"</li>"
+																									+"{% endif %}"
+																								+"{% endfor %}"
+																								+"<br>"
+																								+"<div class='text-right'>"
+																										+"<h3><span class='label label-success'>Total: $ {{r.total}}</span></h3>"
+																										+"</div>"
+																				+"</div>"
+																				+"<div class='modal-footer'>"
+																				+"<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>"
+																				+"</div>"
+																			+"</div>"
+																		+"</div>"
+																			+"<!-- Finaliza contenido modal -->"
+																		+"</div>"
+																		+"<!-- Finaliza Modal view-->"
+															}
+														{% endfor %}
+														document.getElementById('histori').innerHTML = BodyTmp
+
 														{% for item in Pacientes %}
 															if ( id == {{item.id}} )
 															{
-																document.getElementById("edad").value = {{item.f_nacimiento}}
+																document.getElementById('edad').value = {{item.f_nacimiento}}
 															}
 														{% endfor %}
 													}
 												</script>
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-												<input type="number" name="edad" class="form-control" id="edad" placeholder="Edad">
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+												<input type='number' name='edad' class='form-control' id='edad' placeholder='Edad'>
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="number" name="temperatura" class="form-control" id="temperatura" placeholder="Temperatura ℃" >
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+													<input type='number' name='temperatura' class='form-control' id='temperatura' placeholder='Temperatura ℃' >
 											</div>
 										</div>
 										<script>
@@ -262,105 +361,100 @@
 											}
 
 										</script>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="number" name="peso" class="form-control" id="peso" placeholder="Peso KG,s" onchange="Imc()" >
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+													<input type='number' name='peso' class='form-control' id='peso' placeholder='Peso KG,s' onchange='Imc()' >
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="number" name="estatura" class="form-control" id="estatura" placeholder="Estatura CM,s" onchange="Imc()">
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+													<input type='number' name='estatura' class='form-control' id='estatura' placeholder='Estatura CM,s' onchange='Imc()'>
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-												<input type="text" name="presion_arterial" class="form-control" id="presion_arterial" placeholder="Presion arterial sistolica/distolica">
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+												<input type='text' name='presion_arterial' class='form-control' id='presion_arterial' placeholder='Presion arterial sistolica/distolica'>
 											</div>
 										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="number" name="talla" class="form-control" id="talla" placeholder="Talla">
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="text" name="imc" class="form-control" id="imc" placeholder="IMC = Peso [kg]/ estatura [m2]">
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+													<input type='text' name='imc' class='form-control' id='imc' placeholder='IMC = Peso [kg]/ estatura [m2]'>
 											</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">EXPLORACION FISICA</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="exp_fisica" id="exp_fisica" class="form-control" rows="2" placeholder="Texto aqui" ></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>EXPLORACION FISICA</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='exp_fisica' id='exp_fisica' class='form-control' rows='2' placeholder='Texto aqui' ></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">TORAX</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="torax" id="torax" class="form-control" rows="2" placeholder="Texto aqui" ></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>TORAX</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='torax' id='torax' class='form-control' rows='2' placeholder='Texto aqui' ></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">ABDOMEN</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="abdomen" id="abdomen" class="form-control" rows="2" placeholder="Texto aqui" ></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>ABDOMEN</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='abdomen' id='abdomen' class='form-control' rows='2' placeholder='Texto aqui' ></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">GENITALES</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="genitales" id="genitales" class="form-control" rows="2" placeholder="Texto aqui"></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>GENITALES</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='genitales' id='genitales' class='form-control' rows='2' placeholder='Texto aqui'></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">PIEL</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="piel" id="piel" class="form-control" rows="2" placeholder="Texto aqui"></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>PIEL</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='piel' id='piel' class='form-control' rows='2' placeholder='Texto aqui'></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">PROCIDIMIENTO ACTUAL</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="p_actual" id="p_actual" class="form-control" rows="2" placeholder="Texto aqui"></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>PADECIMIENTO ACTUAL</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='p_actual' id='p_actual' class='form-control' rows='2' placeholder='Texto aqui'></textarea>
 															</div>
 													</div>
 												</div>
 										</div>
 
-										<div class="col-md-12">
-												<div class="panel panel-default ">
-													<div class="panel-heading">EXTREMIDADES</div>
-													<div class="panel-body">
-															<div class="form-group">
-																<textarea name="extremidades" id="extremidades" class="form-control" rows="2" placeholder="Texto aqui"></textarea>
+										<div class='col-md-12'>
+												<div class='panel panel-default '>
+													<div class='panel-heading'>EXTREMIDADES</div>
+													<div class='panel-body'>
+															<div class='form-group'>
+																<textarea name='extremidades' id='extremidades' class='form-control' rows='2' placeholder='Texto aqui'></textarea>
 															</div>
 													</div>
 												</div>
@@ -369,28 +463,28 @@
 									</div>
 
 
-									<div class="col-md-4">
-											<div class="panel panel-default ">
-												<div class="panel-heading">DIAGNOSTICO</div>
-												<div class="panel-body">
-														<div class="form-group">
-															<textarea name="diagnostico" id="diagnostico" class="form-control" rows="17" placeholder="Texto aqui"></textarea>
+									<div class='col-md-4'>
+											<div class='panel panel-default '>
+												<div class='panel-heading'>DIAGNOSTICO</div>
+												<div class='panel-body'>
+														<div class='form-group'>
+															<textarea name='diagnostico' id='diagnostico' class='form-control' rows='17' placeholder='Texto aqui'></textarea>
 														</div>
 												</div>
 											</div>
-											<div class="panel panel-default ">
-												<div class="panel-heading">PRONOSTICO</div>
-												<div class="panel-body">
-														<div class="form-group">
-															<textarea name="pronostico" id="pronostico" class="form-control" rows="16" placeholder="Texto aqui"></textarea>
+											<div class='panel panel-default '>
+												<div class='panel-heading'>PRONOSTICO</div>
+												<div class='panel-body'>
+														<div class='form-group'>
+															<textarea name='pronostico' id='pronostico' class='form-control' rows='16' placeholder='Texto aqui'></textarea>
 														</div>
 												</div>
 											</div>
-											<div class="panel panel-default ">
-												<div class="panel-heading">INDICACIONES TERAPEUTICAS</div>
-												<div class="panel-body">
-														<div class="form-group">
-															<textarea name="terapeuticas" id="terapeuticas" class="form-control" rows="16" placeholder="Texto aqui"></textarea>
+											<div class='panel panel-default '>
+												<div class='panel-heading'>INDICACIONES TERAPEUTICAS</div>
+												<div class='panel-body'>
+														<div class='form-group'>
+															<textarea name='terapeuticas' id='terapeuticas' class='form-control' rows='16' placeholder='Texto aqui'></textarea>
 														</div>
 												</div>
 											</div>

@@ -83,14 +83,16 @@
 
 		{% endfor %}
 		{% endif %}
-		<form method="POST"> {% csrf_token %}
+
+<form method="POST"> {% csrf_token %}
 <!-- Agregar paciente -->
 <section id="department" class="department-area  section-sm">
 	<div class="container">
 		<br>
-		<div class="col-md-12 text-center">
-			<div class="section-title white mb-30">
-				<h2>Nueva <span>Consulta</span></h2>
+		<div id='histori'></div>
+		<div class='col-md-12 text-center'>
+			<div class='section-title white mb-30'>
+				<br><h2 class="col-md-12">Nueva <span>Consulta</span></h2>
 			</div>
 		</div>
 		<button type="button" class="btn btn-warning btn-circle-fixed" data-toggle="modal" data-target="#receta"><i class="fa fa-th-list"></i></button>
@@ -225,6 +227,103 @@
 											function LoadEdad()
 											{
 												var id = document.getElementById("paciente").value
+
+												var BodyTmp = ""
+												{% for r in recetas %}
+													if (id == {{r.patient.id}})
+													{
+														BodyTmp +="<div class='col-md-4 col-sm-6'>"
+																+"<div class='single-service'>"
+																+"		<div class='ser-title'>"
+																				+"<i class='fa fa-user-md'></i>"
+																				+"<a href='' data-toggle='modal' data-target='#view{{r.id}}'><h3>{{ r.f_consulta  }}</h3></a>"
+																		+"</div>"
+																		+"<div class='row'>"
+																				+"<div class='col-md-9'>"
+																						+"<div class='col-md-6'>"
+																								+"{{r.edad}} años"
+																								+"<br>{{r.temperatura}} Grados"
+																						+"</div>"
+																						+"<div class='col-md-6'>"
+																								+"PA: {{r.presion_arterial}}"
+																								+"<br>IMC: {{r.imc}}"
+																						+"</div>"
+																				+"</div>"
+																		+"</div>"
+																		+"Medico: {{r.user.first_name}}"
+																+"</div>"
+																+"</div>"
+																+"<!-- Modal view -->"
+																+"<div class='modal fade' id='view{{r.id}}' role='dialog'>"
+																		+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																		+"<div class='modal-dialog modal-lg'>"
+																		+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																	+"<!-- Modal content-->"
+																	+"<div class='modal-content'>"
+																		+"<div class='modal-header'>"
+																		+"<button type='button' class='close' data-dismiss='modal'>&times;</button>"
+																		+"<h4 class='modal-title'>PACIENTE: {{ r.patient.nombre }} {{ r.patient.a_paterno }} {{ r.patient.a_materno }}</h4>"
+																		+"</div>"
+																		+"<div class='modal-body'>"
+																				+"<div class='row'>"
+																					+"<div class='col-md-9'>"
+																						+"<div class='col-md-6'>"
+																								+"<p>Edad: {{ r.edad }} años</p>"
+																								+"<p>Temperatura: {{ r.temperatura }} grados</p>"
+																								+"<p>Peso: {{ r.peso }} KG,s</p>"
+																								+"<p>Estatura: {{ r.estatura }} CM,s</p>"
+																								+"<p>Presion arterial: {{ r.presion_arterial }}</p>"
+																								+"<p>Imc: {{ r.imc }}</p>"
+																								+"<p>EXPLORACION FISICA: {{ r.exp_fisica|slice:'0:25' }}...</p>"
+																								+"<p>Torax: {{ r.torax|slice:'0:25' }}...</p>"
+
+																						+"</div>"
+																						+"<div class='col-md-6'>"
+																								+"<p>Abdomen: {{ r.abdomen|slice:'0:45' }}...</p>"
+																								+"<p>Genitales: {{ r.genitales|slice:'0:45' }}...</p>"
+																								+"<p>Diagnostico: {{ r.diagnostico|slice:'0:45' }}...</p>"
+																								+"<p>Pronostico: {{ r.pronostico|slice:'0:45' }}...</p>"
+																								+"<p>Terapeuticas: {{ r.terapeuticas|slice:'0:45' }}...</p>"
+																								+"<p>Fecha de consulta: {{ r.f_consulta }}</p>"
+																								+"<p>Medico: {{ r.user.first_name }}</p>"
+																						+"</div>"
+																					+"</div>"
+																				+"</div>"
+																				+"{% if r.indicaciones %}"
+																				+"<hr>"
+																				+"<h4 class='modal-title'>RECETA E INDICACIONES</h4>"
+																				+"<div class='modal-body'>"
+																						+"<textarea class='form-control' rows='8' placeholder='Texto aqui' disabled>{{r.indicaciones}}</textarea>"
+																				+"</div>"
+																				+"{% endif %}"
+																				+"<hr>"
+																				+"<h4 class='modal-title'>PROCEDIMIENTOS REALIZADOS</h4>"
+																				+"<br><ul class='list-group'>"
+																						+"{% for a in Procedures_recipe %}"
+																							+"{% if r.id == a.receta.id %}"
+																								+"<li class='list-group-item'>"
+																									+"<span class='badge'>$ {{a.costo}}</span>"
+																									+"{{a.procedure.nombre}}"
+																								+"</li>"
+																							+"{% endif %}"
+																						+"{% endfor %}"
+																						+"<br>"
+																						+"<div class='text-right'>"
+																								+"<h3><span class='label label-success'>Total: $ {{r.total}}</span></h3>"
+																								+"</div>"
+																		+"</div>"
+																		+"<div class='modal-footer'>"
+																		+"<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>"
+																		+"</div>"
+																	+"</div>"
+																+"</div>"
+																	+"<!-- Finaliza contenido modal -->"
+																+"</div>"
+																+"<!-- Finaliza Modal view-->"
+													}
+												{% endfor %}
+												document.getElementById('histori').innerHTML = BodyTmp
+
 												{% for item in Pacientes %}
 
 													if ( id == {{item.id}} )
@@ -262,11 +361,6 @@
 										<div class="col-md-6">
 											<div class="form-group in_name">
 												<input type="text" name="presion_arterial" class="form-control" id="presion_arterial" placeholder="Presion arterial sistolica/distolica">
-											</div>
-										</div>
-										<div class="col-md-6">
-											<div class="form-group in_name">
-													<input type="number" name="talla" class="form-control" id="talla" placeholder="Talla">
 											</div>
 										</div>
 										<div class="col-md-6">
@@ -333,7 +427,7 @@
 
 										<div class="col-md-12">
 												<div class="panel panel-default ">
-													<div class="panel-heading">PROCIDIMIENTO ACTUAL</div>
+													<div class="panel-heading">PADECIMIENTO ACTUAL</div>
 													<div class="panel-body">
 															<div class="form-group">
 																<textarea name="p_actual" id="p_actual" class="form-control" rows="2" placeholder="Texto aqui"></textarea>

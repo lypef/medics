@@ -318,7 +318,6 @@ def consultation(request):
                 peso = request.POST.get('peso'),
                 estatura = request.POST.get('estatura'),
                 presion_arterial = request.POST.get('presion_arterial'),
-                talla = request.POST.get('talla'),
                 imc = request.POST.get('imc'),
                 exp_fisica = request.POST.get('exp_fisica'),
                 extremidades = request.POST.get('extremidades'),
@@ -351,6 +350,8 @@ def consultation(request):
     if request.method == 'GET':
         Pacientes = patients.objects.all().order_by('nombre')
         Procedures = Procedure.objects.all().order_by('nombre')
+        Procedures_recipe = receta_procedures.objects.all()
+        recetas = receta.objects.all().order_by('f_consulta')
 
         for a in Pacientes:
             dt = datetime.datetime.now()
@@ -364,7 +365,7 @@ def consultation(request):
                 a.f_nacimiento =  year_actual - year_nacimiento
         for tmp in properties.objects.all():
             propiedades = tmp
-        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades})
+        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'recetas':recetas, 'Procedures_recipe':Procedures_recipe})
 
 
 @login_required
@@ -409,7 +410,6 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 peso = request.POST.get('peso'),
                 estatura = request.POST.get('estatura'),
                 presion_arterial = request.POST.get('presion_arterial'),
-                talla = request.POST.get('talla'),
                 imc = request.POST.get('imc'),
                 exp_fisica = request.POST.get('exp_fisica'),
                 extremidades = request.POST.get('extremidades'),
@@ -444,6 +444,8 @@ def consultation_agenda (request, id_agenda, id_paciente):
     if request.method == 'GET':
         Pacientes = patients.objects.all().order_by('nombre')
         Procedures = Procedure.objects.all().order_by('nombre')
+        Procedures_recipe = receta_procedures.objects.all()
+        recetas = receta.objects.all().order_by('f_consulta')
 
         for a in Pacientes:
             dt = datetime.datetime.now()
@@ -457,7 +459,7 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 a.f_nacimiento =  year_actual - year_nacimiento
         for tmp in properties.objects.all():
             propiedades = tmp
-        return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades})
+        return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades, 'recetas':recetas, 'Procedures_recipe':Procedures_recipe})
 
 @login_required
 def properties_update_ (request):
@@ -634,8 +636,8 @@ def recipe_receta (request, id):
 
     data.append(Paragraph("<br />INFORMACION", styles['pro']))
 
-    headings = ('TEMPERATURA', 'PESO', 'ESTATURA', 'PRESION ARTERIAL', 'TALLA', 'IMC')
-    allclientes = [(_receta.temperatura + " GRADOS",_receta.peso + " KGs",_receta.estatura + "CMs",_receta.presion_arterial,_receta.talla,_receta.imc)]
+    headings = ('TEMPERATURA', 'PESO', 'ESTATURA', 'PRESION ARTERIAL', 'IMC')
+    allclientes = [(_receta.temperatura + " GRADOS",_receta.peso + " KGs",_receta.estatura + "CMs",_receta.presion_arterial,_receta.imc)]
 
     t = Table([headings] + allclientes)
     data.append(t)
