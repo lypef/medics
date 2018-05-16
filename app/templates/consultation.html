@@ -100,7 +100,7 @@
 		{% endfor %}
 		{% endif %}
 
-		<form method='POST'> {% csrf_token %}
+<form method='POST' enctype="multipart/form-data"> {% csrf_token %}
 <!-- Agregar paciente -->
 <section id='department' class='department-area  section-sm'>
 	<div class='container'>
@@ -114,6 +114,8 @@
 		<button type='button' class='btn btn-warning btn-circle-fixed' data-toggle='modal' data-target='#receta'><i class='fa fa-th-list'></i></button>
 		<br><br><br>
 		<button type='button' class='btn btn-info btn-circle-fixed' data-toggle='modal' data-target='#procedimientos'><i class='fa fa-check'></i></button>
+		<br><br><br>
+		<button type='button' class='btn btn-warning btn-circle-fixed' data-toggle='modal' data-target='#media'><i class='fa fa-cubes'></i></button>
 		<br><br><br>
 		<button type='submit' class='btn btn-success btn-circle-fixed' ><i class='fa fa-save' value='Agregar' name='submit' id='submitButton' ></i></button>
 
@@ -217,6 +219,74 @@
 	</div>
 	<!-- Finaliza procedimientos-->
 
+	<!-- Modal media -->
+	<div class='modal fade' id='media' role='dialog'>
+		<div class='modal-dialog modal-lg'>
+
+		<!-- Modal content-->
+		<div class='modal-content'>
+			<div class='modal-header'>
+			<button type='button' class='close' data-dismiss='modal'>&times;</button>
+			<div class='col-md-12 text-center'>
+				<div class='section-title white mb-30'>
+					<h2>archivos multimedia<span><p id='total'>
+					</span></h2>
+				</div>
+			</div>
+		</div>
+			<p style="color: red; text-align: center;">Tome encuenta que el peso de los archivos afecta el tiempo de respuesta de el servidor.</p>
+			<div class='modal-body'>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo0' class='form-control' id='Archivo0' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo1' class='form-control' id='Archivo1' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo2' class='form-control' id='Archivo2' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo3' class='form-control' id='Archivo3' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo4' class='form-control' id='Archivo4' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo5' class='form-control' id='Archivo5' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo6' class='form-control' id='Archivo6' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo7' class='form-control' id='Archivo7' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo8' class='form-control' id='Archivo8' placeholder='Seleccione fichero' >
+				</div>
+
+				<div class='col-md-6'>
+							<input type='file' name='Archivo9' class='form-control' id='Archivo9' placeholder='Seleccione fichero' >
+				</div>
+
+			</div>
+			<div class='modal-footer'>
+					<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>
+			</div>
+		</div>
+		</div>
+		<!-- Finaliza contenido modal -->
+</div>
+<!-- Finaliza media-->
+
 		<div class='row'>
 				<div class='row'>
 						<div class='row'>
@@ -278,14 +348,15 @@
 																										+"<p>Edad: {{ r.edad }} años</p>"
 																										+"<p>Temperatura: {{ r.temperatura }} grados</p>"
 																										+"<p>Peso: {{ r.peso }} KG,s</p>"
+																										+"<p>Cintura: {{ r.cintura }} CM,s</p>"
 																										+"<p>Estatura: {{ r.estatura }} CM,s</p>"
 																										+"<p>Presion arterial: {{ r.presion_arterial }}</p>"
 																										+"<p>Imc: {{ r.imc }}</p>"
 																										+"<p>EXPLORACION FISICA: {{ r.exp_fisica|slice:'0:25' }}...</p>"
-																										+"<p>Torax: {{ r.torax|slice:'0:25' }}...</p>"
 
 																								+"</div>"
 																								+"<div class='col-md-6'>"
+																										+"<p>Torax: {{ r.torax|slice:'0:25' }}...</p>"
 																										+"<p>Abdomen: {{ r.abdomen|slice:'0:45' }}...</p>"
 																										+"<p>Genitales: {{ r.genitales|slice:'0:45' }}...</p>"
 																										+"<p>Diagnostico: {{ r.diagnostico|slice:'0:45' }}...</p>"
@@ -320,6 +391,7 @@
 																										+"</div>"
 																				+"</div>"
 																				+"<div class='modal-footer'>"
+																				+"<a target='_blank' href='/recipe_pdf/{{ r.id }}'><span class='fa fa-file'></span> Receta</a> "
 																				+"<button type='button' class='btn btn-success' data-dismiss='modal'>OK</button>"
 																				+"</div>"
 																			+"</div>"
@@ -366,6 +438,13 @@
 													<input type='number' name='peso' class='form-control' id='peso' placeholder='Peso KG,s' onchange='Imc()' >
 											</div>
 										</div>
+
+										<div class='col-md-6'>
+											<div class='form-group in_name'>
+													<input type='text' name='cintura' class='form-control' id='cintura' placeholder='Cintura en cm'>
+											</div>
+										</div>
+
 										<div class='col-md-6'>
 											<div class='form-group in_name'>
 													<input type='number' name='estatura' class='form-control' id='estatura' placeholder='Estatura CM,s' onchange='Imc()'>
@@ -381,6 +460,7 @@
 													<input type='text' name='imc' class='form-control' id='imc' placeholder='IMC = Peso [kg]/ estatura [m2]'>
 											</div>
 										</div>
+
 
 										<div class='col-md-12'>
 												<div class='panel panel-default '>

@@ -113,6 +113,9 @@ STATICFILES_DIRS = [
     ("fullcalendar", os.path.join(BASE_DIR+'/static/')+'fullcalendar'),
 ]
 
+MEDIA_URL = os.path.join(BASE_DIR+'/media/')
+MEDIA_ROOT = os.path.join(BASE_DIR+'/media/')
+
 LOGIN_URL = '/manager'
 LOGIN_REDIRECT_URL = '/manager'
 LOGOUT_URL = '/logout'

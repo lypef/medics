@@ -1,0 +1,111 @@
+{% extends 'structure.html' %}
+{% block structure_title%} BIENVENIDO: {{ user.first_name }} {% endblock %}
+{% block structure_body%}
+<!-- Navigation area starts -->
+<div class="menu-area navbar-fixed-top">
+<div class="container">
+	<div class="row">
+
+		<!-- Navigation starts -->
+		<div class="col-md-12">
+			<div class="mainmenu">
+				<div class="navbar navbar-nobg">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="/manager"><img src="/static/assets/img/logo.png" alt=""></a>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+							<span class="sr-only">Toggle navigation</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+					</div>
+
+					<div class="navbar-collapse collapse">
+						<nav>
+							<ul class="nav navbar-nav navbar-right">
+
+								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
+								<li ><a href="/patient">Pacientes</a></li>
+								<li class=""><a  href="/procedures">Procedimientos</a></li>
+                {% if user.is_superuser %}<li class="active"><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li ><a href="/consultation">Consulta</a></li>{% endif %}
+								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
+							</ul>
+						</nav>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Navigation ends -->
+
+	</div>
+</div>
+</div>
+<!-- Navigation area ends -->
+<div class="clearfix header-space"></div>
+{% if messages %}
+		{% for message in messages %}
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.SUCCESS %}
+			<div class="container"><br>
+				<div class="alert alert-success fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡OK!</strong> {{ message }}
+				</div>
+			</div>
+			{% endif %}
+
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.INFO %}
+			<div class="container"><br>
+				<div class="alert alert-info  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Informacion!</strong> {{ message }}
+				</div>
+			</div>
+			{% endif %}
+
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.WARNING %}
+			<div class="container"><br>
+				<div class="alert alert-warning  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Alerta!</strong> {{ message }}
+				</div>
+			</div>
+			{% endif %}
+
+			{% if message.level == DEFAULT_MESSAGE_LEVELS.ERROR %}
+			<div class="container"><br>
+				<div class="alert alert-danger  fade in">
+					<button type="button" class="close" data-dismiss="alert">&times;</button>
+					<strong>¡Error!</strong> {{ message }}
+				</div>
+			</div>
+			{% endif %}
+
+		{% endfor %}
+		{% endif %}
+    <section id="about" class="about-area section-sm">
+    	<div class="container">
+    		<div class="row">
+    			<br>
+    			<div class="col-md-12 text-center">
+    				<div class="section-title mb-60">
+    					<h2>Lista de archivos. receta no. {{r.id}}<span></span></h2>
+    				</div>
+    			</div>
+    		</div>
+        <div class="list-group">
+        <a target="_blank" href="/media/{{r.file0}}" class="list-group-item list-group-item-action active">{{r.file0}}</a>
+        <a target="_blank" href="/media/{{r.file}}" class="list-group-item list-group-item-action">{{r.file1}}</a>
+        <a target="_blank" href="/media/{{r.file2}}" class="list-group-item list-group-item-action">{{r.file2}}</a>
+        <a target="_blank" href="/media/{{r.file3}}" class="list-group-item list-group-item-action">{{r.file3}}</a>
+        <a target="_blank" href="/media/{{r.file4}}" class="list-group-item list-group-item-action ">{{r.file4}}</a>
+        <a target="_blank" href="/media/{{r.file5}}" class="list-group-item list-group-item-action ">{{r.file5}}</a>
+        <a target="_blank" href="/media/{{r.file6}}" class="list-group-item list-group-item-action ">{{r.file6}}</a>
+        <a target="_blank" href="/media/{{r.file7}}" class="list-group-item list-group-item-action ">{{r.file7}}</a>
+        <a target="_blank" href="/media/{{r.file8}}" class="list-group-item list-group-item-action ">{{r.file8}}</a>
+        <a target="_blank" href="/media/{{r.file9}}" class="list-group-item list-group-item-action ">{{r.file9}}</a>
+      </div>
+    	</div>
+    </section>
+    <!-- Finaliza List Patients -->
+{% endblock %}

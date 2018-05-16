@@ -18,7 +18,7 @@ from reportlab.platypus import Paragraph, Table, TableStyle
 from reportlab.lib import colors
 from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary, properties
-
+from django.core.files.storage import FileSystemStorage
 
 def index(request):
     #return render(request,'index.html')
@@ -308,14 +308,110 @@ def recipe(request):
             propiedades = tmp
         return render(request,'recipe.html', {'recetas':recetas,'page_range':paginator.page_range,'count':paginator.num_pages,'procedures':procedures, 'agenda':agenda, 'propiedades':propiedades})
 
+import time
+
 @login_required
 def consultation(request):
     if request.method == 'POST':
+        id_paciente = request.POST.get('paciente')
+        file0 = request.FILES.get('Archivo0', False)
+        file1 = request.FILES.get('Archivo1', False)
+        file2 = request.FILES.get('Archivo2', False)
+        file3 = request.FILES.get('Archivo3', False)
+        file4 = request.FILES.get('Archivo4', False)
+        file5 = request.FILES.get('Archivo5', False)
+        file6 = request.FILES.get('Archivo6', False)
+        file7 = request.FILES.get('Archivo7', False)
+        file8 = request.FILES.get('Archivo8', False)
+        file9 = request.FILES.get('Archivo9', False)
+
+        file0_url = ''
+        file1_url = ''
+        file2_url = ''
+        file3_url = ''
+        file4_url = ''
+        file5_url = ''
+        file6_url = ''
+        file7_url = ''
+        file8_url = ''
+        file9_url = ''
+
+        if  file0:
+             var = file0
+             ext = var.name.split(".")[-1]
+             var.name = "0-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file0_url = fs.save(var.name, var)
+
+        if  file1:
+             var = file1
+             ext = var.name.split(".")[-1]
+             var.name = "1-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file1_url = fs.save(var.name, var)
+
+        if  file2:
+             var = file2
+             ext = var.name.split(".")[-1]
+             var.name = "2-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file2_url = fs.save(var.name, var)
+
+        if  file3:
+             var = file3
+             ext = var.name.split(".")[-1]
+             var.name = "3-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file3_url = fs.save(var.name, var)
+
+        if  file4:
+             var = file4
+             ext = var.name.split(".")[-1]
+             var.name = "4-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file4_url = fs.save(var.name, var)
+
+        if  file5:
+             var = file5
+             ext = var.name.split(".")[-1]
+             var.name = "5-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file5_url = fs.save(var.name, var)
+
+        if  file6:
+             var = file6
+             ext = var.name.split(".")[-1]
+             var.name = "6-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file6_url = fs.save(var.name, var)
+
+        if  file7:
+             var = file7
+             ext = var.name.split(".")[-1]
+             var.name = "7-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file7_url = fs.save(var.name, var)
+
+        if  file8:
+             var = file8
+             ext = var.name.split(".")[-1]
+             var.name = "8-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file8_url = fs.save(var.name, var)
+
+        if  file9:
+             var = file9
+             ext = var.name.split(".")[-1]
+             var.name = "9-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file9_url = fs.save(var.name, var)
+
         r = receta(
                 patient = patients.objects.get(id=request.POST.get('paciente')),
                 edad = request.POST.get('edad'),
                 temperatura = request.POST.get('temperatura'),
                 peso = request.POST.get('peso'),
+                cintura = request.POST.get('cintura'),
                 estatura = request.POST.get('estatura'),
                 presion_arterial = request.POST.get('presion_arterial'),
                 imc = request.POST.get('imc'),
@@ -332,7 +428,18 @@ def consultation(request):
                 f_consulta = str(datetime.datetime.now()),
                 user = User.objects.get(id=request.user.id),
                 total = request.POST.get('total_g'),
-                indicaciones = request.POST.get('receta')
+                indicaciones = request.POST.get('receta'),
+                file0 = file0_url,
+                file1 = file1_url,
+                file2 = file2_url,
+                file3 = file3_url,
+                file4 = file4_url,
+                file5 = file5_url,
+                file6 = file6_url,
+                file7 = file7_url,
+                file8 = file8_url,
+                file9 = file9_url
+
     			)
     	r.save()
         procedimientos = Procedure.objects.all().order_by('nombre')
@@ -403,11 +510,104 @@ def diary_f(request):
 @login_required
 def consultation_agenda (request, id_agenda, id_paciente):
     if request.method == 'POST':
+        file0 = request.FILES.get('Archivo0', False)
+        file1 = request.FILES.get('Archivo1', False)
+        file2 = request.FILES.get('Archivo2', False)
+        file3 = request.FILES.get('Archivo3', False)
+        file4 = request.FILES.get('Archivo4', False)
+        file5 = request.FILES.get('Archivo5', False)
+        file6 = request.FILES.get('Archivo6', False)
+        file7 = request.FILES.get('Archivo7', False)
+        file8 = request.FILES.get('Archivo8', False)
+        file9 = request.FILES.get('Archivo9', False)
+
+        file0_url = ''
+        file1_url = ''
+        file2_url = ''
+        file3_url = ''
+        file4_url = ''
+        file5_url = ''
+        file6_url = ''
+        file7_url = ''
+        file8_url = ''
+        file9_url = ''
+
+        if  file0:
+             var = file0
+             ext = var.name.split(".")[-1]
+             var.name = "0-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file0_url = fs.save(var.name, var)
+
+        if  file1:
+             var = file1
+             ext = var.name.split(".")[-1]
+             var.name = "1-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file1_url = fs.save(var.name, var)
+
+        if  file2:
+             var = file2
+             ext = var.name.split(".")[-1]
+             var.name = "2-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file2_url = fs.save(var.name, var)
+
+        if  file3:
+             var = file3
+             ext = var.name.split(".")[-1]
+             var.name = "3-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file3_url = fs.save(var.name, var)
+
+        if  file4:
+             var = file4
+             ext = var.name.split(".")[-1]
+             var.name = "4-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file4_url = fs.save(var.name, var)
+
+        if  file5:
+             var = file5
+             ext = var.name.split(".")[-1]
+             var.name = "5-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file5_url = fs.save(var.name, var)
+
+        if  file6:
+             var = file6
+             ext = var.name.split(".")[-1]
+             var.name = "6-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file6_url = fs.save(var.name, var)
+
+        if  file7:
+             var = file7
+             ext = var.name.split(".")[-1]
+             var.name = "7-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file7_url = fs.save(var.name, var)
+
+        if  file8:
+             var = file8
+             ext = var.name.split(".")[-1]
+             var.name = "8-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file8_url = fs.save(var.name, var)
+
+        if  file9:
+             var = file9
+             ext = var.name.split(".")[-1]
+             var.name = "9-" + id_paciente + "_" + str(time.strftime("%d%m%y_%H%M%S")) +"." + ext
+             fs = FileSystemStorage()
+             file9_url = fs.save(var.name, var)
+
         r = receta(
                 patient = patients.objects.get(id=request.POST.get('paciente')),
                 edad = request.POST.get('edad'),
                 temperatura = request.POST.get('temperatura'),
                 peso = request.POST.get('peso'),
+                cintura = request.POST.get('cintura'),
                 estatura = request.POST.get('estatura'),
                 presion_arterial = request.POST.get('presion_arterial'),
                 imc = request.POST.get('imc'),
@@ -424,7 +624,17 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 f_consulta = str(datetime.datetime.now()),
                 user = User.objects.get(id=request.user.id),
                 total = request.POST.get('total_g'),
-                indicaciones = request.POST.get('receta')
+                indicaciones = request.POST.get('receta'),
+                file0 = file0_url,
+                file1 = file1_url,
+                file2 = file2_url,
+                file3 = file3_url,
+                file4 = file4_url,
+                file5 = file5_url,
+                file6 = file6_url,
+                file7 = file7_url,
+                file8 = file8_url,
+                file9 = file9_url
     			)
     	r.save()
         procedimientos = Procedure.objects.all().order_by('nombre')
@@ -636,8 +846,8 @@ def recipe_receta (request, id):
 
     data.append(Paragraph("<br />INFORMACION", styles['pro']))
 
-    headings = ('TEMPERATURA', 'PESO', 'ESTATURA', 'PRESION ARTERIAL', 'IMC')
-    allclientes = [(_receta.temperatura + " GRADOS",_receta.peso + " KGs",_receta.estatura + "CMs",_receta.presion_arterial,_receta.imc)]
+    headings = ('TEMPERATURA', 'PESO', 'CINTURA', 'ESTATURA', 'PRESION ARTERIAL', 'IMC')
+    allclientes = [(_receta.temperatura + " GRADOS",_receta.peso + " KGs", _receta.cintura + " CMs", _receta.estatura + "CMs",_receta.presion_arterial,_receta.imc)]
 
     t = Table([headings] + allclientes)
     data.append(t)
@@ -848,7 +1058,7 @@ def _report_recipes (request):
     data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
     data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
 
-    data.append(Paragraph("<br />LISTA DE RECETAS EXPEDIDAD", styles['pro']))
+    data.append(Paragraph("<br />LISTA DE RECETAS EXPEDIDAS", styles['pro']))
 
     headings = ('FOLIO','PACIENTE', 'TOTAL', 'F. CONSULTA')
     allclientes = [(p.id, "(" + str(p.patient.id) + ") " + p.patient.nombre + " " + p.patient.a_paterno + " " + p.patient.a_materno, str(p.total) + " MXN", p.f_consulta) for p in receta.objects.all().order_by("-f_consulta")]
@@ -868,3 +1078,10 @@ def _report_recipes (request):
     response.write(buff.getvalue())
     buff.close()
     return response
+
+@login_required
+def media_files (request, id):
+    r = receta.objects.get(id = id)
+    for tmp in properties.objects.all():
+        propiedades = tmp
+    return render(request,'media_files.html', {'r':r, 'propiedades':propiedades})

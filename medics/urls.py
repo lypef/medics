@@ -4,6 +4,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.contrib.auth import login
 from app import views
+from django.conf import settings
+from django.views.static import serve
 
 admin.autodiscover()
 
@@ -33,5 +35,6 @@ urlpatterns = [
     url(r'^report_procedures/', views._report_procedures),
     url(r'^report_patients/', views._report_patients),
     url(r'^report_recipes/', views._report_recipes),
-
+    url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
+    url(r'^media_files/(?P<id>[^/]+)/$', views.media_files),
 ]

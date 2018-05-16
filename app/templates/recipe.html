@@ -136,6 +136,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 																				<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
 																				<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-file"></span> Receta</a></li>
+																				<li><a target="_blank" href="/media_files/{{ item.id }}"><span class="fa fa-cubes"></span> Multimedia</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>
@@ -195,15 +196,16 @@
                                                             <p>Edad: {{ item.edad }} años</p>
                                                             <p>Temperatura: {{ item.temperatura }} grados</p>
                                                             <p>Peso: {{ item.peso }} KG,s</p>
+																														<p>Cintura: {{ item.cintura }} CM,s</p>
                                                             <p>Estatura: {{ item.estatura }} CM,s</p>
                                                             <p>Presion arterial: {{ item.presion_arterial }}</p>
                                                             <p>Imc: {{ item.imc }}</p>
                                                             <p>Exploracion fisica: {{ item.exp_fisica|slice:'0:25' }}...</p>
-                                                            <p>Torax: {{ item.torax|slice:'0:25' }}...</p>
 
                                                     </div>
                                                     <div class="col-md-6">
-                                                            <p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
+                                                            <p>Torax: {{ item.torax|slice:'0:25' }}...</p>
+																														<p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
                                                             <p>Genitales: {{ item.genitales|slice:'0:45' }}...</p>
                                                             <p>Piel: {{ item.piel|slice:'0:45' }}...</p>
                                                             <p>Diagnostico: {{ item.diagnostico|slice:'0:45' }}...</p>
