@@ -225,7 +225,8 @@ def procedures (request):
             nombre = request.POST.get('nombre').upper(),
             descripcion = request.POST.get('descripcion').upper(),
             costo = request.POST.get('costo'),
-            agendar = _agendar
+            agendar = _agendar,
+            monedero = request.POST.get('monedero')
             )
             insert.save()
             messages.success(request,'Procedimiento agregado')
@@ -248,6 +249,7 @@ def procedures_Edit (request, id):
             update.descripcion = request.POST.get('descripcion').upper()
             update.costo = request.POST.get('costo')
             update.agendar = _agendar
+            update.monedero = request.POST.get('monedero')
             update.save()
             messages.success(request, 'Procedimiento actualizado')
             return redirect ('/procedures')
@@ -442,6 +444,7 @@ def consultation(request):
 
     			)
     	r.save()
+        AddMondero = 0
         procedimientos = Procedure.objects.all().order_by('nombre')
         for a in procedimientos:
             if request.POST.get('p'+str(a.id)):
@@ -451,6 +454,8 @@ def consultation(request):
                     costo = a.costo
     			)
     	        p.save()
+                AddMondero += Procedure.objects.get(id=a.id).monedero
+        AddPtsMondero(AddMondero, request.POST.get('paciente'))
         messages.success(request,'Consulta exitosa')
         return redirect ('/consultation/?recipe='+str(r.id))
 
@@ -474,6 +479,13 @@ def consultation(request):
             propiedades = tmp
         return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'recetas':recetas, 'Procedures_recipe':Procedures_recipe})
 
+def AddPtsMondero (pts, paciente):
+    try:
+        update = patients.objects.get(id=paciente)
+        update.monedero = update.monedero + pts
+        update.save()
+    except Exception, e:
+        print e
 
 @login_required
 def recipe_history(request, id):
@@ -637,6 +649,7 @@ def consultation_agenda (request, id_agenda, id_paciente):
                 file9 = file9_url
     			)
     	r.save()
+        AddMondero = 0
         procedimientos = Procedure.objects.all().order_by('nombre')
         for a in procedimientos:
             if request.POST.get('p'+str(a.id)):
@@ -646,6 +659,8 @@ def consultation_agenda (request, id_agenda, id_paciente):
                     costo = a.costo
     			)
     	        p.save()
+                AddMondero += Procedure.objects.get(id=a.id).monedero
+        AddPtsMondero(AddMondero, request.POST.get('paciente'))
         agenda = diary.objects.get(id= id_agenda)
         agenda.delete()
         messages.success(request,'Consulta exitosa')
@@ -871,6 +886,7 @@ def recipe_receta (request, id):
     ))
     data.append(t)
     data.append(Paragraph("<br />| TOTAL $ " + str(_receta.total), styles['right_bold']))
+    data.append(Paragraph("<br />| MONEDERO: " + str(_receta.patient.monedero) + " PTS", styles['right_bold']))
 
     if len(_receta.exp_fisica) > 0:
         data.append(Paragraph("<br />| EXPLORACION FISICA", styles['pro_LEFT']))
@@ -954,8 +970,8 @@ def _report_procedures (request):
 
     data.append(Paragraph("<br />LISTA DE PROCEDIMIENTOS DISPONIBLES", styles['pro']))
 
-    headings = ('FOLIO','Procedimiento', 'Costo')
-    allclientes = [(p.id, p.nombre, p.costo) for p in Procedure.objects.all().order_by("nombre")]
+    headings = ('FOLIO','PROCEDIMIENTO', 'COSTO','MONEDERO')
+    allclientes = [(p.id, p.nombre, "$ " + str(p.costo), p.monedero) for p in Procedure.objects.all().order_by("nombre")]
 
     t = Table([headings] + allclientes)
     t.setStyle(TableStyle(
@@ -1007,8 +1023,8 @@ def _report_patients (request):
 
     data.append(Paragraph("<br />LISTA DE PACIENTES EXISTENTES", styles['pro']))
 
-    headings = ('EXPEDIENTE','NOMBRE', 'CELULAR', 'F. NACIMIENTO')
-    allclientes = [(p.expediente, "(" + str(p.id) + ") " + p.nombre + " " + p.a_paterno + " " + p.a_materno, p.celular, p.f_nacimiento) for p in patients.objects.all().order_by("nombre")]
+    headings = ('EXPEDIENTE','NOMBRE', 'CELULAR', 'MONEDERO')
+    allclientes = [(p.expediente, "(" + str(p.id) + ") " + p.nombre + " " + p.a_paterno + " " + p.a_materno, p.celular, p.monedero) for p in patients.objects.all().order_by("nombre")]
 
     t = Table([headings] + allclientes)
     t.setStyle(TableStyle(
@@ -1078,10 +1094,3 @@ def _report_recipes (request):
     response.write(buff.getvalue())
     buff.close()
     return response
-
-@login_required
-def media_files (request, id):
-    r = receta.objects.get(id = id)
-    for tmp in properties.objects.all():
-        propiedades = tmp
-    return render(request,'media_files.html', {'r':r, 'propiedades':propiedades})

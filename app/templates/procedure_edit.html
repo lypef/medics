@@ -27,8 +27,8 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li class=""><a href="/patient">Pacientes</a></li>
 								<li class="active"><a  href="/procedures">Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
@@ -99,17 +99,24 @@
 					<button type="submit" class="btn btn-success btn-circle-fixed" value="Actualizar" name="submit" id="submitButton" ><i class="fa fa-save" ></i></button>
 					<div class="row">
 
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group in_name">
 							<input type="text" name="nombre" class="form-control" id="name" placeholder="Nombre"required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')" value="{{item.nombre}}">
 						</div>
 					</div>
-					<div class="col-md-6">
-						<div class="form-group ">
+						<div class="col-md-4">
+							<div class="form-group ">
 							<input type="text" name="costo" class="form-control" id="costo" placeholder="Costo" required="required" oninvalid="this.setCustomValidity('Ingrese un costo. Puede ser cero')" oninput="setCustomValidity('')" value="{{item.costo}}">
+							</div>
 						</div>
-                    </div>
-                    <div class="col-md-12">
+
+						<div class="col-md-4">
+							<div class="form-group ">
+							<input type="text" name="monedero" class="form-control" id="monedero" placeholder="Puntos mondero" required="required" oninvalid="this.setCustomValidity('Ingrese un costo. Puede ser cero')" oninput="setCustomValidity('')" value="{{item.monedero}}">
+							</div>
+						</div>
+
+            <div class="col-md-12">
 						<div class="form-group">
                             <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Message" >{{item.descripcion}}</textarea>
 						</div>

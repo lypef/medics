@@ -36,5 +36,4 @@ urlpatterns = [
     url(r'^report_patients/', views._report_patients),
     url(r'^report_recipes/', views._report_recipes),
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
-    url(r'^media_files/(?P<id>[^/]+)/$', views.media_files),
 ]

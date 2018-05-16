@@ -219,6 +219,7 @@
 											<div class="col-md-9">
 												<div class="col-md-6">
 													<p>Expediente no: {{ item.expediente }}</p>
+													<p>Monedero electronico: {{ item.monedero }} pts</p>
 													<p>Telefono: {{ item.telefono }}</p>
 													<p>Movil: {{ item.celular }}</p>
 													<p>Edad: {{ item.f_nacimiento }} años</p>
@@ -228,9 +229,9 @@
 													<p>Religion: {{ item.religion }}</p>
 													<p>Tipo sanguinio: {{ item.tipo_sanguinio }}</p>
 													<p>Correo electronico: {{ item.mail }}</p>
-													<p>Domicilio: {{ item.domicilio }}, {{ item.colonia }} - {{ item.municipio }}, {{ item.estado }}. CP: {{ item.cp }}</p>
 												</div>
 												<div class="col-md-6">
+													<p>Domicilio: {{ item.domicilio }}, {{ item.colonia }} - {{ item.municipio }}, {{ item.estado }}. CP: {{ item.cp }}</p>
 													<p>No patologicos: <br>{{ item.nopatologicos|slice:'0:52' }}...</p>
 													<p>Patologicos: <br>{{ item.patologicos|slice:'0:52' }}...</p>
 													<p>Ginecologos: <br>{{ item.ginecologos|slice:'0:52' }}...</p>

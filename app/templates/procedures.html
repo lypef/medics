@@ -126,7 +126,7 @@
 							<td>{{ item.id }}</td>
 							<td>{{ item.nombre }}</td>
 							<td>$ {{ item.costo }}</td>
-                            <td>{% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</td>
+              <td>{% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</td>
 							<td><button type="button" class="btn btn-success " data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</button> <a href="/procedures_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a> {% if user.is_superuser %}<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</button>{% endif %}</td>
 
 							<!-- Modal Delete-->
@@ -166,10 +166,11 @@
 									<h4 class="modal-title">{{ item.nombre }} {{ item.a_paterno }} {{ item.a_materno }}</h4>
 									</div>
 									<div class="modal-body">
-                                        <p>Procedimiento: {{ item.nombre }}</p>
-                                        <p>Costo: $ {{ item.costo }}</p>
-                                        <p>Descripcion: {{ item.descripcion }}</p>
-                                        <p>Agregar siempre a consulta: {% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</p>
+                      <p>Procedimiento: {{ item.nombre }}</p>
+                      <p>Costo: $ {{ item.costo }}</p>
+                      <p>Descripcion: {{ item.descripcion }}</p>
+                      <p>Agregar siempre a consulta: {% if item.agendar %}SI{%endif%}{% if item.agendar == 0 %}NO{%endif%}</p>
+											<p>Mondero: {{ item.monedero }} pts</p>
 									</div>
 									<div class="modal-footer">
 									<a href="/procedures_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>
@@ -226,19 +227,24 @@
 			<form method="POST"> {% csrf_token %}
 				<div class="row">
 
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group in_name">
 							<input type="text" name="nombre" class="form-control" id="name" placeholder="Nombre"required="required" oninvalid="this.setCustomValidity('Ingrese un nombre')" oninput="setCustomValidity('')">
 						</div>
 					</div>
-					<div class="col-md-6">
+					<div class="col-md-4">
 						<div class="form-group ">
 							<input type="text" name="costo" class="form-control" id="costo" placeholder="Costo" required="required" oninvalid="this.setCustomValidity('Ingrese un costo. Puede ser cero')" oninput="setCustomValidity('')">
 						</div>
-                    </div>
-                    <div class="col-md-12">
+	        </div>
+					<div class="col-md-4">
+						<div class="form-group ">
+							<input type="text" name="monedero" class="form-control" id="monedero" placeholder="Puntos monedero" required="required" oninvalid="this.setCustomValidity('Ingrese un monto. Puede ser cero')" oninput="setCustomValidity('')">
+						</div>
+					</div>
+					<div class="col-md-12">
 						<div class="form-group">
-                            <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Texto aqui" required></textarea>
+						      <textarea name="descripcion" id="descripcion" class="form-control" rows="6" placeholder="Texto aqui" required></textarea>
 						</div>
 					</div>
 

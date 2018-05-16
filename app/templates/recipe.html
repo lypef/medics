@@ -136,7 +136,7 @@
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 																				<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
 																				<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-file"></span> Receta</a></li>
-																				<li><a target="_blank" href="/media_files/{{ item.id }}"><span class="fa fa-cubes"></span> Multimedia</a></li>
+																				<li><a href="#" data-toggle="modal" data-target="#media{{item.id}}"><span class="fa fa-cubes"></span> Multimedia</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>
@@ -201,11 +201,10 @@
                                                             <p>Presion arterial: {{ item.presion_arterial }}</p>
                                                             <p>Imc: {{ item.imc }}</p>
                                                             <p>Exploracion fisica: {{ item.exp_fisica|slice:'0:25' }}...</p>
-
+																														<p>Torax: {{ item.torax|slice:'0:25' }}...</p>
                                                     </div>
                                                     <div class="col-md-6">
-                                                            <p>Torax: {{ item.torax|slice:'0:25' }}...</p>
-																														<p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
+                                                            <p>Abdomen: {{ item.abdomen|slice:'0:45' }}...</p>
                                                             <p>Genitales: {{ item.genitales|slice:'0:45' }}...</p>
                                                             <p>Piel: {{ item.piel|slice:'0:45' }}...</p>
                                                             <p>Diagnostico: {{ item.diagnostico|slice:'0:45' }}...</p>
@@ -243,6 +242,72 @@
 
 							</div>
 							<!-- Finaliza Modal view-->
+
+							<!-- Modal media -->
+							<div class="modal fade" id="media{{item.id}}" role="dialog">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+                  <div class="modal-dialog modal-lg">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title"><span class="fa fa-cubes"></span>  PACIENTE: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+									</div>
+									<div class="modal-body">
+										<div class="list-group">
+										{% if item.file0 %}
+										<a target="_blank" href="/media/{{item.file0}}" class="list-group-item list-group-item-action ">{{item.file0}}</a>
+										{% endif %}
+
+										{% if item.file1 %}
+										<a target="_blank" href="/media/{{item.file1}}" class="list-group-item list-group-item-action ">{{item.file1}}</a>
+										{% endif %}
+
+										{% if item.file2 %}
+										<a target="_blank" href="/media/{{item.file2}}" class="list-group-item list-group-item-action ">{{item.file2}}</a>
+										{% endif %}
+
+										{% if item.file3 %}
+										<a target="_blank" href="/media/{{item.file3}}" class="list-group-item list-group-item-action ">{{item.file3}}</a>
+										{% endif %}
+
+										{% if item.file4 %}
+										<a target="_blank" href="/media/{{item.file4}}" class="list-group-item list-group-item-action ">{{item.file4}}</a>
+										{% endif %}
+
+										{% if item.file5 %}
+										<a target="_blank" href="/media/{{item.file5}}" class="list-group-item list-group-item-action ">{{item.file5}}</a>
+										{% endif %}
+
+										{% if item.file6 %}
+										<a target="_blank" href="/media/{{item.file6}}" class="list-group-item list-group-item-action ">{{item.file6}}</a>
+										{% endif %}
+
+										{% if item.file7 %}
+										<a target="_blank" href="/media/{{item.file7}}" class="list-group-item list-group-item-action ">{{item.file7}}</a>
+										{% endif %}
+
+										{% if item.file8 %}
+										<a target="_blank" href="/media/{{item.file8}}" class="list-group-item list-group-item-action ">{{item.file8}}</a>
+										{% endif %}
+
+										{% if item.file9 %}
+										<a target="_blank" href="/media/{{item.file9}}" class="list-group-item list-group-item-action ">{{item.file9}}</a>
+										{% endif %}
+									</div>
+									<div class="modal-footer">
+									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+									</div>
+								</div>
+
+								</div>
+								<!-- Finaliza contenido modal -->
+							</div>
+
+							</div>
+							<!-- Finaliza Modal media-->
 						</tr>
 					{% endfor %}
 				</tbody>

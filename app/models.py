@@ -30,12 +30,14 @@ class patients (models.Model):
     quirurgicos = models.TextField()
     alergias = models.TextField()
     observaciones = models.TextField()
+    monedero = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=False)
 
 class Procedure (models.Model):
     nombre = models.CharField(max_length=150)
     descripcion = models.TextField()
     costo = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
     agendar = models.BooleanField(default=False)
+    monedero = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=True)
 
 class receta (models.Model):
     patient = models.ForeignKey(patients)

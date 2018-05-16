@@ -43,8 +43,8 @@
 								{% if user.is_staff %} <li class=''><a href='/diary'>Agenda</a></li> {% endif %}
 								<li ><a href='/patient'>Pacientes</a></li>
 								<li class=''><a  href='/procedures'>Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=''><a href='/recipe'>Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class='active'><a href='/consultation'>Consulta</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=''><a href='/recipe'>Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class='active'><a href='/consultation'>Consulta</a></li>{% endif %}
 								<a class='a_button' href='/logout'>SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
@@ -167,15 +167,23 @@
 				<thead class='thead-dark'>
 				  <tr>
 					<th scope='col'>Procedimiento</th>
-                    <th scope='col'>Costo</th>
+          <th scope='col'>Costo</th>
+					<th scope='col'>Monedero</th>
 					<th scope='col'>Agregar</th>
 				  </tr>
 				</thead>
 				<tbody>
+					<tr>
+						<td>Descontar puntos de monedero</td>
+						<td></td>
+						<td></td>
+						<td><input type='checkbox' class='form-check-input' id='use_mondero' name='use_monedero'></td>
+					</tr>
 					{% for item in Procedures %}
 					<tr>
 							<td>{{ item.nombre }}</td>
 							<td>$ {{ item.costo }}</td>
+							<td>{{ item.monedero }} pts</td>
 							<td><input type='checkbox' class='form-check-input' id='p{{item.id}}' name='p{{item.id}}' {% if item.agendar %} checked{% endif %} value='{{item.costo}}' onchange='calculate_total()'></td>
 						</tr>
 					{% endfor %}
