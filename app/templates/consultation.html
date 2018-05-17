@@ -100,7 +100,7 @@
 		{% endfor %}
 		{% endif %}
 
-<form method='POST' enctype="multipart/form-data"> {% csrf_token %}
+<form method='POST' enctype="multipart/form-data" onKeypress="if(event.keyCode == 13) event.returnValue = false;"> {% csrf_token %}
 <!-- Agregar paciente -->
 <section id='department' class='department-area  section-sm'>
 	<div class='container'>
@@ -159,6 +159,7 @@
 						<input type='hidden' name='total_g' id='total_g'>
 						</span></h2>
 					</div>
+					<p style="color: red; text-align: center;" id="msg_monedero"></p>
 				</div>
 				</div>
 				<div class='modal-body'>
@@ -174,10 +175,10 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>Descontar puntos de monedero</td>
+						<td>DESCONTAR DE MONEDERO: <input type='number' name='id_monedero' id='id_monedero'></td>
 						<td></td>
-						<td></td>
-						<td><input type='checkbox' class='form-check-input' id='use_mondero' name='use_monedero'></td>
+						<td><p id='total_puntos'></p><input type='hidden' name='total_puntos_h' id='total_puntos_h'></td>
+						<td><input type='checkbox' class='form-check-input' id='use_mondero' name='use_monedero' onchange='calculate_total_Desc_Mondero()'></td>
 					</tr>
 					{% for item in Procedures %}
 					<tr>
@@ -203,6 +204,28 @@
 							total_gbl = t
 							document.getElementById('total').innerHTML = 'Total $: ' + total_gbl
 							document.getElementById('total_g').value = total_gbl
+						}
+						function calculate_total_Desc_Mondero()
+						{
+							if ( document.getElementById('id_monedero').value.length > 0 )
+							{
+								if ( document.getElementById('use_mondero').checked )
+								{
+										monedero = document.getElementById('total_puntos_h').value;
+										total = document.getElementById('total_g').value;
+										if (monedero >= total)
+										{
+											document.getElementById('use_mondero').checked = true;
+											document.getElementById('msg_monedero').innerHTML = 'Se descontaran los puntos del monedero'
+										}else {
+											document.getElementById('use_mondero').checked = false;
+											document.getElementById('msg_monedero').innerHTML = 'Los puntos no superan el total.'
+										}
+								}
+							}else {
+									document.getElementById('use_mondero').checked = false;
+									document.getElementById('msg_monedero').innerHTML = 'Ingrese monedero de paciente'
+							}
 						}
 						function SelectAll (bol)
 						{
@@ -415,6 +438,8 @@
 															if ( id == {{item.id}} )
 															{
 																document.getElementById('edad').value = {{item.f_nacimiento}}
+																document.getElementById('total_puntos').innerHTML = {{item.monedero}} + ' pts'
+																document.getElementById('total_puntos_h').value = {{item.monedero}}
 															}
 														{% endfor %}
 													}

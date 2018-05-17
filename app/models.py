@@ -31,6 +31,7 @@ class patients (models.Model):
     alergias = models.TextField()
     observaciones = models.TextField()
     monedero = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=False)
+    id_monedero = models.DecimalField(max_digits=15, decimal_places=2, blank=True, null=False)
 
 class Procedure (models.Model):
     nombre = models.CharField(max_length=150)

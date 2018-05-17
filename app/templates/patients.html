@@ -220,6 +220,7 @@
 												<div class="col-md-6">
 													<p>Expediente no: {{ item.expediente }}</p>
 													<p>Monedero electronico: {{ item.monedero }} pts</p>
+													<p>Numero demonedero: {{ item.id_monedero }}</p>
 													<p>Telefono: {{ item.telefono }}</p>
 													<p>Movil: {{ item.celular }}</p>
 													<p>Edad: {{ item.f_nacimiento }} años</p>
@@ -329,7 +330,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<form method="POST"> {% csrf_token %}
+			<form method="POST" onKeypress="if(event.keyCode == 13) event.returnValue = false;"> {% csrf_token %}
 				<div class="row">
 
 					<div class="col-md-4">
@@ -441,6 +442,11 @@
 					<div class="col-md-4">
 						<div class="form-group ">
 							<input type="text" name="cp" class="form-control" id="email" placeholder="Codigo postal">
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="form-group ">
+							<input type="numer" name="id_monedero" class="form-control" id="id_monedero" placeholder="ID Monedero electronico">
 						</div>
 					</div>
 					<div class="col-md-12 text-center">

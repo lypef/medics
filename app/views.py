@@ -19,6 +19,7 @@ from reportlab.lib import colors
 from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary, properties
 from django.core.files.storage import FileSystemStorage
+from decimal import Decimal
 
 def index(request):
     #return render(request,'index.html')
@@ -111,6 +112,8 @@ def patient (request):
                 domicilio = request.POST.get('domicilio', ''),
                 colonia = request.POST.get('colonia', ''),
                 cp = request.POST.get('cp', ''),
+                id_monedero = request.POST.get('id_monedero', ''),
+                monedero = 0,
                 mail = request.POST.get('mail', ''),
                 estado = request.POST.get('estado', ''),
                 municipio = request.POST.get('municipio', ''),
@@ -147,6 +150,7 @@ def patient_Edit (request, id):
             update.domicilio = request.POST.get('domicilio', '')
             update.colonia = request.POST.get('colonia', '')
             update.cp = request.POST.get('cp', '')
+            update.id_monedero = request.POST.get('id_monedero', '')
             update.mail = request.POST.get('mail', '')
             update.estado = request.POST.get('estado', '')
             update.municipio = request.POST.get('municipio', '')
@@ -456,7 +460,16 @@ def consultation(request):
     	        p.save()
                 AddMondero += Procedure.objects.get(id=a.id).monedero
         AddPtsMondero(AddMondero, request.POST.get('paciente'))
-        messages.success(request,'Consulta exitosa')
+
+        if r.patient.id_monedero == int(request.POST.get('id_monedero')):
+            if request.POST.get('use_monedero'):
+                RemovePtsMondero(request.POST.get('total_g'), request.POST.get('paciente'))
+                messages.success(request,'Consulta exitosa con descuento en monedero')
+            else:
+                messages.warning(request,'Consulta exitosa sin descuento en monedero')
+        else:
+            messages.warning(request,'Consulta exitosa sin descuento en monedero')
+
         return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':
@@ -483,6 +496,14 @@ def AddPtsMondero (pts, paciente):
     try:
         update = patients.objects.get(id=paciente)
         update.monedero = update.monedero + pts
+        update.save()
+    except Exception, e:
+        print e
+
+def RemovePtsMondero (pts, paciente):
+    try:
+        update = patients.objects.get(id=paciente)
+        update.monedero = update.monedero - Decimal(pts)
         update.save()
     except Exception, e:
         print e
@@ -663,7 +684,15 @@ def consultation_agenda (request, id_agenda, id_paciente):
         AddPtsMondero(AddMondero, request.POST.get('paciente'))
         agenda = diary.objects.get(id= id_agenda)
         agenda.delete()
-        messages.success(request,'Consulta exitosa')
+        if r.patient.id_monedero == int(request.POST.get('id_monedero')):
+            if request.POST.get('use_monedero'):
+                RemovePtsMondero(request.POST.get('total_g'), request.POST.get('paciente'))
+                messages.success(request,'Consulta exitosa con descuento en monedero')
+            else:
+                messages.warning(request,'Consulta exitosa sin descuento en monedero')
+        else:
+            messages.warning(request,'Consulta exitosa sin descuento en monedero')
+
         return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':

@@ -94,7 +94,7 @@
 			</div>
 		</div>
 		<div class="row">
-			<form method="POST"> {% csrf_token %}
+			<form method="POST" onKeypress="if(event.keyCode == 13) event.returnValue = false;"> {% csrf_token %}
 					<button type="submit" class="btn btn-success btn-circle-fixed" value="Actualizar" name="submit" id="submitButton" ><i class="fa fa-save" ></i></button>
 				<div class="row">
 
@@ -218,12 +218,18 @@
 							<input type="text" name="cp" class="form-control" id="email" placeholder="Codigo postal" value="{{patient.cp}}">
 						</div>
 					</div>
+					<div class="col-md-12">
+						<div class="form-group ">
+							<input type="number" name="id_monedero" class="form-control" id="id_monedero" placeholder="ID Monedero electronic" value="{{patient.id_monedero}}">
+						</div>
+					</div>
+
 					<div class="col-md-12 text-center">
 						<div class="section-title white mb-30">
 							<h2>antecedentes <span>heredofamiliares</span></h2>
 						</div>
 					</div>
-					
+
 					<div class="col-md-12">
 						<div class="actions">
 							<div class="panel panel-info">
