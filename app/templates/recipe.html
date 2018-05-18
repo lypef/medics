@@ -139,10 +139,53 @@
 																				<li><a href="#" data-toggle="modal" data-target="#media{{item.id}}"><span class="fa fa-cubes"></span> Multimedia</a></li>
                                         <li role="separator" class="divider"></li>
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
-                                        <li><a href="/recipe_history/{{ item.patient.id }}">Ver historia clinica</a></li>
+                                        <li><a href="#" data-toggle="modal" data-target="#historiclin{{item.id}}">Ver historia clinica</a></li>
+																				<li><a href="/recipe_history/{{ item.patient.id }}">Ver todas las consultas</a></li>
                                     </ul>
                                     </div>
                                     </td>
+																		<!-- Modal view -->
+																		<div class="modal fade" id="historiclin{{item.id}}" role="dialog">
+																			<div class="modal-dialog modal-lg">
+
+																			<!-- Modal content-->
+																			<div class="modal-content">
+																				<div class="modal-header">
+																				<button type="button" class="close" data-dismiss="modal">&times;</button>
+																				<h4 class="modal-title">ANTECEDENTES HEREDOFAMILIARES: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+																				</div>
+																				<div class="modal-body">
+																					<div class="row">
+																						<div class="col-md-9">
+																							<div class="col-md-6">
+																								<p>No patologicos: <br>{{ item.patient.nopatologicos|slice:'0:52' }}...</p>
+																								<p>Patologicos: <br>{{ item.patient.patologicos|slice:'0:52' }}...</p>
+																								<p>Ginecologos: <br>{{ item.patient.ginecologos|slice:'0:52' }}...</p>
+																								<p>Andrologicos: <br>{{ item.patient.andrologicos|slice:'0:52' }}...</p>
+
+																							</div>
+																							<div class="col-md-6">
+																								<p>Perinatales: <br>{{ item.patient.perinatales|slice:'0:52' }}...</p>
+																								<p>Quirurgicos: <br>{{ item.patient.quirurgicos|slice:'0:52' }}...</p>
+																								<p>Alergias: <br>{{ item.patient.alergias|slice:'0:52' }}...</p>
+																								<p>Padecimiento actual: <br>{{ item.patient.observaciones|slice:'0:52' }}...</p>
+																							</div>
+																						</div>
+																					</div>
+																				</div>
+																				<div class="modal-footer">
+																				<a href="/report_datos_paciente/{{ item.patient.id }}" target="_blank"><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir datos personales</button></a>
+																				<a href="/report_heredofamiliares/{{ item.patient.id }}" target="_blank" ><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir historia clinica</button></a>
+																				<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+																				</div>
+																			</div>
+
+																			</div>
+																			<!-- Finaliza contenido modal -->
+																	</div>
+																	</div>
+																	<!-- Finaliza Modal view-->
+
 																		<!-- Modal Cita -->
 																		<div class="modal fade" id="cita{{item.id}}" role="dialog">
 																			<div class="modal-dialog modal-sm">

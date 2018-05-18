@@ -143,7 +143,7 @@
 									  {% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
 									  <li role="separator" class="divider"></li>
 									  <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
-									  <li><a href="/recipe_history/{{ item.id }}">Ver historia clinica</a></li>
+									  <li><a href="/recipe_history/{{ item.id }}">Ver todas las consultas</a></li>
 									</ul>
 								  </div>
 
@@ -246,6 +246,8 @@
 										</div>
 									</div>
 									<div class="modal-footer">
+									<a href="/report_datos_paciente/{{ item.id }}" target="_blank"><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir datos personales</button></a>
+									<a href="/report_heredofamiliares/{{ item.id }}" target="_blank"><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir historia clinica</button></a>
 									<a href="/patient_edit/{{ item.id }}"><button type="button" class="btn btn-warning"><span class="fa fa-pencil"></span> Editar</button></a>
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>
