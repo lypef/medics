@@ -63,6 +63,8 @@ def patient (request):
                 ListPatients = patients.objects.filter(a_paterno__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
                 ListPatients = patients.objects.filter(a_materno__contains=request.GET.get('search').upper()).order_by('nombre')
+            if len(ListPatients) < 1:
+                ListPatients = patients.objects.filter(id_monedero__contains=int(request.GET.get('search'))).order_by('nombre')
         else:
             ListPatients = patients.objects.all().order_by('nombre')
 
@@ -293,6 +295,8 @@ def recipe(request):
                 recetas = receta.objects.filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
                 recetas = receta.objects.filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            if len(recetas) < 1:
+                recetas = receta.objects.filter(patient__id_monedero__contains=int(request.GET.get('search'))).order_by('-f_consulta')
         else:
             recetas = receta.objects.all().order_by('-f_consulta')
 
@@ -461,14 +465,14 @@ def consultation(request):
                 AddMondero += Procedure.objects.get(id=a.id).monedero
         AddPtsMondero(AddMondero, request.POST.get('paciente'))
 
-        if r.patient.id_monedero == int(request.POST.get('id_monedero')):
-            if request.POST.get('use_monedero'):
+        if request.POST.get('use_monedero'):
+            if r.patient.id_monedero == int(request.POST.get('id_monedero')):
                 RemovePtsMondero(request.POST.get('total_g'), request.POST.get('paciente'))
                 messages.success(request,'Consulta exitosa con descuento en monedero')
             else:
                 messages.warning(request,'Consulta exitosa sin descuento en monedero')
         else:
-            messages.warning(request,'Consulta exitosa sin descuento en monedero')
+                messages.success(request,'Consulta exitosa')
 
         return redirect ('/consultation/?recipe='+str(r.id))
 
@@ -684,14 +688,16 @@ def consultation_agenda (request, id_agenda, id_paciente):
         AddPtsMondero(AddMondero, request.POST.get('paciente'))
         agenda = diary.objects.get(id= id_agenda)
         agenda.delete()
-        if r.patient.id_monedero == int(request.POST.get('id_monedero')):
-            if request.POST.get('use_monedero'):
+
+        if request.POST.get('use_monedero'):
+            if r.patient.id_monedero == int(request.POST.get('id_monedero')):
                 RemovePtsMondero(request.POST.get('total_g'), request.POST.get('paciente'))
                 messages.success(request,'Consulta exitosa con descuento en monedero')
             else:
                 messages.warning(request,'Consulta exitosa sin descuento en monedero')
         else:
-            messages.warning(request,'Consulta exitosa sin descuento en monedero')
+                messages.success(request,'Consulta exitosa')
+
 
         return redirect ('/consultation/?recipe='+str(r.id))
 

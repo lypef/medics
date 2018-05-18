@@ -26,8 +26,8 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li class="active"><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
-                                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
 						</nav>
@@ -135,7 +135,7 @@
 					</div>
 					<div class="col-md-4">
 						<div class="form-group">
-							<input class="form-control date-pick" id="datepicker" name="f_nacimiento" placeholder="Date" type="text" required oninvalid="this.setCustomValidity('Especifique fecha de nacimiento')" oninput="setCustomValidity('')" value="{{patient.f_nacimiento}}">
+							<input class="form-control date-pick" id="datepicker" name="f_nacimiento" placeholder="Fecha de nacimiento" type="text" required oninvalid="this.setCustomValidity('Especifique fecha de nacimiento')" oninput="setCustomValidity('')" value="{{patient.f_nacimiento}}">
 							<i class="icon fa fa-calendar"></i>
 						</div>
 					</div>
@@ -146,10 +146,10 @@
 								<option value="Masculino">Masculino</option>
 								<option value="Femenino">Femenino</option>
 								<option value="No especificado">No especificar</option>
-                            </select>
-                            <script>
-                                document.getElementById("sexo").value="{{patient.sexo}}";
-                            </script>
+                </select>
+                <script>
+                    document.getElementById("sexo").value="{{patient.sexo}}";
+                </script>
 						</div>
 					</div>
 					<div class="col-md-4">
@@ -220,7 +220,7 @@
 					</div>
 					<div class="col-md-12">
 						<div class="form-group ">
-							<input type="number" name="id_monedero" class="form-control" id="id_monedero" placeholder="ID Monedero electronic" value="{{patient.id_monedero}}">
+							<input type="number" name="id_monedero" class="form-control" id="id_monedero" placeholder="ID Monedero electronic" value="{{patient.id_monedero}}" required>
 						</div>
 					</div>
 
