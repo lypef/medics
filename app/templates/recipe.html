@@ -27,7 +27,7 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li ><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                {% if user.is_superuser %}<li class="active"><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class="active"><a href="/recipe"> Consultas</a></li>{% endif %}
                 {% if user.is_superuser %}<li ><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
@@ -271,8 +271,79 @@
 													{% endfor %}
 													<br>
 													<div class="text-right">
-															<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
-															</div>
+														<h3><span class="label label-success">Total: $ {{item.total}}</span></h3>
+													</div>
+											<h4 class="modal-title">ARCHIVOS MULTIMEDIA</h4><br>
+											{% if item.file0 %}
+											<div>
+														<img src="/media/{{item.file0}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file1 %}
+											<div>
+														<img src="/media/{{item.file1}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file2 %}
+											<div>
+														<img src="/media/{{item.file2}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file3 %}
+											<div>
+														<img src="/media/{{item.file3}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file4 %}
+											<div>
+														<img src="/media/{{item.file4}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file5 %}
+											<div>
+														<img src="/media/{{item.file5}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file6 %}
+											<div>
+														<img src="/media/{{item.file6}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file7 %}
+											<div>
+														<img src="/media/{{item.file7}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file8 %}
+											<div>
+														<img src="/media/{{item.file8}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
+											{% if item.file9 %}
+											<div>
+														<img src="/media/{{item.file9}}" alt="">
+											</div>
+											<hr>
+											{% endif %}
+
 									</div>
 									<div class="modal-footer">
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
@@ -299,47 +370,75 @@
 									<h4 class="modal-title"><span class="fa fa-cubes"></span>  PACIENTE: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
 									</div>
 									<div class="modal-body">
-										<div class="list-group">
 										{% if item.file0 %}
-										<a target="_blank" href="/media/{{item.file0}}" class="list-group-item list-group-item-action ">{{item.file0}}</a>
+										<div>
+													<img src="/media/{{item.file0}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file1 %}
-										<a target="_blank" href="/media/{{item.file1}}" class="list-group-item list-group-item-action ">{{item.file1}}</a>
+										<div>
+													<img src="/media/{{item.file1}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file2 %}
-										<a target="_blank" href="/media/{{item.file2}}" class="list-group-item list-group-item-action ">{{item.file2}}</a>
+										<div>
+													<img src="/media/{{item.file2}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file3 %}
-										<a target="_blank" href="/media/{{item.file3}}" class="list-group-item list-group-item-action ">{{item.file3}}</a>
+										<div>
+													<img src="/media/{{item.file3}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file4 %}
-										<a target="_blank" href="/media/{{item.file4}}" class="list-group-item list-group-item-action ">{{item.file4}}</a>
+										<div>
+													<img src="/media/{{item.file4}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file5 %}
-										<a target="_blank" href="/media/{{item.file5}}" class="list-group-item list-group-item-action ">{{item.file5}}</a>
+										<div>
+													<img src="/media/{{item.file5}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file6 %}
-										<a target="_blank" href="/media/{{item.file6}}" class="list-group-item list-group-item-action ">{{item.file6}}</a>
+										<div>
+													<img src="/media/{{item.file6}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file7 %}
-										<a target="_blank" href="/media/{{item.file7}}" class="list-group-item list-group-item-action ">{{item.file7}}</a>
+										<div>
+													<img src="/media/{{item.file7}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file8 %}
-										<a target="_blank" href="/media/{{item.file8}}" class="list-group-item list-group-item-action ">{{item.file8}}</a>
+										<div>
+													<img src="/media/{{item.file8}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
 
 										{% if item.file9 %}
-										<a target="_blank" href="/media/{{item.file9}}" class="list-group-item list-group-item-action ">{{item.file9}}</a>
+										<div>
+													<img src="/media/{{item.file9}}" alt="">
+										</div>
+										<hr>
 										{% endif %}
-									</div>
 									<div class="modal-footer">
 									<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
 									</div>

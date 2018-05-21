@@ -27,7 +27,7 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li class=""><a href="/patient">Pacientes</a></li>
 								<li class="active"><a  href="/procedures">Procedimientos</a></li>
-                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe"> Consultas</a></li>{% endif %}
                 {% if user.is_superuser %}<li class=""><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>

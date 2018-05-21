@@ -27,7 +27,7 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li ><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                {% if user.is_superuser %}<li class=""><a href="/recipe">Recetas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class=""><a href="/recipe"> Consultas</a></li>{% endif %}
                 {% if user.is_superuser %}<li class="active"><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
@@ -257,43 +257,43 @@
 			<div class='modal-body'>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo0' class='form-control' id='Archivo0' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo0' class='form-control' id='Archivo0' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo1' class='form-control' id='Archivo1' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo1' class='form-control' id='Archivo1' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo2' class='form-control' id='Archivo2' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo2' class='form-control' id='Archivo2' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo3' class='form-control' id='Archivo3' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo3' class='form-control' id='Archivo3' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo4' class='form-control' id='Archivo4' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo4' class='form-control' id='Archivo4' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo5' class='form-control' id='Archivo5' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo5' class='form-control' id='Archivo5' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo6' class='form-control' id='Archivo6' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo6' class='form-control' id='Archivo6' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo7' class='form-control' id='Archivo7' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo7' class='form-control' id='Archivo7' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo8' class='form-control' id='Archivo8' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo8' class='form-control' id='Archivo8' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 				<div class='col-md-6'>
-							<input type='file' name='Archivo9' class='form-control' id='Archivo9' placeholder='Seleccione fichero' >
+							<input type='file' name='Archivo9' class='form-control' id='Archivo9' placeholder='Seleccione fichero' accept="image/*" >
 				</div>
 
 			</div>
@@ -417,6 +417,76 @@
 																						+"<div class='text-right'>"
 																								+"<h3><span class='label label-success'>Total: $ {{r.total}}</span></h3>"
 																								+"</div>"
+																								+"<h4 class='modal-title'>ARCHIVOS MULTIMEDIA</h4><br>"
+																								+"{% if r.file0 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file0}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file1 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file1}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file2 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file2}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file3 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file3}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file4 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file4}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file5 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file5}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file6 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file6}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file7 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file7}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file8 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file8}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
+
+																								+"{% if r.file9 %}"
+																								+"<div>"
+																											+"<img src='/media/{{r.file9}}' alt=''>"
+																								+"</div>"
+																								+"<hr>"
+																								+"{% endif %}"
 																		+"</div>"
 																		+"<div class='modal-footer'>"
 																		+"<a target='_blank' href='/recipe_pdf/{{ r.id }}'><span class='fa fa-file'></span> Receta</a> "
