@@ -38,4 +38,5 @@ urlpatterns = [
     url(r'^media/(?P<path>.*)$', serve, {'document_root': settings.MEDIA_ROOT,}),
     url(r'^report_heredofamiliares/(?P<id>[^/]+)/$', views.report_heredofamiliares),
     url(r'^report_datos_paciente/(?P<id>[^/]+)/$', views.report_datos_paciente),
+    url(r'^delete_recipe/', views.delete_recipe),
 ]

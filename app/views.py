@@ -20,6 +20,7 @@ from django.contrib.auth.models import User
 from models import patients, Procedure, receta, receta_procedures, diary, properties
 from django.core.files.storage import FileSystemStorage
 from decimal import Decimal
+from django.core.mail import EmailMessage
 
 def index(request):
     #return render(request,'index.html')
@@ -530,8 +531,16 @@ def diary_f(request):
             f_start = request.POST.get('datetimepicker')
             )
         d.save()
-
-
+        for tmp in properties.objects.all():
+            propiedades = tmp
+        body = 'NUEVA CITA. \n\nPACIENTE:' + d.patient.nombre + d.patient.a_paterno + d.patient.a_materno
+        body += ' \nFECHA:' + d.f_start
+        body += '\n\n' + propiedades.r_social
+        body += '\nDIRECCION: ' + propiedades.direccion
+        body += '\nTELEFONO: ' + propiedades.telefono
+        body += '\n' + propiedades.lema
+        email = EmailMessage('NUEVA CITA', body, to=[propiedades.correo])
+        email.send()
 
         messages.success(request,'Agregado')
         return redirect ('/diary')
@@ -1221,3 +1230,15 @@ def report_datos_paciente (request, id):
     response.write(buff.getvalue())
     buff.close()
     return response
+
+@login_required
+def delete_recipe(request):
+    if request.GET.get('id') is not None and request.user.is_superuser:
+        try:
+            p = receta.objects.get(id= request.GET.get('id'))
+            p.delete()
+            messages.success(request,'Receta eliminada')
+        except Exception, e:
+            messages.error(request,e)
+
+    return redirect('/recipe')

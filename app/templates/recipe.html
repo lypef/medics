@@ -27,7 +27,7 @@
 								{% if user.is_staff %} <li class=""><a href="/diary">Agenda</a></li> {% endif %}
 								<li ><a href="/patient">Pacientes</a></li>
 								<li class=""><a  href="/procedures">Procedimientos</a></li>
-                {% if user.is_superuser %}<li class="active"><a href="/recipe"> Consultas</a></li>{% endif %}
+                {% if user.is_superuser %}<li class="active"><a href="/recipe">Recetas</a></li>{% endif %}
                 {% if user.is_superuser %}<li ><a href="/consultation">Consulta</a></li>{% endif %}
 								<a class="a_button" href="/logout">SALIR: {{ user.first_name }}</a>
 							</ul>
@@ -137,7 +137,11 @@
 																				<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
 																				<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-file"></span> Receta</a></li>
 																				<li><a href="#" data-toggle="modal" data-target="#media{{item.id}}"><span class="fa fa-cubes"></span> Multimedia</a></li>
-                                        <li role="separator" class="divider"></li>
+																				<li role="separator" class="divider"></li>
+																				{% if user.is_superuser %}
+																				<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>
+																				<li role="separator" class="divider"></li>
+																				{% endif %}
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="#" data-toggle="modal" data-target="#historiclin{{item.id}}">Ver historia clinica</a></li>
 																				<li><a href="/recipe_history/{{ item.patient.id }}">Ver todas las consultas</a></li>
@@ -185,6 +189,40 @@
 																	</div>
 																	</div>
 																	<!-- Finaliza Modal view-->
+
+																	<!-- Modal delete -->
+																	<div class="modal fade" id="delete{{item.id}}" role="dialog">
+																		<div class="modal-dialog">
+
+																		<!-- Modal content-->
+																		<div class="modal-content">
+																			<div class="modal-header">
+																			<button type="button" class="close" data-dismiss="modal">&times;</button>
+																			<h4 class="modal-title">ELIMINAR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+																			</div>
+																			<div class="modal-body">
+																				<div class="row">
+																					<div class="col-md-9">
+																						<div class="col-md-12">
+																							<p style="color: red;">Esta seguro de eliminar la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}, en el futuro sera imposible revertir el proceso.</p>
+																						</div>
+																					</div>
+																				</div>
+																			</div>
+																			<div class="modal-footer">
+																			<form class="" action="/delete_recipe" method="get">
+																				<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+																				<input type="hidden" name="id" value="{{ item.id }}">
+																				<input type="submit" class="btn btn-danger" value="ELIMINAR" name="submit" id="submitButton" title="Eliminar receta">
+																			</form>
+																			</div>
+																		</div>
+
+																		</div>
+																		<!-- Finaliza contenido modal -->
+																	</div>
+																	</div>
+																	<!-- Finaliza Modal delete-->
 
 																		<!-- Modal Cita -->
 																		<div class="modal fade" id="cita{{item.id}}" role="dialog">
