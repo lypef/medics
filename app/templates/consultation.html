@@ -100,7 +100,7 @@
 		{% endfor %}
 		{% endif %}
 
-<form method='POST' enctype="multipart/form-data" onKeypress="if(event.keyCode == 13) event.returnValue = false;"> {% csrf_token %}
+<form method='POST' enctype="multipart/form-data"> {% csrf_token %}
 <!-- Agregar paciente -->
 <section id='department' class='department-area  section-sm'>
 	<div class='container'>
@@ -180,7 +180,7 @@
 				</thead>
 				<tbody>
 					<tr>
-						<td>DESCONTAR DE MONEDERO: <input type='number' name='id_monedero' id='id_monedero'></td>
+						<td>DESCONTAR DE MONEDERO: <input type='number' name='id_monedero' id='id_monedero' onKeypress="if(event.keyCode == 13) event.returnValue = false;"></td>
 						<td></td>
 						<td><p id='total_puntos'></p><input type='hidden' name='total_puntos_h' id='total_puntos_h'></td>
 						<td><input type='checkbox' class='form-check-input' id='use_mondero' name='use_monedero' onchange='calculate_total_Desc_Mondero()'></td>
@@ -216,9 +216,10 @@
 							{
 								if ( document.getElementById('use_mondero').checked )
 								{
-										monedero = document.getElementById('total_puntos_h').value;
-										total = document.getElementById('total_g').value;
-										if (monedero >= total)
+										_monedero = document.getElementById('total_puntos_h').value;
+										_total = document.getElementById('total_g').value;
+
+										if (_monedero <= _total)
 										{
 											document.getElementById('use_mondero').checked = true;
 											document.getElementById('msg_monedero').innerHTML = 'Se descontaran los puntos del monedero'
