@@ -482,7 +482,7 @@ def consultation(request):
         Procedures = Procedure.objects.all().order_by('nombre')
         Procedures_recipe = receta_procedures.objects.all()
         recetas = receta.objects.all().order_by('f_consulta')
-
+        
         for a in Pacientes:
             dt = datetime.datetime.now()
             year_actual = int(dt.strftime("%Y"))
@@ -914,6 +914,100 @@ def recipe_receta (request, id):
     if len(_receta.indicaciones) > 0:
         data.append(Paragraph("<br />RECETA E INDICACIONES", styles['pro']))
         data.append(Paragraph(_receta.indicaciones, styles['Normal']))
+
+    data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
+    doc.build(data)
+    response.write(buff.getvalue())
+    buff.close()
+    return response
+
+@login_required
+def recipe_consulta (request, id):
+    for tmp in properties.objects.all():
+        propiedades = tmp
+
+    _receta = receta.objects.get(id=id)
+
+    response = HttpResponse(content_type='application/pdf')
+    pdf_name = "clientes_consulta.pdf"  # llamado clientes
+    # la linea 26 es por si deseas descargar el pdf a tu computadora
+    # response['Content-Disposition'] = 'attachment; filename=%s' % pdf_name
+    buff = BytesIO()
+    doc = SimpleDocTemplate(buff,
+                            pagesize=letter,
+                            rightMargin=10,
+                            leftMargin=10,
+                            topMargin=10,
+                            bottomMargin=10,
+                            )
+    data = []
+    styles = getSampleStyleSheet()
+    styles.add(ParagraphStyle(name='right', fontName = 'Helvetica', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='right_bold', fontName = 'Helvetica-bold', alignment=TA_RIGHT))
+    styles.add(ParagraphStyle(name='pro', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_CENTER))
+    styles.add(ParagraphStyle(name='pro_LEFT', fontSize=10, fontName = 'Helvetica-bold', alignment=TA_LEFT))
+
+
+    header = Paragraph(propiedades.r_social, styles['Title'])
+    data.append(header)
+    data.append(Paragraph("| DIRECCION: " + propiedades.direccion, styles['Normal']))
+    data.append(Paragraph("| CORREO ELECTRONICO: " + propiedades.correo, styles['Normal']))
+    data.append(Paragraph("| TELEFONO: " + propiedades.telefono, styles['Normal']))
+    data.append(Paragraph("| F. CONSULTA: " + str(_receta.f_consulta), styles['Normal']))
+    data.append(Paragraph("| ATENDIO: " + _receta.user.first_name + _receta.user.last_name, styles['Normal']))
+    data.append(Paragraph("| FOLIO RECETA: " + str(_receta.id), styles['Normal']))
+
+
+    data.append(Paragraph("<br />| PACIENTE: " + _receta.patient.nombre + " " + _receta.patient.a_paterno + " " + _receta.patient.a_materno, styles['right_bold']))
+    data.append(Paragraph("| EXPEDIENTE: " + _receta.patient.expediente + " | SEXO: " + _receta.patient.sexo + " | E. CIVIL: " + _receta.patient.e_civil, styles['right']))
+    data.append(Paragraph("| TELEFONO: " + _receta.patient.telefono + " | CELULAR: " + _receta.patient.celular, styles['right']))
+    data.append(Paragraph("| FECHA DE NACIMIENTO: " + str(_receta.patient.f_nacimiento) + "| EDAD: " + str(_receta.edad), styles['right']))
+    data.append(Paragraph("| OCUPACION: " + _receta.patient.ocupacion, styles['right']))
+    data.append(Paragraph("| RELIGION: " + _receta.patient.religion + " | TIPO SANGUINIO: " + _receta.patient.tipo_sanguinio + "<br />", styles['right']))
+
+    data.append(Paragraph("<br />CONSULTA", styles['pro']))
+
+
+    if len(_receta.exp_fisica) > 0:
+        data.append(Paragraph("<br />| EXPLORACION FISICA", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.exp_fisica, styles['Normal']))
+
+    if len(_receta.torax) > 0:
+        data.append(Paragraph("<br />| TORAX", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.torax, styles['Normal']))
+
+    if len(_receta.abdomen) > 0:
+        data.append(Paragraph("<br />| ABDOMEN", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.abdomen, styles['Normal']))
+
+    if len(_receta.genitales) > 0:
+        data.append(Paragraph("<br />| GENITALES", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.genitales, styles['Normal']))
+
+    if len(_receta.piel) > 0:
+        data.append(Paragraph("<br />| PIEL", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.piel, styles['Normal']))
+
+    if len(_receta.terapeuticas) > 0:
+        data.append(Paragraph("<br />| RECOMENDACIONES TERAPEUTICAS", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.terapeuticas, styles['Normal']))
+
+    if len(_receta.extremidades) > 0:
+        data.append(Paragraph("<br />| EXTREMIDADES", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.extremidades, styles['Normal']))
+
+
+    if len(_receta.diagnostico) > 0:
+        data.append(Paragraph("<br />| DIAGNOSTICO", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.diagnostico, styles['Normal']))
+
+    if len(_receta.p_actual) > 0:
+        data.append(Paragraph("<br />| PADECIMIENTO ACTUAL", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.p_actual, styles['Normal']))
+
+    if len(_receta.pronostico) > 0:
+        data.append(Paragraph("<br />| PRONOSTICO", styles['pro_LEFT']))
+        data.append(Paragraph(_receta.pronostico, styles['Normal']))
 
     data.append(Paragraph("<br />www.cyberchoapas.com", styles['pro']))
     doc.build(data)
