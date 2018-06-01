@@ -481,8 +481,8 @@ def consultation(request):
         Pacientes = patients.objects.all().order_by('nombre')
         Procedures = Procedure.objects.all().order_by('nombre')
         Procedures_recipe = receta_procedures.objects.all()
-        recetas = receta.objects.all().order_by('f_consulta')
-        
+        #recetas = receta.objects.all().order_by('f_consulta')
+
         for a in Pacientes:
             dt = datetime.datetime.now()
             year_actual = int(dt.strftime("%Y"))
@@ -495,7 +495,7 @@ def consultation(request):
                 a.f_nacimiento =  year_actual - year_nacimiento
         for tmp in properties.objects.all():
             propiedades = tmp
-        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'recetas':recetas, 'Procedures_recipe':Procedures_recipe})
+        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'Procedures_recipe':Procedures_recipe})
 
 def AddPtsMondero (pts, paciente):
     try:
