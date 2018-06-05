@@ -1336,3 +1336,16 @@ def delete_recipe(request):
             messages.error(request,e)
 
     return redirect('/recipe')
+
+@login_required
+def delete_recipe_history(request):
+    if request.GET.get('id') is not None and request.user.is_superuser:
+        try:
+            p = receta.objects.get(id= request.GET.get('id'))
+            p.delete()
+            messages.success(request,'Receta eliminada')
+            return redirect('/recipe_history/'+request.GET.get('client'))
+        except Exception, e:
+            messages.error(request,e)
+
+    return redirect('/recipe_history/'+request.GET.get('client'))
