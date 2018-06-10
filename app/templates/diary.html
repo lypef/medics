@@ -272,6 +272,14 @@
 								}
 							</script>
 						</div>
+						<div class="form-group col-md-12">
+							<select id="medic" name="medic" class="form-control" required oninvalid="this.setCustomValidity('Seleccion un medico')" oninput="setCustomValidity('')">
+								<option value="">SELECCIONE MEDICO</option>
+								{% for item in medics %}
+									<option value="{{ item.id }}">{{item.first_name}} {{item.last_name}} ({{item.email}})</option>
+								{% endfor %}
+							</select>
+						</div>
 						<script>
 								$(document).ready(function () {
 										// create DateTimePicker from input HTML element

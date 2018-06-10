@@ -525,21 +525,24 @@ def recipe_history(request, id):
 @login_required
 def diary_f(request):
     if request.method == 'POST':
+        medic_select = User.objects.get(id=request.POST.get('medic'))
         d = diary(
             patient = patients.objects.get(id=request.POST.get('paciente')),
             receta = request.POST.get('receta'),
-            f_start = request.POST.get('datetimepicker')
+            f_start = request.POST.get('datetimepicker'),
+            medic = medic_select
             )
         d.save()
         for tmp in properties.objects.all():
             propiedades = tmp
-        body = 'NUEVA CITA. \n\nPACIENTE:' + d.patient.nombre + d.patient.a_paterno + d.patient.a_materno
-        body += ' \nFECHA:' + d.f_start
+        body = 'NUEVA CITA CREADA CON EXITO. \n\nPACIENTE:' + d.patient.nombre +' '+ d.patient.a_paterno + ' ' +d.patient.a_materno
+        body += '\nATENDERA: ' + medic_select.first_name.upper() +' '+ medic_select.last_name.upper()
+        body +='\nFECHA: ' + d.f_start
         body += '\n\n' + propiedades.r_social
         body += '\nDIRECCION: ' + propiedades.direccion
         body += '\nTELEFONO: ' + propiedades.telefono
-        body += '\n' + propiedades.lema
-        email = EmailMessage('NUEVA CITA', body, to=[propiedades.correo])
+        body += '\n' + propiedades.lema.upper()
+        email = EmailMessage('NUEVA CITA: ' + d.patient.nombre +' '+ d.patient.a_paterno + ' ' +d.patient.a_materno, body, to=[propiedades.correo+","+medic_select.email])
         email.send()
 
         messages.success(request,'Agregado')
@@ -549,9 +552,10 @@ def diary_f(request):
         agenda = diary.objects.all()
         Pacientes = patients.objects.all().order_by('nombre')
         recetas =receta.objects.all().order_by('-f_consulta')
+        medics = usuarios = User.objects.filter(is_superuser__contains=1)
         for tmp in properties.objects.all():
             propiedades = tmp
-        return render(request,'diary.html', {'agenda':agenda, 'Pacientes':Pacientes, 'recetas':recetas, 'propiedades':propiedades})
+        return render(request,'diary.html', {'agenda':agenda, 'Pacientes':Pacientes, 'recetas':recetas, 'propiedades':propiedades, 'medics':medics})
 
 @login_required
 def consultation_agenda (request, id_agenda, id_paciente):
