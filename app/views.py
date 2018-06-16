@@ -478,24 +478,27 @@ def consultation(request):
         return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':
-        Pacientes = patients.objects.all().order_by('nombre')
-        Procedures = Procedure.objects.all().order_by('nombre')
-        Procedures_recipe = receta_procedures.objects.all()
-        #recetas = receta.objects.all().order_by('f_consulta')
+        if request.user.is_superuser:
+            Pacientes = patients.objects.all().order_by('nombre')
+            Procedures = Procedure.objects.all().order_by('nombre')
+            Procedures_recipe = receta_procedures.objects.all()
+            #recetas = receta.objects.all().order_by('f_consulta')
 
-        for a in Pacientes:
-            dt = datetime.datetime.now()
-            year_actual = int(dt.strftime("%Y"))
+            for a in Pacientes:
+                dt = datetime.datetime.now()
+                year_actual = int(dt.strftime("%Y"))
 
-            s = str(a.f_nacimiento)
-            ss = s.split('-')
+                s = str(a.f_nacimiento)
+                ss = s.split('-')
 
-            if ss[0] != 'None':
-                year_nacimiento = int(ss[0])
-                a.f_nacimiento =  year_actual - year_nacimiento
-        for tmp in properties.objects.all():
-            propiedades = tmp
-        return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'Procedures_recipe':Procedures_recipe})
+                if ss[0] != 'None':
+                    year_nacimiento = int(ss[0])
+                    a.f_nacimiento =  year_actual - year_nacimiento
+            for tmp in properties.objects.all():
+                propiedades = tmp
+            return render(request, 'consultation.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'propiedades':propiedades, 'Procedures_recipe':Procedures_recipe})
+        else:
+            return redirect ('/manager')
 
 def AddPtsMondero (pts, paciente):
     try:
@@ -715,24 +718,27 @@ def consultation_agenda (request, id_agenda, id_paciente):
         return redirect ('/consultation/?recipe='+str(r.id))
 
     if request.method == 'GET':
-        Pacientes = patients.objects.all().order_by('nombre')
-        Procedures = Procedure.objects.all().order_by('nombre')
-        Procedures_recipe = receta_procedures.objects.all()
-        recetas = receta.objects.all().order_by('f_consulta')
+        if request.user.is_superuser:
+            Pacientes = patients.objects.all().order_by('nombre')
+            Procedures = Procedure.objects.all().order_by('nombre')
+            #Procedures_recipe = receta_procedures.objects.all()
+            #recetas = receta.objects.all().order_by('f_consulta')
 
-        for a in Pacientes:
-            dt = datetime.datetime.now()
-            year_actual = int(dt.strftime("%Y"))
+            for a in Pacientes:
+                dt = datetime.datetime.now()
+                year_actual = int(dt.strftime("%Y"))
 
-            s = str(a.f_nacimiento)
-            ss = s.split('-')
+                s = str(a.f_nacimiento)
+                ss = s.split('-')
 
-            if ss[0] != 'None':
-                year_nacimiento = int(ss[0])
-                a.f_nacimiento =  year_actual - year_nacimiento
-        for tmp in properties.objects.all():
-            propiedades = tmp
-        return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades, 'recetas':recetas, 'Procedures_recipe':Procedures_recipe})
+                if ss[0] != 'None':
+                    year_nacimiento = int(ss[0])
+                    a.f_nacimiento =  year_actual - year_nacimiento
+            for tmp in properties.objects.all():
+                propiedades = tmp
+            return render(request, 'consultation_agenda.html', {'Pacientes':Pacientes, 'Procedures':Procedures, 'id_paciente':id_paciente, 'propiedades':propiedades})
+        else:
+            return redirect("/manager")
 
 @login_required
 def properties_update_ (request):
@@ -846,7 +852,7 @@ def _users_Add(request):
         else:
             medico = False
 
-        r = User(
+        r = User.objects.create_user(
                 password = request.GET.get('password'),
                 is_superuser = medico,
                 first_name = request.GET.get('nombre'),
