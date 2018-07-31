@@ -41,4 +41,6 @@ urlpatterns = [
     url(r'^report_datos_paciente/(?P<id>[^/]+)/$', views.report_datos_paciente),
     url(r'^delete_recipe/', views.delete_recipe),
     url(r'^delete_recipe_history/', views.delete_recipe_history),
+    url(r'^shareyes_recipe/', views.shareyes_recipe),
+    url(r'^shareno_recipe/', views.shareno_recipe),
 ]

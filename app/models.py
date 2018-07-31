@@ -73,6 +73,7 @@ class receta (models.Model):
     file7 = models.CharField(max_length=600)
     file8 = models.CharField(max_length=600)
     file9 = models.CharField(max_length=600)
+    share = models.BooleanField(default=False)
 
 class receta_procedures (models.Model):
     receta = models.ForeignKey(receta)

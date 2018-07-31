@@ -289,18 +289,20 @@ def procedure_Delete(request):
 def recipe(request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
-            recetas = receta.objects.filter(id__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(id__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.filter(patient__id_monedero__contains=int(request.GET.get('search'))).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__id_monedero__contains=int(request.GET.get('search'))).order_by('-f_consulta')
         else:
-            recetas = receta.objects.all().order_by('-f_consulta')
-
+            recetas = receta.objects.all().exclude(share=False, user__lt = request.user.id).order_by('-f_consulta')
+        
+        
+        
         agenda = diary.objects.all().order_by('-id')
 
         paginator = Paginator(recetas, 10)
@@ -1359,3 +1361,27 @@ def delete_recipe_history(request):
             messages.error(request,e)
 
     return redirect('/recipe_history/'+request.GET.get('client'))
+
+@login_required
+def shareyes_recipe (request):
+    try:
+        update = receta.objects.get(id=request.GET.get('id'))
+        update.share = True
+        update.save()
+        messages.success(request, 'Receta compartida con exito')
+        return redirect ('/recipe')
+    except Exception, e:
+        messages.error(request, e)
+        return redirect ('/recipe')
+
+@login_required
+def shareno_recipe (request):
+    try:
+        update = receta.objects.get(id=request.GET.get('id'))
+        update.share = False
+        update.save()
+        messages.success(request, 'Receta NO compartida con exito')
+        return redirect ('/recipe')
+    except Exception, e:
+        messages.error(request, e)
+        return redirect ('/recipe')

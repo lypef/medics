@@ -115,9 +115,10 @@
 				  <tr>
 					<th scope="col">FOLIO	</th>
 					<th scope="col">Paciente</th>
-          <th scope="col">Fecha</th>
-          <th scope="col">Medico</th>
-          <th scope="col">Opciones</th>
+					<th scope="col">Fecha</th>
+					<th scope="col">Medico</th>
+					<th scope="col">Compartido</th>
+					<th scope="col">Opciones</th>
 				  </tr>
 				</thead>
 				<tbody>
@@ -126,7 +127,14 @@
 							<td>{{item.id}}</td>
 							<td>{{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</td>
 							<td>{{ item.f_consulta }}</td>
-                            <td>{{ item.user.first_name }}</td>
+							<td>{{ item.user.first_name }}</td>
+							
+							{% if item.share %}
+							<td>SI</td>
+							{% else %}
+							<td>NO</td>
+							{% endif %}
+
 							<td>
                                 <div class="dropdown">
                                     <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
@@ -134,131 +142,240 @@
                                         <span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-																				<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
-																				<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-print"></span> Imprimir receta</a></li>
-																				<li><a target="_blank" href="/consulta_pdf/{{ item.id }}"><span class="fa fa-print"></span> Imprimir consulta</a></li>
-																				<li><a href="#" data-toggle="modal" data-target="#media{{item.id}}"><span class="fa fa-cubes"></span> Multimedia</a></li>
-																				<li role="separator" class="divider"></li>
-																				{% if user.is_superuser %}
-																				<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminarsss</a></li>
-																				<li role="separator" class="divider"></li>
-																				{% endif %}
+										<li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Detalles</a></li>
+										<li><a target="_blank" href="/recipe_pdf/{{ item.id }}"><span class="fa fa-print"></span> Imprimir receta</a></li>
+										<li><a target="_blank" href="/consulta_pdf/{{ item.id }}"><span class="fa fa-print"></span> Imprimir consulta</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#media{{item.id}}"><span class="fa fa-cubes"></span> Multimedia</a></li>
+										
+										{% if item.user.id == user.id %}
+											<li><a href="#" data-toggle="modal" data-target="#sharesi{{item.id}}"><span class="fa fa-share"></span> Compartir</a></li>
+											<li><a href="#" data-toggle="modal" data-target="#shareno{{item.id}}"><span class="fa fa-share"></span> No compartir</a></li>
+										{% endif %}
+										
+										<li role="separator" class="divider"></li>
+										{% if user.is_superuser %}
+										<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>
+										<li role="separator" class="divider"></li>
+										{% endif %}
                                         <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
                                         <li><a href="#" data-toggle="modal" data-target="#historiclin{{item.id}}">Ver historia clinica</a></li>
 																				<li><a href="/recipe_history/{{ item.patient.id }}">Ver todas las consultas</a></li>
                                     </ul>
                                     </div>
                                     </td>
-																		<!-- Modal view -->
-																		<div class="modal fade" id="historiclin{{item.id}}" role="dialog">
-																			<div class="modal-dialog modal-lg">
+					<!-- Modal view -->
+					<div class="modal fade" id="historiclin{{item.id}}" role="dialog">
+						<div class="modal-dialog modal-lg">
 
-																			<!-- Modal content-->
-																			<div class="modal-content">
-																				<div class="modal-header">
-																				<button type="button" class="close" data-dismiss="modal">&times;</button>
-																				<h4 class="modal-title">ANTECEDENTES HEREDOFAMILIARES: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
-																				</div>
-																				<div class="modal-body">
-																					<div class="row">
-																						<div class="col-md-9">
-																							<div class="col-md-6">
-																								<p>No patologicos: <br>{{ item.patient.nopatologicos|slice:'0:52' }}...</p>
-																								<p>Patologicos: <br>{{ item.patient.patologicos|slice:'0:52' }}...</p>
-																								<p>Ginecologos: <br>{{ item.patient.ginecologos|slice:'0:52' }}...</p>
-																								<p>Andrologicos: <br>{{ item.patient.andrologicos|slice:'0:52' }}...</p>
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+							<button type="button" class="close" data-dismiss="modal">&times;</button>
+							<h4 class="modal-title">ANTECEDENTES HEREDOFAMILIARES: {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+							</div>
+							<div class="modal-body">
+								<div class="row">
+									<div class="col-md-9">
+										<div class="col-md-6">
+											<p>No patologicos: <br>{{ item.patient.nopatologicos|slice:'0:52' }}...</p>
+											<p>Patologicos: <br>{{ item.patient.patologicos|slice:'0:52' }}...</p>
+											<p>Ginecologos: <br>{{ item.patient.ginecologos|slice:'0:52' }}...</p>
+											<p>Andrologicos: <br>{{ item.patient.andrologicos|slice:'0:52' }}...</p>
 
-																							</div>
-																							<div class="col-md-6">
-																								<p>Perinatales: <br>{{ item.patient.perinatales|slice:'0:52' }}...</p>
-																								<p>Quirurgicos: <br>{{ item.patient.quirurgicos|slice:'0:52' }}...</p>
-																								<p>Alergias: <br>{{ item.patient.alergias|slice:'0:52' }}...</p>
-																								<p>Padecimiento actual: <br>{{ item.patient.observaciones|slice:'0:52' }}...</p>
-																							</div>
-																						</div>
-																					</div>
-																				</div>
-																				<div class="modal-footer">
-																				<a href="/report_datos_paciente/{{ item.patient.id }}" target="_blank"><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir datos personales</button></a>
-																				<a href="/report_heredofamiliares/{{ item.patient.id }}" target="_blank" ><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir historia clinica</button></a>
-																				<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
-																				</div>
-																			</div>
+										</div>
+										<div class="col-md-6">
+											<p>Perinatales: <br>{{ item.patient.perinatales|slice:'0:52' }}...</p>
+											<p>Quirurgicos: <br>{{ item.patient.quirurgicos|slice:'0:52' }}...</p>
+											<p>Alergias: <br>{{ item.patient.alergias|slice:'0:52' }}...</p>
+											<p>Padecimiento actual: <br>{{ item.patient.observaciones|slice:'0:52' }}...</p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<div class="modal-footer">
+							<a href="/report_datos_paciente/{{ item.patient.id }}" target="_blank"><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir datos personales</button></a>
+							<a href="/report_heredofamiliares/{{ item.patient.id }}" target="_blank" ><button type="button" class="btn btn-warning"><span class="fa fa-print"></span> Imprimir historia clinica</button></a>
+							<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+							</div>
+						</div>
 
-																			</div>
-																			<!-- Finaliza contenido modal -->
-																	</div>
-																	</div>
-																	<!-- Finaliza Modal view-->
+						</div>
+						<!-- Finaliza contenido modal -->
+						</div>
+						</div>
+						<!-- Finaliza Modal view-->
 
-																	<!-- Modal delete -->
-																	<div class="modal fade" id="delete{{item.id}}" role="dialog">
-																		<div class="modal-dialog">
+						<!-- Modal delete -->
+						<div class="modal fade" id="delete{{item.id}}" role="dialog">
+							<div class="modal-dialog">
 
-																		<!-- Modal content-->
-																		<div class="modal-content">
-																			<div class="modal-header">
-																			<button type="button" class="close" data-dismiss="modal">&times;</button>
-																			<h4 class="modal-title">ELIMINAR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
-																			</div>
-																			<div class="modal-body">
-																				<div class="row">
-																					<div class="col-md-9">
-																						<div class="col-md-12">
-																							<p style="color: red;">Esta seguro de eliminar la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}, en el futuro sera imposible revertir el proceso.</p>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="modal-footer">
-																			<form class="" action="/delete_recipe" method="get">
-																				<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
-																				<input type="hidden" name="id" value="{{ item.id }}">
-																				<input type="submit" class="btn btn-danger" value="ELIMINAR" name="submit" id="submitButton" title="Eliminar receta">
-																			</form>
-																			</div>
-																		</div>
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">ELIMINAR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-9">
+											<div class="col-md-12">
+												<p style="color: red;">Esta seguro de eliminar la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}, en el futuro sera imposible revertir el proceso.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+								<form class="" action="/delete_recipe" method="get">
+									<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+									<input type="hidden" name="id" value="{{ item.id }}">
+									<input type="submit" class="btn btn-danger" value="ELIMINAR" name="submit" id="submitButton" title="Eliminar receta">
+								</form>
+								</div>
+							</div>
 
-																		</div>
-																		<!-- Finaliza contenido modal -->
-																	</div>
-																	</div>
-																	<!-- Finaliza Modal delete-->
+							</div>
+							<!-- Finaliza contenido modal -->
+							</div>
+							</div>
+							<!-- Finaliza Modal delete-->
+							
+							<!-- Modal share no -->
+							<div class="modal fade" id="shareno{{item.id}}" role="dialog">
+								<div class="modal-dialog">
+	
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">NO COMPARTIR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-md-9">
+												<div class="col-md-12">
+													<p style="color: red;">Esta seguro de NO COMPARTIR la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}. Ningun medicos podra ver esta receta a excepcion de el que la creo.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+									<form class="" action="/shareno_recipe" method="get">
+										<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+										<input type="hidden" name="id" value="{{ item.id }}">
+										<input type="submit" class="btn btn-danger" value="NO COMPARTIR" name="submit" id="submitButton" title="Compartir receta">
+									</form>
+									</div>
+								</div>
+	
+								</div>
+								<!-- Finaliza contenido modal -->
+								</div>
+								</div>
+								<!-- Finaliza Modal share no-->
+								
+								<!-- Modal share si -->
+							<div class="modal fade" id="sharesi{{item.id}}" role="dialog">
+							<div class="modal-dialog">
 
-																		<!-- Modal Cita -->
-																		<div class="modal fade" id="cita{{item.id}}" role="dialog">
-																			<div class="modal-dialog modal-sm">
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+								<butNO ton type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">COMPARTIR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-9">
+											<div class="col-md-12">
+												<p style="color: red;">Esta seguro de COMPARTIR la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}. Todos los medicos podran ver la receta.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+								<form class="" action="/shareyes_recipe" method="get">
+									<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+									<input type="hidden" name="id" value="{{ item.id }}">
+									<input type="submit" class="btn btn-danger" value="COMPARTIR" name="submit" id="submitButton" title="Compartir receta">
+								</form>
+								</div>
+							</div>
 
-																			<!-- Modal content-->
-																			<div class="modal-content">
-																				<div class="modal-header">
-																				<button type="button" class="close" data-dismiss="modal">&times;</button>
-																				<h4 class="modal-title">{{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
-																				</div>
-																				<div class="modal-body">
-																					<div class="row">
-																						<ul class="list-group">
-																								{% for a in agenda %}
-																									{% if a.patient.id == item.patient.id %}
-																										<li class="list-group-item">
-																											<span class="badge">Receta: {{a.receta}}</span>
-																											Hora: {{a.f_start}}
-																										</li>
-																									{% endif %}
-																								{% endfor %}
-																							</ul>
-																					</div>
-																				</div>
-																				<div class="modal-footer">
-																				<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
-																				</div>
-																			</div>
+							</div>
+							<!-- Finaliza contenido modal -->
+							</div>
+							</div>
+							<!-- Finaliza Modal share si-->
+							
+							
+							<!-- Modal delete -->
+						<div class="modal fade" id="delete{{item.id}}" role="dialog">
+							<div class="modal-dialog">
 
-																			</div>
-																			<!-- Finaliza contenido modal -->
-																	</div>
-																	</div>
-																	<!-- Finaliza Modal cita-->
+							<!-- Modal content-->
+							<div class="modal-content">
+								<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">ELIMINAR RECETA # {{ item.id }} | {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+								</div>
+								<div class="modal-body">
+									<div class="row">
+										<div class="col-md-9">
+											<div class="col-md-12">
+												<p style="color: red;">Esta seguro de eliminar la receta con numero {{item.id}} del paciente {{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}, en el futuro sera imposible revertir el proceso.</p>
+											</div>
+										</div>
+									</div>
+								</div>
+								<div class="modal-footer">
+								<form class="" action="/delete_recipe" method="get">
+									<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+									<input type="hidden" name="id" value="{{ item.id }}">
+									<input type="submit" class="btn btn-danger" value="ELIMINAR" name="submit" id="submitButton" title="Eliminar receta">
+								</form>
+								</div>
+							</div>
+
+							</div>
+							<!-- Finaliza contenido modal -->
+							</div>
+							</div>
+							<!-- Finaliza Modal delete-->
+
+								<!-- Modal Cita -->
+								<div class="modal fade" id="cita{{item.id}}" role="dialog">
+									<div class="modal-dialog modal-sm">
+
+									<!-- Modal content-->
+									<div class="modal-content">
+										<div class="modal-header">
+										<button type="button" class="close" data-dismiss="modal">&times;</button>
+										<h4 class="modal-title">{{ item.patient.nombre }} {{ item.patient.a_paterno }} {{ item.patient.a_materno }}</h4>
+										</div>
+										<div class="modal-body">
+											<div class="row">
+												<ul class="list-group">
+														{% for a in agenda %}
+															{% if a.patient.id == item.patient.id %}
+																<li class="list-group-item">
+																	<span class="badge">Receta: {{a.receta}}</span>
+																	Hora: {{a.f_start}}
+																</li>
+															{% endif %}
+														{% endfor %}
+													</ul>
+											</div>
+										</div>
+										<div class="modal-footer">
+										<button type="button" class="btn btn-success" data-dismiss="modal">OK</button>
+										</div>
+									</div>
+
+									</div>
+									<!-- Finaliza contenido modal -->
+							</div>
+							</div>
+							<!-- Finaliza Modal cita-->
 							<!-- Modal view -->
 							<div class="modal fade" id="view{{item.id}}" role="dialog">
 									<button type="button" class="close" data-dismiss="modal">&times;</button>
