@@ -289,17 +289,17 @@ def procedure_Delete(request):
 def recipe(request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
-            recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(id__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+            recetas = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(id__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(patient__nombre__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(patient__a_paterno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(patient__a_materno__contains=request.GET.get('search').upper()).order_by('-f_consulta')
             if len(recetas) < 1:
-                recetas = receta.objects.exclude(share=False, user__lt = request.user.id).filter(patient__id_monedero__contains=int(request.GET.get('search'))).order_by('-f_consulta')
+                recetas = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(patient__id_monedero__contains=int(request.GET.get('search'))).order_by('-f_consulta')
         else:
-            recetas = receta.objects.all().exclude(share=False, user__lt = request.user.id).order_by('-f_consulta')
+            recetas = receta.objects.all().exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).order_by('-f_consulta')
         
         
         
