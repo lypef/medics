@@ -520,7 +520,7 @@ def RemovePtsMondero (pts, paciente):
 
 @login_required
 def recipe_history(request, id):
-    var = receta.objects.filter(patient__id__contains=id).order_by('-f_consulta')
+    var = receta.objects.exclude(share=False, user__lt=request.user.id).exclude(share=False, user__gt=request.user.id).filter(patient__id__contains=id).order_by('-f_consulta')
     procedures = receta_procedures.objects.all()
 
     for tmp in properties.objects.all():
