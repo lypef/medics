@@ -120,6 +120,7 @@
 					<th scope="col">Edad</th>
 					<th scope="col">Sexo</th>
 					<th scope="col">Estado civil</th>
+					<th scope="col">Compartido</th>
 					<th scope="col">Opciones</th>
 				  </tr>
 				</thead>
@@ -132,6 +133,13 @@
 							<td>{{ item.f_nacimiento }} Años</td>
 							<td>{{ item.sexo }}</td>
 							<td>{{ item.e_civil }}</td>
+							<td align="center">
+								{% if item.share %}
+									SI
+								{% else %}
+									NO
+								{% endif %}
+							</td>
 							<td><div class="dropdown">
 									<button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 									  Opciones
@@ -139,8 +147,13 @@
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
 									  <li><a href="#" data-toggle="modal" data-target="#view{{item.id}}"><span class="fa fa-eye"></span> Visualizar</a></li>
-									  <li><a href="/patient_edit/{{ item.id }}"><span class="fa fa-pencil"></span> Editar</a></li>
-									  {% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
+									  
+									  {% if item.medic.id == user.id %}
+										<li><a href="/patient_edit/{{ item.id }}"><span class="fa fa-pencil"></span> Editar</a></li>
+										{% if user.is_superuser %}<li><a href="#" data-toggle="modal" data-target="#delete{{item.id}}"><span class="fa fa-trash"></span> Eliminar</a></li>{% endif %}
+										<li><a href="#" data-toggle="modal" data-target="#sharesi{{item.id}}"><span class="fa fa-share"></span> Compartir paciente</a></li>
+										<li><a href="#" data-toggle="modal" data-target="#shareno{{item.id}}"><span class="fa fa-share"></span> No compartir paciente</a></li>
+									  {% endif %}
 									  <li role="separator" class="divider"></li>
 									  <li><a href="#" data-toggle="modal" data-target="#cita{{item.id}}">Ver citas</a></li>
 									  <li><a href="/recipe_history/{{ item.id }}">Ver todas las consultas</a></li>
@@ -149,6 +162,74 @@
 
 
 							</td>
+							
+							<!-- Modal share SI -->
+							<div class="modal fade" id="sharesi{{item.id}}" role="dialog">
+								<div class="modal-dialog">
+	
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">COMPARTIR PACIENTE</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-md-9">
+												<div class="col-md-12">
+													<p style="color: red;">Esta seguro de COMPARTIR su paciente ? todos los usuarios podran ver solo las recetas compartida.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+									<form class="" action="/sharesi_paciente" method="get">
+										<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+										<input type="hidden" name="id" value="{{ item.id }}">
+										<input type="submit" class="btn btn-danger" value="COMPARTIR" name="submit" id="submitButton" title="Compartir receta">
+									</form>
+									</div>
+								</div>
+	
+								</div>
+								<!-- Finaliza contenido modal -->
+								</div>
+								</div>
+								<!-- Finaliza Modal share no-->
+								
+								<!-- Modal share no -->
+							<div class="modal fade" id="shareno{{item.id}}" role="dialog">
+								<div class="modal-dialog">
+	
+								<!-- Modal content-->
+								<div class="modal-content">
+									<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal">&times;</button>
+									<h4 class="modal-title">NO COMPARTIR PACIENTE</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<div class="col-md-9">
+												<div class="col-md-12">
+													<p style="color: red;">Esta seguro de NO COMPARTIR su paciente ? ningun usuario podra ver sus recetas compartidas.</p>
+												</div>
+											</div>
+										</div>
+									</div>
+									<div class="modal-footer">
+									<form class="" action="/shareno_paciente" method="get">
+										<button type="button" class="btn btn-success" data-dismiss="modal">NO</button>
+										<input type="hidden" name="id" value="{{ item.id }}">
+										<input type="submit" class="btn btn-danger" value="NO COMPARTIR" name="submit" id="submitButton" title="Compartir receta">
+									</form>
+									</div>
+								</div>
+	
+								</div>
+								<!-- Finaliza contenido modal -->
+								</div>
+								</div>
+								<!-- Finaliza Modal share SI-->
 
 							<!-- Modal Editar-->
 							<div class="modal fade" id="edit{{item.id}}" role="dialog">

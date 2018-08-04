@@ -56,18 +56,18 @@ def patient (request):
     if request.method == 'GET':
         if request.GET.get('search') is not None:
 
-            ListPatients = patients.objects.filter(id__contains=request.GET.get('search').upper()).order_by('nombre')
+            ListPatients = patients.objects.exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).filter(id__contains=request.GET.get('search').upper()).order_by('nombre')
 
             if len(ListPatients) < 1:
-                ListPatients = patients.objects.filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
+                ListPatients = patients.objects.exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).filter(nombre__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
-                ListPatients = patients.objects.filter(a_paterno__contains=request.GET.get('search').upper()).order_by('nombre')
+                ListPatients = patients.objects.exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).filter(a_paterno__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
-                ListPatients = patients.objects.filter(a_materno__contains=request.GET.get('search').upper()).order_by('nombre')
+                ListPatients = patients.objects.exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).filter(a_materno__contains=request.GET.get('search').upper()).order_by('nombre')
             if len(ListPatients) < 1:
-                ListPatients = patients.objects.filter(id_monedero__contains=int(request.GET.get('search'))).order_by('nombre')
+                ListPatients = patients.objects.exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).filter(id_monedero__contains=int(request.GET.get('search'))).order_by('nombre')
         else:
-            ListPatients = patients.objects.all().order_by('nombre')
+            ListPatients = patients.objects.all().exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).order_by('nombre')
 
         agenda = diary.objects.all().order_by('-id')
 
@@ -127,7 +127,8 @@ def patient (request):
                 perinatales = request.POST.get('perinatales', '').upper(),
                 quirurgicos = request.POST.get('quirurgicos', '').upper(),
                 alergias = request.POST.get('alergias', '').upper(),
-                observaciones = request.POST.get('observaciones', '').upper()
+                observaciones = request.POST.get('observaciones', '').upper(),
+                medic = User.objects.get(id=request.user.id)
     			)
     	insert.save()
         messages.success(request,'Paciente agregado')
@@ -1385,3 +1386,27 @@ def shareno_recipe (request):
     except Exception, e:
         messages.error(request, e)
         return redirect ('/recipe')
+
+@login_required
+def shareyes_paciente (request):
+    try:
+        update = patients.objects.get(id=request.GET.get('id'))
+        update.share = True
+        update.save()
+        messages.success(request, 'Paciente compartido con exito')
+        return redirect ('/patient')
+    except Exception, e:
+        messages.error(request, e)
+        return redirect ('/patient')
+
+@login_required
+def shareno_paciente (request):
+    try:
+        update = patients.objects.get(id=request.GET.get('id'))
+        update.share = False
+        update.save()
+        messages.success(request, 'Paciente NO compartido con exito')
+        return redirect ('/patient')
+    except Exception, e:
+        messages.error(request, e)
+        return redirect ('/patient')

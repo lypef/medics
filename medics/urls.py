@@ -43,4 +43,6 @@ urlpatterns = [
     url(r'^delete_recipe_history/', views.delete_recipe_history),
     url(r'^shareyes_recipe/', views.shareyes_recipe),
     url(r'^shareno_recipe/', views.shareno_recipe),
+    url(r'^sharesi_paciente/', views.shareyes_paciente),
+    url(r'^shareno_paciente/', views.shareno_paciente),
 ]
