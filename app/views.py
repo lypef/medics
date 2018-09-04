@@ -420,6 +420,13 @@ def consultation(request):
              fs = FileSystemStorage()
              file9_url = fs.save(var.name, var)
 
+        pp = patients.objects.get(id=request.POST.get('paciente'))
+        
+        
+        share_r = False
+        if pp.share:
+            share_r = True
+
         r = receta(
                 patient = patients.objects.get(id=request.POST.get('paciente')),
                 edad = request.POST.get('edad'),
@@ -452,8 +459,8 @@ def consultation(request):
                 file6 = file6_url,
                 file7 = file7_url,
                 file8 = file8_url,
-                file9 = file9_url
-
+                file9 = file9_url,
+                share = share_r
     			)
     	r.save()
         AddMondero = 0
@@ -482,7 +489,8 @@ def consultation(request):
 
     if request.method == 'GET':
         if request.user.is_superuser:
-            Pacientes = patients.objects.all().order_by('nombre')
+            Pacientes = patients.objects.all().exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).order_by('nombre')
+
             Procedures = Procedure.objects.all().order_by('nombre')
             Procedures_recipe = receta_procedures.objects.all()
             #recetas = receta.objects.all().order_by('f_consulta')
@@ -722,7 +730,8 @@ def consultation_agenda (request, id_agenda, id_paciente):
 
     if request.method == 'GET':
         if request.user.is_superuser:
-            Pacientes = patients.objects.all().order_by('nombre')
+            #Pacientes = patients.objects.all().order_by('nombre')
+            Pacientes = patients.objects.all().exclude(share=False, medic__lt=request.user.id).exclude(share=False, medic__gt=request.user.id).order_by('nombre')
             Procedures = Procedure.objects.all().order_by('nombre')
             #Procedures_recipe = receta_procedures.objects.all()
             #recetas = receta.objects.all().order_by('f_consulta')
